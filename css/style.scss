@@ -1,0 +1,17 @@
+button.cusBut{
+    width:75px;
+    margin-right:5px ;
+    background-color: #0d6efd !important;
+    
+    &:hover{
+        background-color: #2e6da4 !important;
+        color: white !important;
+    }
+}
+.btn-pill{
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    -ms-border-radius: 25px;
+    -o-border-radius: 25px;
+}
