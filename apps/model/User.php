@@ -46,7 +46,6 @@ class User
        return ($result->num_rows>0) ? false : true;
     }
     
-
     public function addUser($userId, $firstName, $lastName,  $contact, $birthday, $gender, $nic, $email, $role,  $add1,  $add2,  $add3, $image)
     {
         $today = date("Y-m-d");
@@ -61,6 +60,14 @@ class User
     {
         $conn = $GLOBALS['con'];
         $sql = "SELECT * FROM `user`";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
+
+    public function viewUserDetails($userId)
+    {
+        $conn = $GLOBALS['con'];
+        $sql = "SELECT * FROM `user` WHERE `user_id`='$userId'";
         $result = $conn->query($sql) or die($conn->error);
         return $result;
     }

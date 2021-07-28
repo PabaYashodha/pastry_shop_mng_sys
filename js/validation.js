@@ -8,7 +8,7 @@ $(document).ready(() => {
     const email = $("#email");//email of user form
     const role = $("#role");//role of user form
     const add1 = $("#add1");//address no of user form
-    const add2 = $("#add2");//street of user form
+    const add2 = $("#add2");//street of user form 
     const add3 = $("#add3");//lane of user form
     const image = $("#image");//image of user form
 
@@ -31,7 +31,7 @@ $(document).ready(() => {
     email.blur(() =>{
         const url = "../controller/UserController.php?status=checkEmailIsExist";
         let emailVal = email.val();
-        $.post(url, {email:emailVal}, (result) =>{
+        $.post(url, {email:emailVal}, (result) => {
             if(result==1){
                 addInvalidClass(email, "Email is already exist");
                 return false;
@@ -193,7 +193,7 @@ $(document).ready(() => {
                     time : 1000,
                 });
             }
-        })
+        })  
 
     });
 

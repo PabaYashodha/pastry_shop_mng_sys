@@ -1,3 +1,9 @@
+<?php
+include_once'../model/User.php';
+$userObj = new User();
+$getAllUser = $userObj->getUserData();
+print_r($getAllUser);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,8 +14,10 @@
     <title>Add user</title>
     <link rel="stylesheet" type="text/css" href="../../resources/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../../resources/toastr/build/toastr.min.css">
-    <link rel="stylesheet" type="text/css" href="../../resources/DataTables/datatables.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../../resources/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../resources/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+
 
 </head>
 
@@ -29,7 +37,27 @@
                             <th scope="col">Option</th>
                         </tr>
                     </thead>
-                    <tbody id="userTable"></tbody>
+                    <tbody id="userTable">
+                    <?php ?>
+                    <tr>
+                        <th scope="row">result[index].user_id</th>            
+                        <td><img src="../../images/user-images/result[index].user_image" width="40" height="40"></td>
+                        <td>result[index].user_fname result[index].user_lname</td>
+                        <td>result[index].user_email</td>
+                        <td>result[index].user_contact</td><td>;           
+                        if((result[index].user_status)==1){
+                            row =<button class="btn btn-outline-success rounded shadow" onclick="deactivateUser((result[index].user_id))">Active</button>;
+                        }else{
+                            row =<button class="btn btn-outline-danger rounded shadow" onclick="activateUser((result[index].user_id))">Deactivate</button>;
+                        }
+                        </td>
+                        <td>
+                        <div class="d-inline-flex justify-content-start">
+                        <button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewUser" onclick="viewUserDetails((result[index].user_id))"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;
+                        <button class="btn  btn-warning "><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;
+                        <button class="btn  btn-danger "><i class="fal fa-trash-alt"></i></button></div></td>&nbsp;&nbsp;&nbsp;
+                    </tr>
+                    </tbody>
                 </table>
                 <!-- <form action="" method="post" role="form" id="userForm">
                     <div class="row">
@@ -154,6 +182,23 @@
             </div>
         </div>
     </div>
+    <!-- modal start -->
+    <!-- view user -->
+    <div class="modal fade" tabindex="-1" aria-labelledby="viewUser" id="viewUser" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">VIEW USER</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="viewUserContent"></div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+    <!-- modal end -->
     <script type="text/javascript" src="../../js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="../../resources/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../js/validation.js"></script>
@@ -161,6 +206,7 @@
     <script type="text/javascript" src="../../resources/toastr/build/toastr.min.js"></script>
     <script type="text/javascript" src="../../js/script.js"></script>
     <script type="text/javascript" src="../../resources/DataTables/datatables.min.js"></script>
+    <script type="text/javascript" src="../../resources/fontawesome/js/all.min.js"></script>
     <script>
         // console.log(new FormData($('#userForm')[0]))
     </script>

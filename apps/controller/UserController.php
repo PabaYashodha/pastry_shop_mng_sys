@@ -73,7 +73,7 @@ switch ($status) {
                 $image = $_FILES["image"]["name"];
                 $imageExt = substr($image, strrpos($image, '.')); //split image name using dot
                 $image = time() . $imageExt; //change image name with current time
-                $temp_loc = $_FILES["image"]["tmp_name"]; //tempory location
+                $temp_loc = $_FILES["image"]["tmp_name"]; //temporary location
                 $new_loc = "../../images/user-images/$image"; //current location
                 move_uploaded_file($temp_loc, $new_loc);
             } else {
@@ -108,4 +108,48 @@ switch ($status) {
         }
         echo json_encode($userArray);
         break;
+
+    // case 'viewUserDetails':
+    //     $userId = base64_decode($_POST['userId']);
+    //     $result = $userObj->viewUserDetails($userId);
+    //     $row = $result->fetch_assoc();
+        // echo json_encode($row);
+        ?>
+                <!-- <div class="row">                    
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <img src="../../images/user-images/<?php echo $row['user_image']?>" alt="" width="350px" height="350px" class="m-auto">
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">                       
+                        <div class="row">
+                            <label for="name" class="col-sm-12 col-form-label" style="padding-left: 8rem;"> <h2><?php echo $row['user_fname'].' '.$row['user_lname']?></h2></label>
+                            <label for="createDate" class="col-sm-4 col-form-label text-end">Create Date  </label>
+                            <label for="createDate" class="col-sm-8 col-form-label text-start mb-2"> : <?php echo $row['user_create_date']?> </label>
+                            <label for="contact" class="col-sm-4 col-form-label text-end">Contact  </label>
+                            <label for="contact" class="col-sm-8 col-form-label text-start mb-2"> : <?php echo $row['user_contact']?> </label>
+                            <label for="email" class="col-sm-4 col-form-label text-end"> Email </label>
+                            <label for="email" class="col-sm-8 col-form-label text-start mb-2"> : <?php echo $row['user_email']?> </label>
+                            <label for="address" class="col-sm-4 col-form-label text-end"> Address </label>
+                            <label for="address" class="col-sm-8 col-form-label text-start mb-2"> : <?php echo $row['user_add1'].', '.$row['user_add2'].', '.$row['user_add3']?> </label>
+                            <label for="gender" class="col-sm-4 col-form-label text-end"> Gender </label>
+                            <label for="gender" class="col-sm-8 col-form-label text-start mb-2"> : <?php echo ($row['user_gender']==1)? 'Male' : 'Female' ?></label>
+                            <label for="birthday" class="col-sm-4 col-form-label text-end"> Birthday </label>
+                            <label for="birthday" class="col-sm-8 col-form-label text-start mb-2"> : <?php echo $row['user_dob']?></label>                            
+                            <label for="nic" class="col-sm-4 col-form-label text-end"> NIC </label>
+                            <label for="nic" class="col-sm-8 col-form-label text-start mb-2"> : <?php echo $row['user_nic']?></label>                                                       
+                            <label for="status" class="col-sm-4 col-form-label text-end"> Status </label>
+                            <label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <?php echo ($row['user_status']==1)? '<span style="color:green">Active</span>' : '<span style="color:red">Deactivate</span>' ?></label>                                                       
+                        </div>
+                    </div>                    
+                </div> -->
+
+        <?php
+        //break;
+
+        case 'viewUserDetails':
+            $userId = base64_decode($_POST['userId']);
+            $result = $userObj->viewUserDetails($userId);
+            $row = $result->fetch_assoc();
+            echo json_encode($row);           
+            break;
+    
 }
