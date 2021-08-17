@@ -71,4 +71,38 @@ class User
         $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
+    
+    public function editUser($userId, $firstName, $lastName,  $contact, $birthday, $gender, $nic, $email, $role,  $add1,  $add2,  $add3, $image)
+    {
+        $conn = $GLOBALS['con'];
+        if ($image == 1) {
+            $sql = "UPDATE `user` SET  `user_fname`='$firstName', `user_lname`='$lastName',  `user_contact`='$contact', `user_dob`='$birthday', `user_gender`='$gender', `user_nic`='$nic', `user_email`='$email', `role_role_id`='$role',  `user_add1`='$add1', `user_add2`='$add2',  `user_add3`='$add3' WHERE `user_id`='$userId' "; 
+        }else{
+            $sql = "UPDATE `user` SET  `user_fname`='$firstName', `user_lname`='$lastName',  `user_contact`='$contact', `user_dob`='$birthday', `user_gender`='$gender', `user_nic`='$nic', `user_email`='$email', `role_role_id`='$role',  `user_add1`='$add1', `user_add2`='$add2',  `user_add3`='$add3', `user_image`='$image' WHERE `user_id`='$userId' ";
+        }
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
+    
+    public function changeUserStatus($userId, $userStatus)
+    {
+        $conn = $GLOBALS['con'];
+        $sql = "UPDATE `user` SET `user_status` = '$userStatus' WHERE `user_id` = '$userId'";
+        if ($userStatus == 1) {
+            $sql1 = "UPDATE `user_login` SET `user_login_status` = '1' WHERE `user_user_id` = '$userId'";
+        }else{
+            $sql1 = "UPDATE `user_login` SET `user_login_status` = '0' WHERE `user_user_id` = '$userId'";
+        }
+        $result = $conn->query($sql) or die($conn->error);
+        $conn->query($sql1) or die($conn->error);
+        return $result;
+    }
+
+    public function makeUserLogin($userName, $password, $userId)
+    {
+        $conn = $GLOBALS['con'];
+        $sql = "INSERT INTO `user_login` (`user_login_username`, `user_login_password`, `user_user_id`) VALUES('$userName', '$password', '$userId')";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
 }

@@ -15,3 +15,24 @@ button.cusBut{
     -ms-border-radius: 25px;
     -o-border-radius: 25px;
 }
+nav{
+    background-color: #2f2e41;
+}
+
+.list-group-item{
+    background-color: #2f2e41;
+}
+
+.sidebar{
+    background-color: #2f2e41;
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+}
+
+.sidebar-content{
+    &:hover{
+        background-color: white;
+        color: #2f2e41 !important;
+    }
+}

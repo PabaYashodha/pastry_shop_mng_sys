@@ -1,9 +1,3 @@
-<?php
-include_once'../model/User.php';
-$userObj = new User();
-$getAllUser = $userObj->getUserData();
-print_r($getAllUser);
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,8 +11,6 @@ print_r($getAllUser);
     <link rel="stylesheet" type="text/css" href="../../resources/DataTables/datatables.min.css" />
     <link rel="stylesheet" type="text/css" href="../../resources/fontawesome/css/all.min.css" />
     <link rel="stylesheet" type="text/css" href="../../css/style.css" />
-
-
 </head>
 
 <body>
@@ -37,29 +29,9 @@ print_r($getAllUser);
                             <th scope="col">Option</th>
                         </tr>
                     </thead>
-                    <tbody id="userTable">
-                    <?php ?>
-                    <tr>
-                        <th scope="row">result[index].user_id</th>            
-                        <td><img src="../../images/user-images/result[index].user_image" width="40" height="40"></td>
-                        <td>result[index].user_fname result[index].user_lname</td>
-                        <td>result[index].user_email</td>
-                        <td>result[index].user_contact</td><td>;           
-                        if((result[index].user_status)==1){
-                            row =<button class="btn btn-outline-success rounded shadow" onclick="deactivateUser((result[index].user_id))">Active</button>;
-                        }else{
-                            row =<button class="btn btn-outline-danger rounded shadow" onclick="activateUser((result[index].user_id))">Deactivate</button>;
-                        }
-                        </td>
-                        <td>
-                        <div class="d-inline-flex justify-content-start">
-                        <button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewUser" onclick="viewUserDetails((result[index].user_id))"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;
-                        <button class="btn  btn-warning "><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;
-                        <button class="btn  btn-danger "><i class="fal fa-trash-alt"></i></button></div></td>&nbsp;&nbsp;&nbsp;
-                    </tr>
-                    </tbody>
+                    <tbody id="userTable"></tbody>
                 </table>
-                <!-- <form action="" method="post" role="form" id="userForm">
+                <form action="" method="post" role="form" id="userForm">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
@@ -107,7 +79,7 @@ print_r($getAllUser);
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
-                                <label for="birthday" class="col-sm-3 col-form-label"> NIC </label>
+                                <label for="nic" class="col-sm-3 col-form-label"> NIC </label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="nic" name="nic">
                                 </div>
@@ -115,7 +87,7 @@ print_r($getAllUser);
                         </div>                        
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
-                                <label for="birthday" class="col-sm-3 col-form-label"> Email </label>
+                                <label for="email" class="col-sm-3 col-form-label"> Email </label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="email" name="email">
                                 </div>
@@ -123,7 +95,7 @@ print_r($getAllUser);
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
-                                <label for="formFile" class="col-sm-3 col-form-label">Role</label>
+                                <label for="role" class="col-sm-3 col-form-label">Role</label>
                                 <div class="col-sm-9">
                                     <select class="form-select" aria-label="Default select example" id="role" name="role">
                                         <option selected value="">-- Select role --</option>
@@ -138,7 +110,7 @@ print_r($getAllUser);
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="row mb-3">
-                                <label for="formFile" class="col-sm-6 col-form-label">Address</label>
+                                <label for="address" class="col-sm-6 col-form-label">Address</label>
                                 <div class="col-sm-6">
                                     <input class="form-control" type="text" id="add1" name="add1">
                                 </div>
@@ -157,7 +129,7 @@ print_r($getAllUser);
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
-                                <label for="formFile" class="col-sm-3 col-form-label">Image</label>
+                                <label for="image" class="col-sm-3 col-form-label">Image</label>
                                 <div class="col-sm-9">
                                     <input class="form-control" type="file" id="image" name="image" onchange="preview(this)">
                                 </div>
@@ -178,10 +150,11 @@ print_r($getAllUser);
                             </div>
                         </div>
                     </div>
-                </form> -->
+                </form>
             </div>
         </div>
     </div>
+
     <!-- modal start -->
     <!-- view user -->
     <div class="modal fade" tabindex="-1" aria-labelledby="viewUser" id="viewUser" aria-hidden="true">
@@ -199,6 +172,142 @@ print_r($getAllUser);
         </div>
     </div>
     <!-- modal end -->
+
+    <!-- modal start -->
+    <!-- edit user -->
+    <div class="modal fade" tabindex="-1" data-bs-backdrop="static"  data-bs-keyboard="false"aria-labelledby="editUser" id="editUser" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">EDIT USER</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="" method="post" role="form" id="editUserForm">
+                    <div class="modal-body">
+                        <!-- <div id="editUserContent"></div> -->
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="row mb-3">
+                                    <label for="editFirstName" class="col-sm-3 col-form-label">First Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="editFirstName" name="editFirstName">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="row mb-3">
+                                    <label for="editLastName" class="col-sm-3 col-form-label"> Last Name </label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="editLastName" name="editLastName">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="row mb-3">
+                                    <label for="editContact" class="col-sm-3 col-form-label"> Contact </label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="editContact" name="editContact">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="row mb-3">
+                                    <label for="editBirthday" class="col-sm-3 col-form-label"> Birthday </label>
+                                    <div class="col-sm-9">
+                                        <input type="date" class="form-control" id="editBirthday" name="editBirthday">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="row mb-3">
+                                    <label for="editGender" class="col-sm-3 col-form-label"> Gender </label>
+                                    <div class="col-sm-9">
+                                        <label class="form-check-label" for="Male"> Male </label>
+                                        <input type="radio" class="form-check-input" name="editGender" id="Male" value="1" checked>
+                                        &nbsp; &nbsp;
+                                        <label class="form-check-label" for="Female"> Female </label>
+                                        <input type="radio" class="form-check-input" name="editGender" id="Female" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="row mb-3">
+                                    <label for="editNic" class="col-sm-3 col-form-label"> NIC </label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="editNic" name="editNic">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="row mb-3">
+                                    <label for="editEmail" class="col-sm-3 col-form-label"> Email </label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="editEmail" name="editEmail">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="row mb-3">
+                                    <label for="editRole" class="col-sm-3 col-form-label">Role</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-select" aria-label="Default select example" id="editRole" name="editRole">
+                                            <option selected value="">-- Select role --</option>
+                                            <option value="1">Administrator</option>
+                                            <option value="2">Owner</option>
+                                            <option value="3">Waiter</option>
+                                            <option value="4">Cashier</option>
+                                            <option value="5">Delivery</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="row mb-3">
+                                    <label for="editAddress" class="col-sm-6 col-form-label">Address</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" type="text" id="editAdd1" name="editAdd1">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+                                <div class="row mb-3">
+                                    <div class="col-sm-6">
+                                        <input class="form-control" type="text" id="editAdd2" name="editAdd2">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" type="text" id="editAdd3" name="editAdd3">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="row mb-3">
+                                    <label for="editImage" class="col-sm-3 col-form-label">Image</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="file" id="editImage" name="editImage" onchange="preview(this)">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="row mb-3">
+                                    <img id="pre_image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-danger">Reset</button>
+                        <input type="hidden" id="editUserId" name="editUserId">
+                        <button type="button" id="saveEditForm" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- modal end -->
+
+
+
     <script type="text/javascript" src="../../js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="../../resources/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../js/validation.js"></script>

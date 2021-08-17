@@ -83,6 +83,7 @@ switch ($status) {
             if ($userId != "") {
                 $result = $userObj->addUser($userId, $firstName, $lastName,  $contact, $birthday, $gender, $nic, $email, $role,  $add1,  $add2,  $add3, $image);
                 if ($result > 0) {
+                    $result = $userObj->makeUserLogin($email, sha1($nic), $userId);
                     $res = 1;
                     $msg = '';
                 } else {
@@ -151,5 +152,103 @@ switch ($status) {
             $row = $result->fetch_assoc();
             echo json_encode($row);           
             break;
+
+        case 'editUser':
+            try {
+                $userId = base64_decode($_POST['editUserId']);
+                $firstName = $_POST['editFirstName'];
+                $lastName = $_POST['editLastName'];
+                $contact = $_POST['editContact'];
+                $birthday = $_POST['editBirthday'];
+                $gender = $_POST['editGender'];
+                $nic = $_POST['editNic'];
+                $email = $_POST['editEmail'];
+                $role = $_POST['editRole'];
+                $add1 = $_POST['editAdd1'];
+                $add2 = $_POST['editAdd2'];
+                $add3 = $_POST['editAdd3'];
+
+                if ($firstName == "") {
+                    throw new Exception("First name is required");
+                }
+                if ($lastName == "") {
+                    throw new Exception("Last name is required");
+                }
+                if ($contact == "") {
+                    throw new Exception("Contact is required");
+                }
+                if ($birthday == "") {
+                    throw new Exception("Birthday is required");
+                }
+                if ($gender == "") {
+                    throw new Exception("Gender is required");
+                }
+                if ($nic == "") {
+                    throw new Exception("NIC is required");
+                }
+                if ($email == "") {
+                    throw new Exception("Email is required");
+                }
+                if ($role == "") {
+                    throw new Exception("Role is required");
+                }
+                if ($add1 == "") {
+                    throw new Exception("Address no is required");
+                }
+                if ($add2 == "") {
+                    throw new Exception("Lane is required");
+                }
+                if ($add3 == "") {
+                    throw new Exception("Street is required");
+                }
+                if ($_FILES["editImage"]["name"] != "") {
+                    $image = $_FILES["editImage"]["name"];
+                    $imageExt = substr($image, strrpos($image, '.')); //split image name using dot
+                    $image = time() . $imageExt; //change image name with current time
+                    $temp_loc = $_FILES["editImage"]["tmp_name"]; //temporary location
+                    $new_loc = "../../images/user-images/$image"; //current location
+                    move_uploaded_file($temp_loc, $new_loc);
+                } else {
+                    $image = 1;
+                }
+                $result = $userObj->editUser($userId, $firstName, $lastName,  $contact, $birthday, $gender, $nic, $email, $role,  $add1,  $add2,  $add3, $image);
+                if ($result == 1) {
+                    $res = 1;
+                    $getUserTbl = $userObj->getUserData();
+                    $userArray = array();
+                    while ($row = $getUserTbl->fetch_assoc()) {
+                        array_push($userArray, $row);
+                    }
+                    $msg = $userArray;
+                }
+            } catch (Throwable $th) {
+                $res = 2;
+                $msg = $th->getMessage();
+            }
+            $data[0] = $res;
+            $data[1] = $msg;
+            echo json_encode($data);
+            break;
+
+        case 'changeUserStatus':
+            $userId = base64_decode($_POST['userId']);
+            $userStatus = $_POST['userStatus'];
+            $result = $userObj->changeUserStatus($userId, $userStatus);
+            if ($result == 1) {
+                $res = 1;
+                $getUserTbl = $userObj->getUserData();
+                $userArray = array();
+                while ($row = $getUserTbl->fetch_assoc()) {
+                    array_push($userArray, $row);
+                }
+                $msg = $userArray;
+            }else{
+                $res = 2;
+                $msg ="Oops! user can't deactivate";
+            }
+            $data[0] = $res;
+            $data[1] = $msg;
+            echo json_encode($data);
+            break;   
     
 }
