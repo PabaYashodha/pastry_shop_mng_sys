@@ -40,6 +40,30 @@ $(document).ready(() => {
     const editSupplierAdd2 = $('#editSupplierAdd2');
     const editSupplierAdd3 = $('#editSupplierAdd3');
 
+    const customerFirstName = $('#customerFirstName');
+    const customerLastName = $('#customerLastName');
+    const customerContact = $('#customerContact');
+    const customerEmail = $('#customerEmail');
+    // const customerGender = $('#customerGender');
+    const customerBirthday = $('#customerBirthday');
+    const customerAdd1 = $('#customerAdd1');
+    const customerAdd2 = $('#customerAdd2');
+    const customerAdd3 = $('#customerAdd3');
+    const customerPostalCode = $('#customerPostalCode');
+    const customerNic = $('#customerNic');
+
+    const editCustomerFirstName = $('#editCustomerFirstName');
+    const editCustomerLastName = $('#editCustomerLastName');
+    const editCustomerContact = $('#editCustomerContact');
+    const editCustomerEmail = $('#editCustomerEmail');
+    // const editCustomerGender = $('#editCustomerGender');
+    const editCustomerBirthday = $('#editCustomerBirthday');
+    const editCustomerAdd1 = $('#editCustomerAdd1');
+    const editCustomerAdd2 = $('#editCustomerAdd2');
+    const editCustomerAdd3 = $('#editCustomerAdd3');
+    const editCustomerPostalCode = $('#editCustomerPostalCode');
+    const editCustomerNic = $('#editCustomerNic');
+
     const patName = /^[a-zA-Z\.\s]+$/;//validation rgx for text
     const patEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,6})+$/;//validation rgx for email
     const patCon = /^(07)([0-9]){8}$/;//validation rgx for contact
@@ -596,6 +620,285 @@ $(document).ready(() => {
         })
     });
 
+    $("#customerFormSubmit").click(() => {//customer form submit validation
+
+        let customerFirstNameVal = customerFirstName.val()
+        let customerLastNameVal = customerLastName.val()
+        let customerContactVal = customerContact.val()
+        let customerEmailVal = customerEmail.val()
+        let customerBirthdayVal = customerBirthday.val()
+        let customerAdd1Val = customerAdd1.val()
+        let customerAdd2Val = customerAdd2.val()
+        let customerAdd3Val = customerAdd3.val()
+        let customerPostalCodeVal = customerPostalCode.val()
+        let customerNicVal = customerNic.val()
+
+        if (customerFirstNameVal == "" && customerLastNameVal == "" && customerContactVal == "" && customerEmailVal == "" && customerBirthdayVal == "" &&  customerAdd1Val == "" && customerAdd2Val == "" && customerAdd3Val == "" && customerPostalCodeVal == "" &&  customerNicVal == "") {
+            toastr.error("Please fill the form");
+            $([customerFirstName, customerLastName, customerContact,  customerEmail, customerBirthday,  customerAdd1, customerAdd2, customerAdd3, customerPostalCode, customerNic]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid");
+            });
+            firstName.focus();
+            return false;
+        }
+
+        if (customerFirstNameVal == "" || !customerFirstNameVal.match(patName)) {
+            addInvalidClass(customerFirstName, "please enter first name");
+            return false;
+        }
+
+        if (customerLastNameVal == "" || !customerLastNameVal.match(patName)) {
+            addInvalidClass(customerLastName, "Please enter last name");
+            return false;
+        }
+
+        if (customerContactVal == "" || !customerContactVal.match(patCon)) {
+            addInvalidClass(customerContact, "Please enter contact");
+            return false;
+        }
+
+        if (customerBirthdayVal == "") {
+            addInvalidClass(customerBirthday, "Please enter birthday");
+            return false;
+        }
+
+        if (customerNicVal == "" || !customerNicVal.match(patNIC)) {
+            addInvalidClass(customerNic, "Please enter NIC");
+            return false;
+        }
+
+        if (customerEmailVal == "" || !customerEmailVal.match(patEmail)) {
+            addInvalidClass(customerEmail, "Please enter email");
+            return false;
+        }
+        if (customerAdd1Val == "") {
+            addInvalidClass(customerAdd1, "Please enter address no");
+            return false;
+        }
+
+        if (customerAdd2Val == "") {
+            addInvalidClass(customerAdd2, "Please enter lane");
+            return false;
+        }
+
+        if (customerAdd3Val == "") {
+            addInvalidClass(customerAdd3, "Please enter street");
+            return false;
+        }
+        if (customerPostalCodeVal == "") {
+            addInvalidClass(customerPostalCode, "Please enter postal code");
+            return false;
+        }
+       
+        swal({
+            title : 'Are You Sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,//cancel btn
+            dangerMode : true,//ok btn red color
+            allowOutsideClick : false,
+            allowEscapeKey : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false,
+        }).then((willOUT) => {
+            if (willOUT) {
+                $.ajax({
+                    method : "POST",
+                    url : "../controller/CustomerController.php?status=addCustomer",
+                    data : new FormData($('#customerForm')[0]),
+                    dataType : "json",
+                    enctype : "multipart/form-data",
+                    processData : false,
+                    contentType : false,
+                    async : true,
+                    cache : false,
+                    beforeSend : function(){
+                        swal({
+                            title : "Loading...",
+                            text : " ",
+                            icon : "../../images/96x96.gif",
+                            buttons :false,
+                            allowOutsideClick : false,
+                            allowEscapeKey : false,
+                            closeOnClickOutside : false,
+                            closeOnEsc : false,
+                        });
+                    },
+                    success : function(result){
+                        if (result[0] == 1) {
+                            swal({
+                                title : "Good Job !",
+                                text : "User Successfully Added",
+                                icon : "success",
+                                buttons :false,
+                                timer : 1000,
+                            });
+                            userTableBody(result[1]);
+                        }
+                        if (result[0] ==2) {
+                            swal({
+                                title : "Warning !",
+                                text : result[1],
+                                icon : "warning",
+                            });
+                        }
+                    },
+                    error : function(error){
+                        console.log(error)
+                    }
+                });
+            }else{
+                swal({
+                    title : "Warning !",
+                    text : 'User not added ',
+                    icon : "warning",
+                    buttons :false,
+                    timer : 1000,
+                });
+            }
+        })  
+    });
+
+    $("#saveEditCustomerForm").click(() => {//customer form submit validation
+
+        let editCustomerFirstNameVal = editCustomerFirstName.val()
+        let editCustomerLastNameVal = editCustomerLastName.val()
+        let editCustomerContactVal = editCustomerContact.val()
+        let editCustomerEmailVal = editCustomerEmail.val()
+        let editCustomerBirthdayVal = editCustomerBirthday.val()
+        let editCustomerAdd1Val = editCustomerAdd1.val()
+        let editCustomerAdd2Val = editCustomerAdd2.val()
+        let editCustomerAdd3Val = editCustomerAdd3.val()
+        let editCustomerPostalCodeVal = editCustomerPostalCode.val()
+        let editCustomerNicVal = editCustomerNic.val()
+
+        if (editCustomerFirstNameVal == "" && editCustomerLastNameVal == "" && editCustomerContactVal == "" && editCustomerEmailVal == "" && editCustomerBirthdayVal == "" &&  editCustomerAdd1Val == "" && editCustomerAdd2Val == "" && editCustomerAdd3Val == "" && editCustomerPostalCodeVal == "" &&  editCustomerNicVal == "") {
+            toastr.error("Please fill the form");
+            $([editCustomerFirstName, editCustomerLastName, editCustomerContact,  editCustomerEmail, editCustomerBirthday,  editCustomerAdd1, editCustomerAdd2, editCustomerAdd3, editCustomerPostalCode, editCustomerNic]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid");
+            });
+            firstName.focus();
+            return false;
+        }
+
+        if (editCustomerFirstNameVal == "" || !editCustomerFirstNameVal.match(patName)) {
+            addInvalidClass(editCustomerFirstName, "please enter first name");
+            return false;
+        }
+
+        if (editCustomerLastNameVal == "" || !editCustomerLastNameVal.match(patName)) {
+            addInvalidClass(editCustomerLastName, "Please enter last name");
+            return false;
+        }
+
+        if (editCustomerContactVal == "" || !editCustomerContactVal.match(patCon)) {
+            addInvalidClass(editCustomerContact, "Please enter contact");
+            return false;
+        }
+
+        if (editCustomerBirthdayVal == "") {
+            addInvalidClass(editCustomerBirthday, "Please enter birthday");
+            return false;
+        }
+
+        if (editCustomerNicVal == "" || !editCustomerNicVal.match(patNIC)) {
+            addInvalidClass(editCustomerNic, "Please enter NIC");
+            return false;
+        }
+
+        if (editCustomerEmailVal == "" || !editCustomerEmailVal.match(patEmail)) {
+            addInvalidClass(editCustomerEmail, "Please enter email");
+            return false;
+        }
+        if (editCustomerAdd1Val == "") {
+            addInvalidClass(editCustomerAdd1, "Please enter address no");
+            return false;
+        }
+
+        if (editCustomerAdd2Val == "") {
+            addInvalidClass(editCustomerAdd2, "Please enter lane");
+            return false;
+        }
+
+        if (editCustomerAdd3Val == "") {
+            addInvalidClass(editCustomerAdd3, "Please enter street");
+            return false;
+        }
+        if (editCustomerPostalCodeVal == "") {
+            addInvalidClass(editCustomerPostalCode, "Please enter postal code");
+            return false;
+        }
+       
+        swal({
+            title : 'Are You Sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,//cancel btn
+            dangerMode : true,//ok btn red color
+            allowOutsideClick : false,
+            allowEscapeKey : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false,
+        }).then((willOUT) => {
+            if (willOUT) {
+                $("#editCustomer").modal('hide')
+                $.ajax({
+                    method : "POST",
+                    url : "../controller/CustomerController.php?status=editCustomer",
+                    data : new FormData($('#editCustomerForm')[0]),
+                    dataType : "json",
+                    enctype : "multipart/form-data",
+                    processData : false,
+                    contentType : false,
+                    async : true,
+                    cache : false,
+                    beforeSend : function(){
+                        swal({
+                            title : "Loading...",
+                            text : " ",
+                            icon : "../../images/96x96.gif",
+                            buttons :false,
+                            allowOutsideClick : false,
+                            allowEscapeKey : false,
+                            closeOnClickOutside : false,
+                            closeOnEsc : false,
+                        });
+                    },
+                    success : function(result){
+                        if (result[0] == 1) {
+                            swal({
+                                title : "Good Job !",
+                                text : "User Successfully Added",
+                                icon : "success",
+                                buttons :false,
+                                timer : 1000,
+                            });
+                           customerTableBody(result[1]);
+                        }
+                        if (result[0] ==2) {
+                            swal({
+                                title : "Warning !",
+                                text : result[1],
+                                icon : "warning",
+                            });
+                        }
+                    },
+                    error : function(error){
+                        console.log(error)
+                    }
+                });
+            }else{
+                swal({
+                    title : "Warning !",
+                    text : 'User not added ',
+                    icon : "warning",
+                    buttons :false,
+                    timer : 1000,
+                });
+            }
+        })  
+    });
+    
     let addInvalidClass = (Id, massage) => {
         let id = Id
         toastr.error(massage);
@@ -644,6 +947,28 @@ $(document).ready(() => {
     editSupplierAdd1.change(() => {removeInvalidClass( editSupplierAdd1)});
     editSupplierAdd2.change(() => {removeInvalidClass( editSupplierAdd2)});
     editSupplierAdd3.change(() => {removeInvalidClass( editSupplierAdd3)});
+
+    customerFirstName.change(()=> {removeInvalidClass(customerFirstName)});
+    customerLastName.change(()=> {removeInvalidClass(customerLastName)});
+    customerContact.change(()=> {removeInvalidClass(customerContact)});
+    customerEmail.change(()=> {removeInvalidClass(customerEmail)});
+    customerBirthday.change(()=> {removeInvalidClass(customerBirthday)});
+    customerAdd1.change(()=> {removeInvalidClass(customerAdd1)});
+    customerAdd2.change(()=> {removeInvalidClass(customerAdd2)});
+    customerAdd3.change(()=> {removeInvalidClass(customerAdd3)});
+    customerPostalCode.change(()=> {removeInvalidClass(customerPostalCode)});
+    customerNic.change(()=> {removeInvalidClass(customerNic)});
+
+    editCustomerFirstName.change(()=> {removeInvalidClass(editCustomerFirstName)});
+    editCustomerLastName.change(()=> {removeInvalidClass(editCustomerLastName)});
+    editCustomerContact.change(()=> {removeInvalidClass(editCustomerContact)});
+    editCustomerEmail.change(()=> {removeInvalidClass(editCustomerEmail)});
+    editCustomerBirthday.change(()=> {removeInvalidClass(editCustomerBirthday)});
+    editCustomerAdd1.change(()=> {removeInvalidClass(editCustomerAdd1)});
+    editCustomerAdd2.change(()=> {removeInvalidClass(editCustomerAdd2)});
+    editCustomerAdd3.change(()=> {removeInvalidClass(editCustomerAdd3)});
+    editCustomerPostalCode.change(()=> {removeInvalidClass(editCustomerPostalCode)});
+    editCustomerNic.change(()=> {removeInvalidClass(editCustomerNic)});
 });
 
 // let userTableBody = (result) =>{

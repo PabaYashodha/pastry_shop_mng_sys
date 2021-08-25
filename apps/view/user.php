@@ -267,7 +267,6 @@
                                     <div class="col-sm-6">
                                         <input class="form-control" type="text" id="editAdd1" name="editAdd1">
                                     </div>
-
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">

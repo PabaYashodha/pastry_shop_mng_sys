@@ -1,3 +1,8 @@
+body {
+  background: #cccccc;
+  font-size: 0.9rem;
+}
+
 button.cusBut {
   width: 75px;
   margin-right: 5px;
@@ -25,15 +30,105 @@ nav {
   background-color: #2f2e41;
 }
 
-.sidebar {
-  background-color: #2f2e41;
-  height: 100vh;
-  width: 250px;
+.list-group-item-action:hover {
+  background: #cccccc !important;
+  color: #1a1a1a !important;
+}
+
+.sidebar-expanded {
+  width: 220px;
+  height: calc(100vh - 3rem);
   position: fixed;
+  overflow-y: auto;
+  background: #2f2e41;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+.sidebar-collapsed {
+  width: 55px;
+  height: calc(100vh - 3rem);
+  position: fixed;
+  overflow-y: auto;
+  background: #2f2e41;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+.d-box {
+  -webkit-box-sizing: unset !important;
+          box-sizing: unset !important;
 }
 
 .sidebar-content:hover {
   background-color: white;
   color: #2f2e41 !important;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: #2f2e41;
+  min-width: 160px;
+  -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: white;
+  padding: 12px 10px;
+  text-decoration: none;
+  text-align: left;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background: #cccccc;
+  color: #1a1a1a;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+  margin-left: -16.95rem;
+}
+
+.dropdown-menu {
+  top: 100%;
+  left: 0;
+  margin-top: 0 !important;
+}
+
+.dropdown-menu-end {
+  margin-left: -6.5rem;
+}
+
+.content-expanded {
+  height: 100vh;
+  width: calc(100% - 220px);
+  position: absolute;
+  right: 0;
+  padding: 1rem;
+  -webkit-box-shadow: 0 0 3rem 3rem rgba(26, 26, 26, 0.1);
+          box-shadow: 0 0 3rem 3rem rgba(26, 26, 26, 0.1);
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+.content-collapsed {
+  height: 100vh;
+  width: calc(100% - 55px);
+  position: absolute;
+  right: 0;
+  padding: 1rem;
+  -webkit-box-shadow: 0 0 3rem 3rem rgba(26, 26, 26, 0.1);
+          box-shadow: 0 0 3rem 3rem rgba(26, 26, 26, 0.1);
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
 }
 /*# sourceMappingURL=style.css.map */

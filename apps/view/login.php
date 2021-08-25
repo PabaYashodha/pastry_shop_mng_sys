@@ -8,6 +8,8 @@
     <title>Login</title>
     <link rel="stylesheet" type="text/css" href="../../resources/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../../css/login.css">
+    <link rel="stylesheet" type="text/css" href="../../resources/toastr/build/toastr.min.css">
+    <link rel="stylesheet" type="text/css" href="../../resources/DataTables/datatables.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fruktur&display=swap" rel="stylesheet">
@@ -45,6 +47,11 @@
     <script type="text/javascript" src="../../js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="../../resources/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../js/validation.js"></script>
+    <script type="text/javascript" src="../../resources/sweetalert.js"></script>
+    <script type="text/javascript" src="../../resources/toastr/build/toastr.min.js"></script>
+    <script type="text/javascript" src="../../js/script.js"></script>
+    <script type="text/javascript" src="../../resources/DataTables/datatables.min.js"></script>
+    <script type="text/javascript" src="../../resources/fontawesome/js/all.min.js"></script>
 </body>
 
 </html>

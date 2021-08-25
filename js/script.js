@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     toastr.options = {
         "closeButton": false,
@@ -55,10 +54,22 @@ $(document).ready(function () {
         // console.log(result);
         let li = '';
         for (let index = 0; index < result.length; index++) {
-            li += '<li class="list-group-item list-group-item-action"><a href="'+result[index].module_url+'" class="text-decoration-none text-white"><i class="'+result[index].module_logo+'"></i> &nbsp;'+ result[index].module_name +'</a></li>'  
+            li += '<li class="list-group-item p-0"><a href="'+result[index].module_url+'" class="nav-link text-light list-group-item list-group-item-action flex-column"><i class="'+result[index].module_logo+'"></i> &nbsp;<span class="moduleName">'+ result[index].module_name +'</span></a></li>'  
         }
         $('#getModule').append(li);
     }, 'json')
+
+    $.get("../controller/CustomerController.php?status=getCustomerData", (result) => {
+        customerTableBody(result);
+    },'json')
+
+    $('#navBTN').click(function (){
+        $(this).children().toggleClass("far fa-bars far fa-times")
+        $('#brandName, .moduleName').toggleClass("show d-none")
+        $('#sidebar').toggleClass("sidebar-expanded sidebar-collapsed")
+        $('.nav-link').toggleClass('d-box')
+        $('#content').toggleClass("content-expanded content-collapsed")
+    })
 });
 
 let preview = (input) => {
@@ -259,6 +270,7 @@ let supplierTableBody = (result) =>{
                 '<div class="d-inline-flex justify-content-start">' +
                 '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewSupplier" onclick="viewSupplierDetails(\'' + btoa(result[index].supplier_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
                 '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editSupplier" onclick="editSupplierDetails(\'' + btoa(result[index].supplier_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '</td>'+
                 '</tr>';
         //console.log(row)
     }
@@ -304,5 +316,78 @@ let editSupplierDetails = (Id) => {
     }, 'json')
 }
 
+let customerTableBody = (result) =>{
+    let row = '';
+    for (let index = 0; index < result.length; index++) {
+       row += '<tr>'+
+                '<th scope="row">'+ result[index].customer_id+ '</th>' +
+                '<td>'+ result[index].customer_fname+' '+result[index].customer_lname+ '</td>' +
+                '<td>'+ result[index].customer_contact+'</td>'+ 
+                '<td>'+ result[index].customer_email+'</td>'+ 
+                '<td>'+ result[index].customer_add1+', '+result[index].customer_add2+', '+result[index].customer_add3+'</td>'+ 
+
+                '<td>'+
+                '<div class="d-inline-flex justify-content-start">' +
+                '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewCustomer" onclick="viewCustomerDetails(\'' + btoa(result[index].customer_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editCustomer" onclick="editCustomerDetails(\'' + btoa(result[index].customer_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '</td>'
+       '</tr>'; 
+    }
+    $('#customerTable').html(row).show()
+}
+
+let viewCustomerDetails = (Id) =>{
+    $.post("../controller/CustomerController.php?status=viewCustomerDetails", {customerId: Id}, (result)=>{
+        let row = '<div class="row">'+
+        '<label for="name" class="col-sm-12 col-form-label"><h2>' + result.customer_fname+ ' ' + result.customer_lname+'</h2></label>' +
+        '<label for="email" class="col-sm-4 col-form-label text-end">Email</label>' +
+        '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_email + '</label>' +
+        '<label for="contact" class="col-sm-4 col-form-label text-end">Contact</label>' +
+        '<label for="contact" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_contact + '</label>' +
+        '<label for="address" class="col-sm-4 col-form-label text-end">Address</label>' +
+        '<label for="address" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_add1+ ' '+result.customer_add2+ ' '+result.customer_add3+ '</label>' +
+        '<label for="postalCode" class="col-sm-4 col-form-label text-end">Postal Code</label>' +
+        '<label for="postalCode" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_postal_code + '</label>' +
+        '<label for="nic" class="col-sm-4 col-form-label text-end">NIC</label>' +
+        '<label for="nic" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_nic + '</label>' +
+        '<label for="gender" class="col-sm-4 col-form-label text-end">Gender</label>' ;
+        if ((result.customer_gender) == 1) {
+            row += '<label for="gender" class="col-sm-8 col-form-label text-start mb-2"> : male</label>';
+        } else {
+            row += '<label for="gender" class="col-sm-8 col-form-label text-start mb-2"> : female</label>';
+        }
+        
+        row += '<label for="birthday" class="col-sm-4 col-form-label text-end">Birthday</label>' +
+        '<label for="birthday" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_dob + '</label>' +
+        '<label for="status" class="col-sm-4 col-form-label text-end"> Status </label>';
+        if ((result.customer_status) == 1) {
+            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:green">Active</span></label>';
+        } else {
+            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:red">Deactivate</span></label>';
+        }
+        row += '<label for="createDate" class="col-sm-4 col-form-label text-end">Create Date  </label>' +
+        '<label for="createDate" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_create_date + '</label>' +
+            
+        '</div>'
+        $('#viewCustomerContent').html(row).show()
+    },'json')
+}
+
+let editCustomerDetails = (Id) =>{
+    $.post("../controller/customerController.php?status=viewCustomerDetails", {customerId: Id}, (result) =>{
+        $('#editCustomerId').val(btoa(result.customer_id));
+        $('#editCustomerFirstName').val(result.customer_fname);
+        $('#editCustomerLastName').val(result.customer_lname);
+        $('#editCustomerEmail').val(result.customer_email);
+        $('#editCustomerContact').val(result.customer_contact);
+        $('#editCustomerBirthday').val(result.customer_dob);
+        $('#editCustomerGender').val(result.customer_gender);
+        $('#editCustomerAdd1').val(result.customer_add1);
+        $('#editCustomerAdd2').val(result.customer_add2);
+        $('#editCustomerAdd3').val(result.customer_add3);
+        $('#editCustomerPostalCode').val(result.customer_postal_code);
+        $('#editCustomerNic').val(result.customer_nic);
+    }, 'json')
+}
 
 
