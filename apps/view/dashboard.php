@@ -81,7 +81,7 @@
         <div class="sidebar-expanded" id="sidebar">
             <nav class="navbar nav nav-pills navbar-dark flex-column align-items-stretch">
                 <ul class="list-group" id="getModule">
-
+              
                 </ul>
             </nav>
         </div>
@@ -89,7 +89,9 @@
         <div id="content" class="content-expanded">
             <div class="card p-3 " style="height: 100vh; border-radius: 0.75rem;">
                 <div class="card-body">
-                    <div id="chart-container"></div>
+                    <div id="content-container">
+                        <div id="chart-container"></div>
+                    </div>                    
                 </div>
             </div>
         </div>

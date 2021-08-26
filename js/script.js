@@ -50,14 +50,7 @@ $(document).ready(function () {
         supplierTableBody(result);
     }, 'json')
 
-    $.get("../controller/DashboardController.php?status=getModule", (result) => {
-        // console.log(result);
-        let li = '';
-        for (let index = 0; index < result.length; index++) {
-            li += '<li class="list-group-item p-0"><a href="'+result[index].module_url+'" class="nav-link text-light list-group-item list-group-item-action flex-column"><i class="'+result[index].module_logo+'"></i> &nbsp;<span class="moduleName">'+ result[index].module_name +'</span></a></li>'  
-        }
-        $('#getModule').append(li);
-    }, 'json')
+
 
     $.get("../controller/CustomerController.php?status=getCustomerData", (result) => {
         customerTableBody(result);
@@ -70,7 +63,23 @@ $(document).ready(function () {
         $('.nav-link').toggleClass('d-box')
         $('#content').toggleClass("content-expanded content-collapsed")
     })
+
+    $('.sideBTN').click(function() {
+        $('.sidebarActive').removeClass('sidebarActive')
+        $('.nav-link').removeClass('text-dark').addClass('text-light')  
+        $(this).addClass('sidebarActive').children().removeClass('text-light').addClass('text-dark')        
+    })
+   
 });
+
+$.get("../controller/DashboardController.php?status=getModule", (result) => {
+    // console.log(result);
+    let li = '';
+    for (let index = 0; index < result.length; index++) {
+        li += '<li class="list-group-item sideBTN p-0 "><a href="#" class="nav-link text-light list-group-item flex-column"><i class="'+result[index].module_logo+'"></i> &nbsp;<span class="moduleName">'+ result[index].module_name +'</span></a></li>'  
+    }
+    $('#getModule').append(li);
+}, 'json')
 
 let preview = (input) => {
     if (input.files && input.files[0]) {
