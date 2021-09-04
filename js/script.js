@@ -40,21 +40,7 @@ $(document).ready(function () {
         pagingType: "full_numbers"
     });
 
-    //     // setInterval(function () {
-    $.get("../controller/UserController.php?status=getUserData", (result) => {
-        userTableBody(result);      //call userTableBody function  
-    }, 'json')
-    //     // }, 30000)    
-
-    $.get("../controller/SupplierController.php?status=getSupplierData", (result) => {
-        supplierTableBody(result);
-    }, 'json')
-
-
-
-    $.get("../controller/CustomerController.php?status=getCustomerData", (result) => {
-        customerTableBody(result);
-    },'json')
+   
 
     $('#navBTN').click(function (){
         $(this).children().toggleClass("far fa-bars far fa-times")
@@ -72,14 +58,6 @@ $(document).ready(function () {
    
 });
 
-$.get("../controller/DashboardController.php?status=getModule", (result) => {
-    // console.log(result);
-    let li = '';
-    for (let index = 0; index < result.length; index++) {
-        li += '<li class="list-group-item sideBTN p-0 "><a href="#" class="nav-link text-light list-group-item flex-column"><i class="'+result[index].module_logo+'"></i> &nbsp;<span class="moduleName">'+ result[index].module_name +'</span></a></li>'  
-    }
-    $('#getModule').append(li);
-}, 'json')
 
 let preview = (input) => {
     if (input.files && input.files[0]) {

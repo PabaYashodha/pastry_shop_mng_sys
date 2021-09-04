@@ -1,59 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer</title>
-    <link rel="stylesheet" type="text/css" href="../../resources/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../../resources/toastr/build/toastr.min.css">
-    <link rel="stylesheet" type="text/css" href="../../resources/DataTables/datatables.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../resources/fontawesome/css/all.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../css/style.css" />
-</head>
-
-<body>
-<div class="container">
-        <div class="card shadow-lg mt-5" style="border-radius: 20px;">
-            <div class="card-body">
+<?php
+require_once "header.php";
+require_once "sidebar.php";
+?>
+<div id="content" class="content-expanded">
+    <div class="card" style="border-radius: 20px;">
+        <div class="card-body">
             <div class="row mb-3">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addCustomer"><i class="far fa-plus"></i> ADD CUSTOMER</button>
-                    </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addCustomer"><i class="far fa-plus"></i> ADD CUSTOMER</button>
                 </div>
+            </div>
 
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <table class="table  table-hover table-responsive-*" id="dataTable">
-                            <thead class="table-primary">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Contact</th>
-                                    <th scope="col">Email</th>
-                                    <th scope ="col">Address</th>
-                                    <th scope="col">Option</th>
-                                </tr>
-                            </thead>
-                            <tbody id="customerTable"></tbody>
-                        </table>
-                    </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <table class="table  table-hover table-responsive-*" id="dataTable">
+                        <thead class="table-primary">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Contact</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Option</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTable"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-      <!-- modal start -->
-    <!-- add Customer -->
-    <div class="modal fade" tabindex="-1" aria-labelledby="addCustomer" id="addCustomer" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Customer</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+<!-- modal start -->
+<!-- add Customer -->
+<div class="modal fade" tabindex="-1" aria-labelledby="addCustomer" id="addCustomer" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
                 <form action="" method="post" role="form" id="customerForm">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
@@ -90,7 +78,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
-                                <label for="customerGender" class="col-sm-3 col-form-label" > Gender </label>
+                                <label for="customerGender" class="col-sm-3 col-form-label"> Gender </label>
                                 <div class="col-sm-9">
                                     <label class="form-check-label" for="Male"> Male </label>
                                     <input type="radio" class="form-check-input" name="customerGender" id="Male" value="1" checked>
@@ -108,7 +96,7 @@
                                 </div>
                             </div>
                         </div>
-                                               
+
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="row mb-3">
                                 <label for="customerAddress" class="col-sm-6 col-form-label">Address</label>
@@ -121,10 +109,10 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
                             <div class="row mb-3">
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text"  id="customerAdd2" name="customerAdd2">
+                                    <input class="form-control" type="text" id="customerAdd2" name="customerAdd2">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text"  id="customerAdd3" name="customerAdd3">
+                                    <input class="form-control" type="text" id="customerAdd3" name="customerAdd3">
                                 </div>
                             </div>
                         </div>
@@ -155,41 +143,41 @@
                         </div>
                     </div>
                 </form>
-                </div>
-                <div class="modal-footer"></div>
             </div>
+            <div class="modal-footer"></div>
         </div>
     </div>
-    <!-- modal end -->
+</div>
+<!-- modal end -->
 
-      <!-- modal start -->
-    <!-- view Customer -->
-    <div class="modal fade" tabindex="-1" aria-labelledby="viewCustomer" id="viewCustomer" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">VIEW CUSTOMER</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="viewCustomerContent"></div>
-                </div>
-                <div class="modal-footer"></div>
+<!-- modal start -->
+<!-- view Customer -->
+<div class="modal fade" tabindex="-1" aria-labelledby="viewCustomer" id="viewCustomer" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">VIEW CUSTOMER</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+                <div id="viewCustomerContent"></div>
+            </div>
+            <div class="modal-footer"></div>
         </div>
     </div>
-    <!-- modal end -->
+</div>
+<!-- modal end -->
 
-    <!-- modal start -->
-    <!-- edit customer -->
-    <div class="modal fade" tabindex="-1" aria-labelledby="editCustomer" id="editCustomer" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Customer</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+<!-- modal start -->
+<!-- edit customer -->
+<div class="modal fade" tabindex="-1" aria-labelledby="editCustomer" id="editCustomer" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
                 <form action="" method="post" role="form" id="editCustomerForm">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
@@ -226,7 +214,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
-                                <label for="editCustomerGender" class="col-sm-3 col-form-label" > Gender </label>
+                                <label for="editCustomerGender" class="col-sm-3 col-form-label"> Gender </label>
                                 <div class="col-sm-9">
                                     <label class="form-check-label" for="Male"> Male </label>
                                     <input type="radio" class="form-check-input" name="editCustomerGender" id="Male" value="1" checked>
@@ -244,7 +232,7 @@
                                 </div>
                             </div>
                         </div>
-                                               
+
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="row mb-3">
                                 <label for="editCustomerAddress" class="col-sm-6 col-form-label">Address</label>
@@ -257,10 +245,10 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
                             <div class="row mb-3">
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text"  id="editCustomerAdd2" name="editCustomerAdd2">
+                                    <input class="form-control" type="text" id="editCustomerAdd2" name="editCustomerAdd2">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text"  id="editCustomerAdd3" name="editCustomerAdd3">
+                                    <input class="form-control" type="text" id="editCustomerAdd3" name="editCustomerAdd3">
                                 </div>
                             </div>
                         </div>
@@ -292,21 +280,14 @@
                         </div>
                     </div>
                 </form>
-                </div>
-                <div class="modal-footer"></div>
             </div>
+            <div class="modal-footer"></div>
         </div>
     </div>
-    <!-- modal end -->
-
-    <script type="text/javascript" src="../../js/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="../../resources/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../js/validation.js"></script>
-    <script type="text/javascript" src="../../resources/sweetalert.js"></script>
-    <script type="text/javascript" src="../../resources/toastr/build/toastr.min.js"></script>
-    <script type="text/javascript" src="../../js/script.js"></script>
-    <script type="text/javascript" src="../../resources/DataTables/datatables.min.js"></script>
-    <script type="text/javascript" src="../../resources/fontawesome/js/all.min.js"></script>
-</body>
-
-</html>
+</div>
+<!-- modal end -->
+<?php require_once "scriptInclude.php" ?>
+<script>
+    $(window).load(getCustomerData());
+</script>
+<?php require_once "footer.php"; ?>

@@ -93,7 +93,8 @@ nav{
 
 .dropdown:hover .dropdown-content {
     display: block;
-    margin-left: -16.95rem;
+    margin-left: -9.5rem;
+    
 }
 
 .dropdown-menu {
@@ -114,6 +115,7 @@ nav{
     padding: 1rem;
     box-shadow:0 0 3rem 3rem rgba(26, 26, 26, 0.1);
     transition: all 0.2s;
+    
 }
 .content-collapsed{
     height: 100vh;
