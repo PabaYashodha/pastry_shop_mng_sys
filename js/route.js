@@ -2,7 +2,7 @@ $.get("../controller/DashboardController.php?status=getModule", (result) => {
     // console.log(result);
     let li = '';
     for (let index = 0; index < result.length; index++) {
-        li += '<li class="list-group-item sideBTN p-0 "><a href="#" class="nav-link text-light list-group-item flex-column"><i class="'+result[index].module_logo+'"></i> &nbsp;<span class="moduleName">'+ result[index].module_name +'</span></a></li>'  
+        li += '<li class="sideBTN p-0 "><a href="#" class="nav-link text-light flex-column" style="padding:0.73rem; padding-left:1.7rem" ><i class="'+result[index].module_logo+'"></i><span class="moduleName"> &nbsp;'+ result[index].module_name +'</span></a></li>'  
     }
     $('#getModule').html(li).show();
 }, 'json')

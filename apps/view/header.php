@@ -29,7 +29,8 @@
     }
 </style> -->
 <style>
-    .sidebar-expanded::-webkit-scrollbar {
+    /* avoid sidebar scroll bar */
+    .sidebar-expanded::-webkit-scrollbar { 
         display: none;
     }
 
