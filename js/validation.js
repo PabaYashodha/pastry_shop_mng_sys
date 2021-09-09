@@ -64,6 +64,12 @@ $(document).ready(() => {
     const editCustomerPostalCode = $('#editCustomerPostalCode');
     const editCustomerNic = $('#editCustomerNic');
 
+    const foodItemName = $('#foodItemName');
+    const unitPrice = $('#unitPrice');
+    const categoryName =$('#categoryName');
+    const subCategoryName = $('#subCategoryName');
+    const foodItemImage = $('#foodItemImage');
+
     const patName = /^[a-zA-Z\.\s]+$/;//validation rgx for text
     const patEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,6})+$/;//validation rgx for email
     const patCon = /^(07)([0-9]){8}$/;//validation rgx for contact
@@ -899,9 +905,47 @@ $(document).ready(() => {
         })  
     });
     
-    let addInvalidClass = (Id, massage) => {
+    $("#addItemSubmit").click(() => {
+        let foodItemNameVal = foodItemName.val()
+        let unitPriceVal = unitPrice.val()
+        let categoryNameVal =categoryName.val()
+        let subCategoryNameVal = subCategoryName.val()
+        let foodItemImageVal = foodItemImage.val()
+
+        if (foodItemNameVal=="" && unitPriceVal == "" && categoryNameVal == "" && subCategoryNameVal=="" && foodItemImageVal =="") {
+            toastr.error("Please fill the form");
+            $([foodItemName, unitPrice, categoryName, subCategoryName, foodItemImage]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid")
+            });
+            foodItemName.focus();
+            return false;
+        }
+        if (foodItemNameVal == "") {
+            addInvalidClass(foodItemName, "Please fill the item name");
+            return false;
+        }
+        if (unitPriceVal == "") {
+            addInvalidClass(unitPrice, "Please add price");
+            return false;
+        }
+        if (categoryNameVal == "") {
+            addInvalidClass(categoryName, "Please add price");
+            return false;
+        }
+        if (subCategoryNameVal == "") {
+            addInvalidClass(subCategoryName, "Please add price");
+            return false;
+        }
+        if (foodItemImageVal == "") {
+            addInvalidClass(foodItemImage, "Please add price");
+            return false;
+        }
+        
+    });
+    
+    let addInvalidClass = (Id, message) => {
         let id = Id
-        toastr.error(massage);
+        toastr.error(message);
         id.removeClass("is-valid").addClass("is-invalid").focus();
     }
     let removeInvalidClass = (Id) => {
@@ -969,7 +1013,14 @@ $(document).ready(() => {
     editCustomerAdd3.change(()=> {removeInvalidClass(editCustomerAdd3)});
     editCustomerPostalCode.change(()=> {removeInvalidClass(editCustomerPostalCode)});
     editCustomerNic.change(()=> {removeInvalidClass(editCustomerNic)});
+
+    foodItemName.change(()=> {removeInvalidClass(foodItemName)});
+    unitPrice.change(()=> {removeInvalidClass(unitPrice)});
+    categoryName.change(()=> {removeInvalidClass(categoryName)});
+    subCategoryName.change(()=> {removeInvalidClass(subCategoryName)});
+    foodItemImage.change(()=> {removeInvalidClass(foodItemImage)});
 });
+
 
 // let userTableBody = (result) =>{
 //     let row = '';

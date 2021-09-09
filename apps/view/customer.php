@@ -2,6 +2,7 @@
 require_once "header.php";
 require_once "sidebar.php";
 ?>
+<!-- view customer  in a table -->
 <div id="content" class="content-expanded">
     <div class="card" style="border-radius: 20px;">
         <div class="card-body">
@@ -10,7 +11,6 @@ require_once "sidebar.php";
                     <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addCustomer"><i class="far fa-plus"></i> ADD CUSTOMER</button>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <table class="table  table-hover table-responsive-*" id="dataTable">

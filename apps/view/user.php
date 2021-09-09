@@ -19,6 +19,7 @@ require_once "sidebar.php";
                 </thead>
                 <tbody id="userTable"></tbody>
             </table>
+            
             <form action="" method="post" role="form" id="userForm">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
