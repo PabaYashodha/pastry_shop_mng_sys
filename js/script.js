@@ -69,6 +69,7 @@ let preview = (input) => {
     }
 }
 
+//user
 let userTableBody = (result) =>{
     let row = '';
         for (let index = 0; index < result.length; index++) {
@@ -89,6 +90,7 @@ let userTableBody = (result) =>{
                 '<div class="d-inline-flex justify-content-start">' +
                 '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewUser" onclick="viewUserDetails(\'' + btoa(result[index].user_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
                 '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editUser" onclick="editUserDetails(\'' + btoa(result[index].user_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '</td>'+
                 '</tr>';
         }
         // console.log(row)
@@ -239,6 +241,7 @@ let activateUser = (Id) => {
     })
 }
 
+//supplier 
 let supplierTableBody = (result) =>{
     let row = '';
     for (let index = 0; index < result.length; index++) {
@@ -303,6 +306,7 @@ let editSupplierDetails = (Id) => {
     }, 'json')
 }
 
+//customer
 let customerTableBody = (result) =>{
     let row = '';
     for (let index = 0; index < result.length; index++) {
@@ -377,4 +381,33 @@ let editCustomerDetails = (Id) =>{
     }, 'json')
 }
 
+//food item
+let foodItemTableBody = (result) =>{
+    let row = '';
+    for (let index = 0; index < array.length; index++) {
+        row += '<tr>'+
+        '<th scope="row">'+result[index].food_item_id+'</th>'+
+        '<td><img src="../../images/foodItem-images/' + result[index].food_item_image + '" width="40" height="40"></td>' +
+        '<td>'+result[index].food_item_name+'</td>'+
+        '<td>'+result[index].food_item_unit_price+'</td><td>';
+        if ((result[index].food_item_status) ==1) {
+            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateFoodItem(\'' + btoa(result[index].food_item_id) + '\')">Active</button>';
+        }else{
+            row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateFoodItem(\'' + btoa(result[index].food_item_id) + '\')">Deactivate</button>';
+        }
+        row += '</td>' +
+        '<td>'+
+        '<div class="d-inline-flex justify-content-start">' +
+        '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewFoodItem" onclick="viewFoodItem(\'' + btoa(result[index].food_item_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+        '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editFoodItem" onclick="editFoodItemDetails(\'' + btoa(result[index].food_item_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+        '</td>'+
+        '</tr>'; 
+    }
+    $('#FoodItemTable').html(row).show()
+}
 
+// let viewFoodDetails = (Id) =>{
+//     $.post("../controller/foodItemController.php?status=viewFoodDetails", {foodItem: Id}, (result)=>{
+//         let row = '<div class="row">'++'</div>'
+//     })
+// }

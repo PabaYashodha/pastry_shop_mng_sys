@@ -19,14 +19,14 @@ require_once "sidebar.php";
                                 <th scope="col">#</th>
                                 <th scope="col">Image</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Sub Category</th>
+                                <!-- <th scope="col">Category</th>
+                                <th scope="col">Sub Category</th> -->
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Option</th>
                             </tr>
                         </thead>
-                        <!-- <tbody id="customerTable"></tbody> -->
+                        <tbody id="FoodItemTable"></tbody>
                     </table>
                 </div>
             </div>
@@ -43,7 +43,7 @@ require_once "sidebar.php";
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="" method="post" role="form" id="addFoodItem">
+                <form action="" method="post" role="form" id="FoodItemForm">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="row mb-3">
@@ -63,9 +63,9 @@ require_once "sidebar.php";
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="row mb-3">
-                                <label for="categoryName" class="col-sm-3 col-form-label">Category</label>
+                                <label for="category" class="col-sm-3 col-form-label">Category</label>
                                 <div class="col-sm-9">
-                                    <select class="form-select" aria-label="Default select example" id="categoryName" name="categoryName">
+                                    <select class="form-select" aria-label="Default select example" id="category" name="category">
                                         <option selected value="">-- Select role --</option>
                                         <option value="1">Savories & Buns</option>
                                         <option value="2">Breads</option>
@@ -78,9 +78,9 @@ require_once "sidebar.php";
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="row mb-3">
-                                <label for="subCategoryName" class="col-sm-3 col-form-label">Sub Category</label>
+                                <label for="subCategory" class="col-sm-3 col-form-label">Sub Category</label>
                                 <div class="col-sm-9">
-                                    <select class="form-select" aria-label="Default select example" id="subCategoryName" name="subCategoryName">
+                                    <select class="form-select" aria-label="Default select example" id="subCategory" name="subCategory">
                                         <option selected value="">-- Select role --</option>
                                         <option value="1">Cool Drinks</option>
                                         <option value="2">Hot Drinks</option>
@@ -129,6 +129,23 @@ require_once "sidebar.php";
     </div>
 </div>
 
+<!-- modal start -->
+<!-- view food item -->
+<div class="modal fade" tabindex="-1" aria-labelledby="viewFoodItem" id="viewFoodItem" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">VIEW FOOD</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="viewFoodItemContent"></div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<!-- modal end -->
 
 <?php require_once "scriptInclude.php" ?>
 <!-- <script>

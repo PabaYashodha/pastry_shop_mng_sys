@@ -940,7 +940,73 @@ $(document).ready(() => {
             addInvalidClass(foodItemImage, "Please add price");
             return false;
         }
-        
+        swal({
+            title : 'Are You Sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,
+            dangerMode : true,
+            allowEscapeKey : false,
+            allowOutsideClick : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false,
+        }).then((willOUT) =>{
+            if(willOUT) {
+                $.ajax({
+                    method : "POST",
+                    url : "../controller/FoodItemController.php?status=addFoodItem",
+                    data : new FormData($('#FoodItemForm')[0]),
+                    dataType : "json",
+                    enctype : "multipart/form-data",
+                    processData : false,
+                    contentType : false,
+                    async :true,
+                    cache : false,
+                    beforeSend : function() {
+                       swal({
+                           title : "Loading..",
+                           text : " ",
+                           icon : "../../images/96x96.gif",
+                           buttons :false,
+                           allowOutsideClick : false,
+                           allowEscapeKey : false,
+                           closeOnClickOutside : false,
+                           closeOnEsc : false,
+                       });
+                    },
+                    success : function(result) {
+                        if (result[0] ==1) {
+                            swal({
+                                title : "Good Job !",
+                                text : "User Successfully Added",
+                                icon : "success",
+                                buttons :false,
+                                timer : 1000,
+                            });
+                            // userTableBody(result[1]);
+                        }
+                        if (result[0] ==2) {
+                            swal({
+                                title : "Warning !",
+                                text : result[1],
+                                icon : "warning",
+                            });
+                        }
+                    },
+                    error : function(error){
+                        console.log(error)
+                    }
+                });
+            }else{
+                swal({
+                    title : "Warning !",
+                    text : 'User not added ',
+                    icon : "warning",
+                    buttons :false,
+                    timer : 1000,
+                });
+            }
+        })
     });
     
     let addInvalidClass = (Id, message) => {
