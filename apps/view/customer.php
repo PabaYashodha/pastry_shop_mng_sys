@@ -2,6 +2,19 @@
 require_once "header.php";
 require_once "sidebar.php";
 ?>
+
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
 <!-- view customer  in a table -->
 <div id="content" class="content-expanded">
     <div class="card" style="border-radius: 20px;">
@@ -64,7 +77,7 @@ require_once "sidebar.php";
                             <div class="row mb-3">
                                 <label for="customerContact" class="col-sm-3 col-form-label"> Contact </label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="customerContact" name="customerContact">
+                                    <input type="number" class="form-control" id="customerContact" name="customerContact">
                                 </div>
                             </div>
                         </div>
@@ -200,7 +213,7 @@ require_once "sidebar.php";
                             <div class="row mb-3">
                                 <label for="editCustomerContact" class="col-sm-3 col-form-label"> Contact </label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="editCustomerContact" name="editCustomerContact">
+                                    <input type="number" class="form-control" id="editCustomerContact" name="editCustomerContact">
                                 </div>
                             </div>
                         </div>
@@ -285,6 +298,7 @@ require_once "sidebar.php";
         </div>
     </div>
 </div>
+
 <!-- modal end -->
 <?php require_once "scriptInclude.php" ?>
 <script>

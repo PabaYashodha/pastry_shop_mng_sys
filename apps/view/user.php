@@ -20,6 +20,7 @@ require_once "sidebar.php";
                 <tbody id="userTable"></tbody>
             </table>
             
+            <!-- add user -->
             <form action="" method="post" role="form" id="userForm">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
@@ -161,7 +162,7 @@ require_once "sidebar.php";
     </div>
 </div>
 <!-- modal end -->
-
+ 
 <!-- modal start -->
 <!-- edit user -->
 <div class="modal fade" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="editUser" id="editUser" aria-hidden="true">

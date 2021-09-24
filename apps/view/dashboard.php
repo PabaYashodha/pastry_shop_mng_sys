@@ -59,23 +59,6 @@ require_once "sidebar.php";
             </div>
         </div>
     </div>
-    <!-- <div>Available food</div>
-    <div class="row mt-4">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <table class="table table-hover table-responsive-*">
-                <thead class="table-primary">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Contact</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">Option</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div> -->
 </div>
 <?php
 require_once "scriptInclude.php";

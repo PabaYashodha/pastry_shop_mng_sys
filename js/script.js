@@ -64,6 +64,7 @@ let preview = (input) => {
         let reader = new FileReader();
         reader.onload = function (e) {
             $('#pre_image').attr('src', e.target.result).height(200).width(200);
+            $('#food_pre_image').attr('src', e.target.result).height(300).width(300);
         };
         reader.readAsDataURL(input.files[0]);
     }
@@ -384,7 +385,7 @@ let editCustomerDetails = (Id) =>{
 //food item
 let foodItemTableBody = (result) =>{
     let row = '';
-    for (let index = 0; index < array.length; index++) {
+    for (let index = 0; index < result.length; index++) {
         row += '<tr>'+
         '<th scope="row">'+result[index].food_item_id+'</th>'+
         '<td><img src="../../images/foodItem-images/' + result[index].food_item_image + '" width="40" height="40"></td>' +
@@ -398,16 +399,60 @@ let foodItemTableBody = (result) =>{
         row += '</td>' +
         '<td>'+
         '<div class="d-inline-flex justify-content-start">' +
-        '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewFoodItem" onclick="viewFoodItem(\'' + btoa(result[index].food_item_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+        '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewFoodItem" onclick="viewFoodDetails(\'' + btoa(result[index].food_item_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
         '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editFoodItem" onclick="editFoodItemDetails(\'' + btoa(result[index].food_item_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
         '</td>'+
         '</tr>'; 
     }
-    $('#FoodItemTable').html(row).show()
+    $('#foodItemTable').html(row).show()
 }
 
-// let viewFoodDetails = (Id) =>{
-//     $.post("../controller/foodItemController.php?status=viewFoodDetails", {foodItem: Id}, (result)=>{
-//         let row = '<div class="row">'++'</div>'
-//     })
-// }
+
+
+//dining table
+let diningTableBody = (result) =>{
+    let row = '';
+    for (let index = 0; index < result.length; index++) {
+       row += '<tr>'+
+            '<th scope="row">'+ result[index].dining_table_id +'</th>'+
+            '<td>'+ result[index].dining_table_name +'</td>'+
+            '<td>'+ result[index].dining_table_psn_cnt +'</td><td>';
+            if ((result[index].dining_table_status) == 1) {
+            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Active</button>';
+            } else {
+                 row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Deactivate</button>';
+            }
+       row += '</td>'+
+                '<td>' +
+                '<div class="d-inline-flex justify-content-start">' +
+                '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDiningTable" onclick="viewDiningTableDetails(\'' + btoa(result[index].dining_table_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editDiningTable" onclick="editDiningTable(\'' + btoa(result[index].dining_table_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '</td>'+
+            '</tr>';
+            }
+            $('#diningTable').html(row).show()
+}
+
+let viewDiningTableDetails = (Id) =>{
+    $.post("../controller/DiningTableController.php?status=viewDiningTableDetails",{diningTableId: Id},(result)=>{
+        console.log(result)
+        let row = '<div class="row">'+
+        '<label for="name" class="col-sm-12 col-form-label"><h2>' + result.dining_table_name +'</h2></label>' +
+        '<label for="tableCapacity" class="col-sm-4 col-form-label text-end">Table Capacity</label>' +
+        '<label for="tableCapacity" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.dining_table_psn_cnt + '</label>' +
+        '<label for="status" class="col-sm-4 col-form-label text-end"> Status </label>';
+        if ((result.dining_table_status) == 1) {
+            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:green">Booked</span></label>';
+        } else {
+            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:red">Available</span></label>';
+        }
+        row +='</div>'
+        $('#viewDiningTableContent').html(row).show()
+    },'json')
+}
+
+let editDiningTable = (Id)=>{
+
+}
+
+

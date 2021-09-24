@@ -24,3 +24,15 @@ let getCustomerData = () =>{
         customerTableBody(result);
     },'json')
 }
+
+let getFoodItemData = () =>{
+    $.get("../controller/FoodItemController.php?status=getFoodItemData", (result) =>{
+        foodItemTableBody(result);
+    },'json')
+}
+
+let getDiningTableData = () =>{
+    $.get("../controller/DiningTableController.php?status=getDiningTableData", (result) =>{
+        diningTableBody(result);
+    },'json')
+}

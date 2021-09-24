@@ -70,6 +70,9 @@ $(document).ready(() => {
     const subCategoryName = $('#subCategoryName');
     const foodItemImage = $('#foodItemImage');
 
+    const tableName = $('#tableName');
+    const tableCapacity = $('#tableCapacity');
+
     const patName = /^[a-zA-Z\.\s]+$/;//validation rgx for text
     const patEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,6})+$/;//validation rgx for email
     const patCon = /^(07)([0-9]){8}$/;//validation rgx for contact
@@ -443,7 +446,7 @@ $(document).ready(() => {
         }
         swal({
             title : 'Are you sure',
-            text : 'Do you want to submit ti form',
+            text : 'Do you want to submit this form',
             icon : 'warning',
             buttons : true,
             dangerMode : true,
@@ -905,7 +908,7 @@ $(document).ready(() => {
         })  
     });
     
-    $("#addItemSubmit").click(() => {
+    $("#foodItemSubmit").click(() => {//food item for validation submit btn id is foodItemSubmit
         let foodItemNameVal = foodItemName.val()
         let unitPriceVal = unitPrice.val()
         let categoryNameVal =categoryName.val()
@@ -1008,6 +1011,94 @@ $(document).ready(() => {
             }
         })
     });
+
+    $('#tableFormSubmit').click(() =>{
+        let tableNameVal = tableName.val();
+        let tableCapacityVal = tableCapacity.val();
+
+        if (tableNameVal == "" && tableCapacityVal == "") {
+            toastr.error("Please fill the form");
+            $([tableName, tableCapacity]).each(function () {
+                $(this).removeClass("is-valid").addClass("is-invalid")
+            })
+            tableName.focus();
+            return false;
+        }
+        if (tableNameVal=="") {
+            addInvalidClass(tableName, "Please enter table name");
+            return false;
+        }
+        if (tableCapacityVal== "") {
+            addInvalidClass(tableCapacity, 'Please enter capacity');
+            return false;
+        }
+        swal({
+            title : 'Are you sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,
+            dangerMode : true,
+            allowEscapeKey : false,
+            allowOutsideClick : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false,
+        }).then((willOUT) =>{
+            if (willOUT) {
+                // $("#addDiningTable").modal('hide')
+                $.ajax({
+                    method : "POST",
+                    url : "../controller/DiningTableController.php?status=addDiningTable",
+                    data : new FormData($('#diningTableForm')[0]),
+                    dataType : "json",
+                    enctype : "multipart/form-data",
+                    processData : false,
+                    contentType : false,
+                    async : true,
+                    beforeSend : function () {
+                        swal({
+                            title : "Loading...",
+                            text : " ",
+                            icon : "../../images/96x96.gif",
+                            buttons : false,
+                            allowOutsideClick : false,
+                            closeOnEsc : false,
+                            closeOnClickOutside : false,
+                        });
+                    },success : function (result) {
+                        if (result[0] ==1) {
+                            swal({
+                                title : "Good Job!",
+                                text : "Dining Table Successfully Added",
+                                icon : "success",
+                                buttons : false,
+                                timer : 1000,
+                            });
+                            diningTableBody(result[1]);
+                            $("#diningTableForm").trigger('reset');
+                            $(".is-valid").removeClass('is-valid');
+                        }
+                        if (result[0]==2) {
+                            swal({
+                                title : "Warning!",
+                                text : result[1],
+                                icon :"warning",
+                            });
+                        }
+                    },
+                    error : function (error) {
+                        console.log(error)
+                    }
+                });
+            }else{
+                swal({
+                    title : "Warning!",
+                    text : "Dining Table Not Added",
+                    icon : "warning",
+                    timer: 1000,
+                });
+            }
+        })
+    });
     
     let addInvalidClass = (Id, message) => {
         let id = Id
@@ -1085,6 +1176,9 @@ $(document).ready(() => {
     categoryName.change(()=> {removeInvalidClass(categoryName)});
     subCategoryName.change(()=> {removeInvalidClass(subCategoryName)});
     foodItemImage.change(()=> {removeInvalidClass(foodItemImage)});
+
+    tableName.change(()=> {removeInvalidClass(tableName)});
+    tableCapacity.change(()=> {removeInvalidClass(tableCapacity)});
 });
 
 

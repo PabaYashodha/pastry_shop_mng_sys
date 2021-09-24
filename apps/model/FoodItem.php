@@ -25,7 +25,7 @@ class FoodItem
     public function viewFoodDetails($foodItemId)
     {
         $conn = $GLOBALS['con'];
-        $sql = "SELECT * FROM `foodItem` WHERE `foodItem_id` = '$foodItemId'";
+        $sql = "SELECT * FROM `food_item` WHERE `food_item_id` = '$foodItemId'";
         $result=$conn->query($sql) or die($conn->error);
         return $result;
     }
