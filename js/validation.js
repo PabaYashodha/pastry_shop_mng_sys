@@ -73,6 +73,9 @@ $(document).ready(() => {
     const tableName = $('#tableName');
     const tableCapacity = $('#tableCapacity');
 
+    const editTableName = $('#editTableName');
+    const editTableCapacity = $('#editTableCapacity');
+
     const patName = /^[a-zA-Z\.\s]+$/;//validation rgx for text
     const patEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,6})+$/;//validation rgx for email
     const patCon = /^(07)([0-9]){8}$/;//validation rgx for contact
@@ -550,15 +553,15 @@ $(document).ready(() => {
             return false;
         }
         if (editSupplierAdd1Val == "") {
-            addInvalidClass(add1, "Please enter address no");
+            addInvalidClass(editSupplierAdd1, "Please enter address no");
             return false;
         }
         if (editSupplierAdd2Val == "") {
-            addInvalidClass(add2, "Please enter lane");
+            addInvalidClass(editSupplierAdd2, "Please enter lane");
             return false;
         }
         if (editSupplierAdd3Val == "") {
-            addInvalidClass(add3, "Please enter address street");
+            addInvalidClass(editSupplierAdd3, "Please enter address street");
             return false;
         }
         swal({
@@ -1100,6 +1103,94 @@ $(document).ready(() => {
         })
     });
     
+    $("#saveEditTableFormSubmit").click(()=>{
+        let editTableNameVal = editTableName.val();
+        let editTableCapacityVal = editTableCapacity.val();
+
+        if (editTableNameVal == "" && editTableCapacityVal == "") {
+            toastr.error("Please fill the form");
+            $([editTableName, editTableCapacity]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid")
+            })
+            editTableName.focus();
+            return false;
+        }
+
+        if (editTableName == "") {
+            addInvalidClass(editTableName, "Please enter table name");
+            return false;
+        }
+        if (editTableCapacity == "") {
+            addInvalidClass(editTableCapacity, "Please enter table capacity");
+            return false;
+        }
+        swal({
+            title : 'Are you sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,
+            dangerMode : true,
+            allowEscapeKey : false,
+            allowOutsideClick : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false,
+        }).then((willOUT) =>{
+            if (willOUT) {
+                 $("#editDiningTable").modal('hide')
+                $.ajax({
+                    method : "POST",
+                    url : "../controller/DiningTableController.php?status=editDiningTable",
+                    data : new FormData($('#editDiningTableForm')[0]),
+                    dataType : "json",
+                    enctype : "multipart/form-data",
+                    processData : false,
+                    contentType : false,
+                    async : true,
+                    beforeSend : function () {
+                        swal({
+                            title : "Loading...",
+                            text : " ",
+                            icon : "../../images/96x96.gif",
+                            buttons : false,
+                            allowOutsideClick : false,
+                            closeOnEsc : false,
+                            closeOnClickOutside : false,
+                        });
+                    },success : function (result) {
+                        if (result[0] ==1) {
+                            swal({
+                                title : "Good Job!",
+                                text : "Dining Table Successfully Updated",
+                                icon : "success",
+                                buttons : false,
+                                timer : 1000,
+                            });
+                            diningTableBody(result[1]);
+                            $("#editDiningTableForm").trigger('reset');
+                            $(".is-valid").removeClass('is-valid');
+                        }
+                        if (result[0]==2) {
+                            swal({
+                                title : "Warning!",
+                                text : result[1],
+                                icon :"warning",
+                            });
+                        }
+                    },
+                    error : function (error) {
+                        console.log(error)
+                    }
+                });
+            }else{
+                swal({
+                    title : "Warning!",
+                    text : "Dining Table Not Added",
+                    icon : "warning",
+                    timer: 1000,
+                });
+            }
+        })
+    });
     let addInvalidClass = (Id, message) => {
         let id = Id
         toastr.error(message);
@@ -1179,6 +1270,9 @@ $(document).ready(() => {
 
     tableName.change(()=> {removeInvalidClass(tableName)});
     tableCapacity.change(()=> {removeInvalidClass(tableCapacity)});
+
+    editTableName.change(()=>{removeInvalidClass(editTableName)});
+    editTableCapacity.change(()=>{removeInvalidClass(editTableCapacity)});
 });
 
 

@@ -28,4 +28,20 @@ class DiningTable
        $result = $conn->query($sql) or die ($conn->error);
        return $result;
     }
+
+    public function editDiningTable($diningTableId, $tableName, $tableCapacity)
+    {
+        $conn = $GLOBALS['con'];
+        $sql = "UPDATE `dining_table`SET `dining_table_name` = '$tableName', `dining_table_psn_cnt`= '$tableCapacity' WHERE `dining_table_id`= '$diningTableId'";
+        $result = $conn->query($sql) or die ($conn->error);
+        return $result;
+    }
+
+    public function changeDiningTableStatus($diningTableId, $diningTableStatus)
+    {
+        $conn = $GLOBALS['con'];
+        $sql = "UPDATE `dining_table` SET `dining_table_status`= '$diningTableStatus' WHERE `dining_table_id`= '$diningTableId'";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
 }

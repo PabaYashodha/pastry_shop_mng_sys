@@ -52,9 +52,53 @@ switch ($status) {
 
     case 'editDiningTable':
         try {
-            //code...
-        } catch (\Throwable $th) {
-            //throw $th;
+            $diningTableId = base64_decode($_POST['editDiningTableId']);
+            $tableName =$_POST['editTableName'];
+            $tableCapacity = $_POST['editTableCapacity'];
+
+            if ($tableName == "") {
+                throw new Exception("Table name is required");
+            }
+            if ($tableCapacity == "") {
+                throw new Exception("Table capacity is required");
+            }
+            $result = $DiningTableObj->editDiningTable($diningTableId,$tableName, $tableCapacity);
+            if ($result == 1) {
+                $res = 1;
+                $getDiningTableTbl = $DiningTableObj->getDiningTableData();
+                $diningTableArray = array();
+                while ($row = $getDiningTableTbl->fetch_assoc()) {
+                   array_push($diningTableArray, $row);
+                }
+                $msg = $diningTableArray;
+            }
+        } catch (Throwable $th) {
+            $res = 2;
+            $msg = $th->getMessage();
         }
+        $data[0] = $res;
+        $data[1]=$msg;
+        echo json_encode($data);
         break;
+
+        case 'changeDiningTableStatus':
+            $diningTableId = base64_decode($_POST['diningTableId']);
+            $diningTableStatus = $_POST['diningTableStatus'];
+            $result = $DiningTableObj->changeDiningTableStatus($diningTableId, $diningTableStatus);
+            if ($result == 1) {
+                $res = 1;
+                $getDiningTableTbl = $DiningTableObj->getDiningTableData();
+                $diningTableArray = array();
+                while ($row= $getDiningTableTbl->fetch_assoc()) {
+                    array_push($diningTableArray, $row);
+                }
+                $msg = $diningTableArray;
+            }else{
+                $res = 2;
+                $msg = "Oops! table can't deactivate";
+            }
+            $data[0] = $res;
+            $data[1] =$msg;
+            echo json_encode($data);
+            break;
 }

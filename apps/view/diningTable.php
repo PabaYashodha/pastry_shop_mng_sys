@@ -138,7 +138,8 @@ require_once "sidebar.php";
                             <div class="float-end d-inline-flex">
                                 <button type="reset" class="btn btn-danger">Reset</button>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <button type="button" id="editTableFormSubmit" class="btn btn-primary">Submit</button>
+                                <input type="hidden" id="editDiningTableId" name="editDiningTableId">
+                                <button type="button" id="saveEditTableFormSubmit" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
                     </div>

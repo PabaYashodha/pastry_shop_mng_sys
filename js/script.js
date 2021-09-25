@@ -407,8 +407,6 @@ let foodItemTableBody = (result) =>{
     $('#foodItemTable').html(row).show()
 }
 
-
-
 //dining table
 let diningTableBody = (result) =>{
     let row = '';
@@ -418,9 +416,9 @@ let diningTableBody = (result) =>{
             '<td>'+ result[index].dining_table_name +'</td>'+
             '<td>'+ result[index].dining_table_psn_cnt +'</td><td>';
             if ((result[index].dining_table_status) == 1) {
-            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Active</button>';
+            row += '<button class="btn btn-outline-danger rounded shadow" onclick="deactivateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Booked</button>';
             } else {
-                 row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Deactivate</button>';
+                 row += '<button class="btn btn-outline-success rounded shadow" onclick="activateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Available</button>';
             }
        row += '</td>'+
                 '<td>' +
@@ -452,7 +450,60 @@ let viewDiningTableDetails = (Id) =>{
 }
 
 let editDiningTable = (Id)=>{
+    $.post("../controller/DiningTableController.php?status=viewDiningTableDetails", {diningTableId: Id}, (result)=>{
+        $('#editDiningTableId').val(btoa(result.dining_table_id));
+        $('#editTableName').val(result.dining_table_name);
+        $('#editTableCapacity').val(result.dining_table_psn_cnt);
+    },'json')
 
+}
+
+let deactivateDiningTable=(Id)=>{
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to change the status',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside:false,
+        closeOnEsc: false,
+    }).then(willOUT=>{
+        if (willOUT) {
+            $.post('../controller/DiningTableController.php?status=changeDiningTableStatus', {diningTableId: Id, diningTableStatus: "0"},(result)=>{
+                if ([result[0]==1]) {
+                    toastr.success("Table status successfully  changed");
+                    diningTableBody(result[1])
+                }else{
+                    toastr.success(result[1]);
+                }
+            },'json')
+        }
+    })
+}
+
+let activateDiningTable=(Id)=>{
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to change the status',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside:false,
+        closeOnEsc: false,
+    }).then(willOUT=>{
+        if (willOUT) {
+            $.post('../controller/DiningTableController.php?status=changeDiningTableStatus', {diningTableId: Id, diningTableStatus: "1"},(result)=>{
+                if ([result[0]==1]) {
+                    toastr.success("Table status successfully  changed");
+                    diningTableBody(result[1])
+                }else{
+                    toastr.success(result[1]);
+                }
+            },'json')
+        }
+    })
 }
 
 
