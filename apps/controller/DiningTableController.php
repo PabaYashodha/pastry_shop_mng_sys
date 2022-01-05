@@ -15,22 +15,31 @@ switch ($status) {
             if ($tableCapacity == "") {
                 throw new Exception("Table capacity is required");
             }
-            $result = $DiningTableObj->addDiningTable($tableName, $tableCapacity);
-            if ($result == 1) {
-                $res = 1;
-                $result = $DiningTableObj->getDiningTableData();
-                $diningTableArray = array();
-                while ($row = $result->fetch_assoc()) {
-                    array_push($diningTableArray, $row);
+            
+            $duplicate = $DiningTableObj->existDiningTable($tableName);
+
+            if ($duplicate == true) {
+                throw new Exception("Table name already exist");
+            }else{
+                $result = $DiningTableObj->addDiningTable($tableName, $tableCapacity);
+                if ($result == 1) {
+                    $res = 1; 
+                    $result = $DiningTableObj->getDiningTableData();
+                    $diningTableArray = array();
+                    while ($row = $result->fetch_assoc()) {
+                        array_push($diningTableArray, $row);
+                    }
+                    $msg =serialize($diningTableArray) ;
+                }else{
+                    throw new Exception("Table name already exist");
                 }
-                $msg = $diningTableArray;
-            }
+            }          
         } catch (Throwable $th) {
             $res = 2;
             $msg = $th->getMessage();
         }
         $data[0] = $res;
-        $data[1] = $msg;
+        $data[1] = base64_encode($msg);
         echo json_encode($data);
         break;
 
@@ -53,7 +62,7 @@ switch ($status) {
     case 'editDiningTable':
         try {
             $diningTableId = base64_decode($_POST['editDiningTableId']);
-            $tableName =$_POST['editTableName'];
+            $tableName = $_POST['editTableName'];
             $tableCapacity = $_POST['editTableCapacity'];
 
             if ($tableName == "") {
@@ -62,13 +71,13 @@ switch ($status) {
             if ($tableCapacity == "") {
                 throw new Exception("Table capacity is required");
             }
-            $result = $DiningTableObj->editDiningTable($diningTableId,$tableName, $tableCapacity);
+            $result = $DiningTableObj->editDiningTable($diningTableId, $tableName, $tableCapacity);
             if ($result == 1) {
                 $res = 1;
                 $getDiningTableTbl = $DiningTableObj->getDiningTableData();
                 $diningTableArray = array();
                 while ($row = $getDiningTableTbl->fetch_assoc()) {
-                   array_push($diningTableArray, $row);
+                    array_push($diningTableArray, $row);
                 }
                 $msg = $diningTableArray;
             }
@@ -77,28 +86,28 @@ switch ($status) {
             $msg = $th->getMessage();
         }
         $data[0] = $res;
-        $data[1]=$msg;
+        $data[1] = $msg;
         echo json_encode($data);
         break;
 
-        case 'changeDiningTableStatus':
-            $diningTableId = base64_decode($_POST['diningTableId']);
-            $diningTableStatus = $_POST['diningTableStatus'];
-            $result = $DiningTableObj->changeDiningTableStatus($diningTableId, $diningTableStatus);
-            if ($result == 1) {
-                $res = 1;
-                $getDiningTableTbl = $DiningTableObj->getDiningTableData();
-                $diningTableArray = array();
-                while ($row= $getDiningTableTbl->fetch_assoc()) {
-                    array_push($diningTableArray, $row);
-                }
-                $msg = $diningTableArray;
-            }else{
-                $res = 2;
-                $msg = "Oops! table can't deactivate";
+    case 'changeDiningTableStatus':
+        $diningTableId = base64_decode($_POST['diningTableId']);
+        $diningTableStatus = $_POST['diningTableStatus'];
+        $result = $DiningTableObj->changeDiningTableStatus($diningTableId, $diningTableStatus);
+        if ($result == 1) {
+            $res = 1;
+            $getDiningTableTbl = $DiningTableObj->getDiningTableData();
+            $diningTableArray = array();
+            while ($row = $getDiningTableTbl->fetch_assoc()) {
+                array_push($diningTableArray, $row);
             }
-            $data[0] = $res;
-            $data[1] =$msg;
-            echo json_encode($data);
-            break;
+            $msg = $diningTableArray;
+        } else {
+            $res = 2;
+            $msg = "Oops! table can't deactivate";
+        }
+        $data[0] = $res;
+        $data[1] = $msg;
+        echo json_encode($data);
+        break;
 }

@@ -6,6 +6,8 @@ class dbConnection{
     private const password = "";
     private const dbname = "pastryshop_db";
 
+    private $result;
+
     public function __construct()//when db object create this function automatically call 
     {
         $this->conn = new mysqli(//create db connection
@@ -14,11 +16,16 @@ class dbConnection{
             self::password,
             self::dbname
         );
-
+        
         if (!$this->conn->connect_error) {
-           $GLOBALS['con'] = $this->conn;
+            $this->result = $this->conn;
         }else{
-            $GLOBALS['con'] = $this->conn;
-        }        
+            $this->result = $this->conn;
+        }           
+    }
+
+    public function connection(){
+        $result = $this->result;
+        return $result;
     }
 }

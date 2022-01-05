@@ -30,7 +30,7 @@
 </style> -->
 <style>
     /* avoid sidebar scroll bar */
-    .sidebar-expanded::-webkit-scrollbar { 
+    .sidebar-expanded::-webkit-scrollbar {
         display: none;
     }
 
@@ -43,8 +43,8 @@
     <nav class="navbar navbar-inverse navbar-expand-md navbar-dark fixed-top py-0">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <img src="../../images/bootstrap-logo.svg" alt="" width="35px" height="30px" class="d-inline-block align-text-top">
-                <span style="font-size: 0.9rem;" id="brandName">YASHODHA RESTAURANT</span>
+                <img src="../../images/Color logo with background.svg" alt="" width="40px" height="40px" class="d-inline-block align-text-top">
+                <span style="font-size: 1.2rem;" id="brandName">MR.PAAN</span>
             </a>
             <span style="font-size:1.35rem; cursor: pointer;" class="text-light" id="navBTN">
                 <i class="far fa-bars"></i>

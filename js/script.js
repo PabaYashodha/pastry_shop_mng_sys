@@ -22,27 +22,15 @@ $(document).ready(function () {
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         // dom:'Bfrtip',
-        buttons: [{
-                extend: 'copy',
-                className: 'cusBut'
-            },
-            {
-                extend: 'excel',
-                className: 'cusBut'
-            },
-            {
-                extend: 'print',
-                className: 'cusBut'
-            }
-        ],
+        buttons: [ 'copy', 'excel', 'print','pdf', 'csv' ],
         bSort: false,
         pageLength: 10,
         pagingType: "full_numbers"
     });
 
-   
 
-    $('#navBTN').click(function (){
+
+    $('#navBTN').click(function () {
         $(this).children().toggleClass("far fa-bars far fa-times")
         $('#brandName, .moduleName').toggleClass("show d-none")
         $('#sidebar').toggleClass("sidebar-expanded sidebar-collapsed")
@@ -50,12 +38,12 @@ $(document).ready(function () {
         $('#content').toggleClass("content-expanded content-collapsed")
     })
 
-    $('.sideBTN').click(function() {
+    $('.sideBTN').click(function () {
         $('.sidebarActive').removeClass('sidebarActive')
-        $('.nav-link').removeClass('text-dark').addClass('text-light')  
-        $(this).addClass('sidebarActive').children().removeClass('text-light').addClass('text-dark')        
+        $('.nav-link').removeClass('text-dark').addClass('text-light')
+        $(this).addClass('sidebarActive').children().removeClass('text-light').addClass('text-dark')
     })
-   
+
 });
 
 
@@ -65,37 +53,39 @@ let preview = (input) => {
         reader.onload = function (e) {
             $('#pre_image').attr('src', e.target.result).height(200).width(200);
             $('#food_pre_image').attr('src', e.target.result).height(300).width(300);
+            // console.log(e);
         };
         reader.readAsDataURL(input.files[0]);
     }
 }
 
+
 //user
-let userTableBody = (result) =>{
+let userTableBody = (result) => {
     let row = '';
-        for (let index = 0; index < result.length; index++) {
-            // console.log( result[index].user_id);
-            row += '<tr>' +
-                '<th scope="row">' + result[index].user_id + '</th>' +
-                '<td><img src="../../images/user-images/' + result[index].user_image + '" width="40" height="40"></td>' +
-                '<td>' + result[index].user_fname + ' ' + result[index].user_lname + '</td>' +
-                '<td>' + result[index].user_email + '</td>' +
-                '<td>' + result[index].user_contact + '</td><td>';
-            if ((result[index].user_status) == 1) {
-                row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateUser(\'' + btoa(result[index].user_id) + '\')">Active</button>';
-            } else {
-                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateUser(\'' + btoa(result[index].user_id) + '\')">Deactivate</button>';
-            }
-            row += '</td>' +
-                '<td>' +
-                '<div class="d-inline-flex justify-content-start">' +
-                '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewUser" onclick="viewUserDetails(\'' + btoa(result[index].user_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editUser" onclick="editUserDetails(\'' + btoa(result[index].user_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '</td>'+
-                '</tr>';
+    for (let index = 0; index < result.length; index++) {
+        // console.log( result[index].user_id);
+        row += '<tr>' +
+            '<th scope="row">' + result[index].user_id + '</th>' +
+            '<td><img src="../../images/user-images/' + result[index].user_image + '" width="40" height="40"></td>' +
+            '<td>' + result[index].user_fname + ' ' + result[index].user_lname + '</td>' +
+            '<td>' + result[index].user_email + '</td>' +
+            '<td>' + result[index].user_contact + '</td><td>';
+        if ((result[index].user_status) == 1) {
+            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateUser(\'' + btoa(result[index].user_id) + '\')">Active</button>';
+        } else {
+            row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateUser(\'' + btoa(result[index].user_id) + '\')">Deactivate</button>';
         }
-        // console.log(row)
-        $('#userTable').html(row).show()
+        row += '</td>' +
+            '<td>' +
+            '<div class="d-inline-flex justify-content-start">' +
+            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewUser" onclick="viewUserDetails(\'' + btoa(result[index].user_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editUser" onclick="editUserDetails(\'' + btoa(result[index].user_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '</td>' +
+            '</tr>';
+    }
+    // console.log(row)
+    $('#userTable').html(row).show()
 }
 
 // let viewUserDetails = (Id) =>{
@@ -105,7 +95,9 @@ let userTableBody = (result) =>{
 // }
 
 let viewUserDetails = (Id) => {
-    $.post("../controller/UserController.php?status=viewUserDetails", {userId: Id}, (result) => {
+    $.post("../controller/UserController.php?status=viewUserDetails", {
+        userId: Id
+    }, (result) => {
         let row = '<div class="row">' +
             '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">' +
             '<img src="../../images/user-images/' + result.user_image + '" alt="" width="350px" height="350px" class="m-auto">' +
@@ -145,11 +137,13 @@ let viewUserDetails = (Id) => {
 }
 
 let editUserDetails = (Id) => {
-    $.post("../controller/UserController.php?status=viewUserDetails", {userId: Id}, (result) => {
+    $.post("../controller/UserController.php?status=viewUserDetails", {
+        userId: Id
+    }, (result) => {
         //  console.log(result)
         $('#editUserId').val(btoa(result.user_id));
         $('#editFirstName').val(result.user_fname);
-        $('#editLastName').val(result.user_lname); 
+        $('#editLastName').val(result.user_lname);
         $('#editContact').val(result.user_contact);
         $('#editBirthday').val(result.user_dob);
         $('#editGender').val(result.user_gender);
@@ -159,10 +153,10 @@ let editUserDetails = (Id) => {
         $('#editAdd1').val(result.user_add1);
         $('#editAdd2').val(result.user_add2);
         $('#editAdd3').val(result.user_add3);
-        let url= "../../images/user-images/"+result.user_image;
+        let url = "../../images/user-images/" + result.user_image;
         $('#pre_image').attr('src', url).height(200).width(200);
         // $('#editImage').val(result.user_image);
-        
+
     }, 'json')
 }
 
@@ -180,9 +174,12 @@ let deactivateUser = (Id) => {
         closeOnEsc: false,
     }).then((willOUT) => {
         if (willOUT) {
-            $.post('../controller/UserController.php?status=changeUserStatus', {userId: Id,userStatus: "0"}, (result) => {
+            $.post('../controller/UserController.php?status=changeUserStatus', {
+                userId: Id,
+                userStatus: "0"
+            }, (result) => {
                 // console.log(result);
-                if ([result[0]]==1) {
+                if ([result[0]] == 1) {
                     toastr.success("User status successfully changed");
                     userTableBody(result[1])
                     // let row = '';
@@ -207,10 +204,10 @@ let deactivateUser = (Id) => {
                     //              '</tr>';
                     // }console.log(row)
                     // $('#userTable').html(row).show()
-                }else{
+                } else {
                     toastr.success(result[1]);
                 }
-            },'json')
+            }, 'json')
         }
     })
 }
@@ -229,73 +226,80 @@ let activateUser = (Id) => {
         closeOnEsc: false,
     }).then((willOUT) => {
         if (willOUT) {
-            $.post('../controller/UserController.php?status=changeUserStatus', {userId: Id,userStatus: "1"}, (result) => {
+            $.post('../controller/UserController.php?status=changeUserStatus', {
+                userId: Id,
+                userStatus: "1"
+            }, (result) => {
                 // console.log(result);
-                if ([result[0]]==1) {
+                if ([result[0]] == 1) {
                     toastr.success("User status successfully changed");
                     userTableBody(result[1])
-                }else{
+                } else {
                     toastr.success(result[1]);
                 }
-            },'json')
+            }, 'json')
         }
     })
 }
 
 //supplier 
-let supplierTableBody = (result) =>{
+let supplierTableBody = (result) => {
     let row = '';
     for (let index = 0; index < result.length; index++) {
         row += '<tr>' +
-                '<th scope="row">' + result[index].supplier_id + '</th>' +
-                '<td>' + result[index].supplier_name + '</td>' +
-                '<td>' + result[index].supplier_contact_name + '</td>' +
-                '<td>' + result[index].supplier_email + '</td>' +
-                '<td>' + result[index].supplier_contact + '</td>'+
+            '<th scope="row">' + result[index].supplier_id + '</th>' +
+            '<td>' + result[index].supplier_name + '</td>' +
+            '<td>' + result[index].supplier_contact_name + '</td>' +
+            '<td>' + result[index].supplier_email + '</td>' +
+            '<td>' + result[index].supplier_contact + '</td>' +
             // if ((result[index].supplier_status) == 1) {
             //     row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateSupplier(\'' + btoa(result[index].supplier_id) + '\')">Active</button>';
             // } else {
             //     row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateSupplier(\'' + btoa(result[index].supplier_id) + '\')">Deactivate</button>';
             // }
-                '<td>' +
-                '<div class="d-inline-flex justify-content-start">' +
-                '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewSupplier" onclick="viewSupplierDetails(\'' + btoa(result[index].supplier_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editSupplier" onclick="editSupplierDetails(\'' + btoa(result[index].supplier_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '</td>'+
-                '</tr>';
+            '<td>' +
+            '<div class="d-inline-flex justify-content-start">' +
+            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewSupplier" onclick="viewSupplierDetails(\'' + btoa(result[index].supplier_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editSupplier" onclick="editSupplierDetails(\'' + btoa(result[index].supplier_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '</td>' +
+            '</tr>';
         //console.log(row)
     }
     $('#supplierTable').html(row).show()
 }
 
 let viewSupplierDetails = (Id) => {
-    $.post("../controller/SupplierController.php?status=viewSupplierDetails", {supplierId: Id}, (result) =>{
-        let row = '<div class="row">'+
-        '<label for="name" class="col-sm-12 col-form-label"><h2>' + result.supplier_name +'</h2></label>' +
-        '<label for="contactName" class="col-sm-4 col-form-label text-end">Contact Name</label>' +
-        '<label for="contactName" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.supplier_contact_name + '</label>' +
-        '<label for="email" class="col-sm-4 col-form-label text-end">Email</label>' +
-        '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.supplier_email + '</label>' +
-        '<label for="contact" class="col-sm-4 col-form-label text-end">Contact</label>' +
-        '<label for="contact" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.supplier_contact + '</label>' +
-        '<label for="address" class="col-sm-4 col-form-label text-end">Address</label>' +
-        '<label for="address" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.supplier_add1+ ' '+result.supplier_add2+ ' '+result.supplier_add3+ '</label>' +
-        '<label for="status" class="col-sm-4 col-form-label text-end"> Status </label>';
+    $.post("../controller/SupplierController.php?status=viewSupplierDetails", {
+        supplierId: Id
+    }, (result) => {
+        let row = '<div class="row">' +
+            '<label for="name" class="col-sm-12 col-form-label"><h2>' + result.supplier_name + '</h2></label>' +
+            '<label for="contactName" class="col-sm-4 col-form-label text-end">Contact Name</label>' +
+            '<label for="contactName" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.supplier_contact_name + '</label>' +
+            '<label for="email" class="col-sm-4 col-form-label text-end">Email</label>' +
+            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.supplier_email + '</label>' +
+            '<label for="contact" class="col-sm-4 col-form-label text-end">Contact</label>' +
+            '<label for="contact" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.supplier_contact + '</label>' +
+            '<label for="address" class="col-sm-4 col-form-label text-end">Address</label>' +
+            '<label for="address" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.supplier_add1 + ' ' + result.supplier_add2 + ' ' + result.supplier_add3 + '</label>' +
+            '<label for="status" class="col-sm-4 col-form-label text-end"> Status </label>';
         if ((result.supplier_status) == 1) {
             row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:green">Active</span></label>';
         } else {
             row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:red">Deactivate</span></label>';
         }
         row += '<label for="createDate" class="col-sm-4 col-form-label text-end">Create Date  </label>' +
-        '<label for="createDate" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.supplier_create_date + '</label>' +
-            
-        '</div>'
+            '<label for="createDate" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.supplier_create_date + '</label>' +
+
+            '</div>'
         $('#viewSupplierContent').html(row).show()
     }, 'json')
 }
 
 let editSupplierDetails = (Id) => {
-    $.post("../controller/SupplierController.php?status=viewSupplierDetails", {supplierId: Id}, (result) =>{
+    $.post("../controller/SupplierController.php?status=viewSupplierDetails", {
+        supplierId: Id
+    }, (result) => {
         $('#editSupplierId').val(btoa(result.supplier_id));
         $('#editSupplierName').val(result.supplier_name);
         $('#editSupplierContactName').val(result.supplier_contact_name);
@@ -308,65 +312,69 @@ let editSupplierDetails = (Id) => {
 }
 
 //customer
-let customerTableBody = (result) =>{
+let customerTableBody = (result) => {
     let row = '';
     for (let index = 0; index < result.length; index++) {
-       row += '<tr>'+
-                '<th scope="row">'+ result[index].customer_id+ '</th>' +
-                '<td>'+ result[index].customer_fname+' '+result[index].customer_lname+ '</td>' +
-                '<td>'+ result[index].customer_contact+'</td>'+ 
-                '<td>'+ result[index].customer_email+'</td>'+ 
-                '<td>'+ result[index].customer_add1+', '+result[index].customer_add2+', '+result[index].customer_add3+'</td>'+ 
+        row += '<tr>' +
+            '<th scope="row">' + result[index].customer_id + '</th>' +
+            '<td>' + result[index].customer_fname + ' ' + result[index].customer_lname + '</td>' +
+            '<td>' + result[index].customer_contact + '</td>' +
+            '<td>' + result[index].customer_email + '</td>' +
+            '<td>' + result[index].customer_add1 + ', ' + result[index].customer_add2 + ', ' + result[index].customer_add3 + '</td>' +
 
-                '<td>'+
-                '<div class="d-inline-flex justify-content-start">' +
-                '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewCustomer" onclick="viewCustomerDetails(\'' + btoa(result[index].customer_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editCustomer" onclick="editCustomerDetails(\'' + btoa(result[index].customer_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '</td>'
-       '</tr>'; 
+            '<td>' +
+            '<div class="d-inline-flex justify-content-start">' +
+            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewCustomer" onclick="viewCustomerDetails(\'' + btoa(result[index].customer_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editCustomer" onclick="editCustomerDetails(\'' + btoa(result[index].customer_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '</td>'
+        '</tr>';
     }
     $('#customerTable').html(row).show()
 }
 
-let viewCustomerDetails = (Id) =>{
-    $.post("../controller/CustomerController.php?status=viewCustomerDetails", {customerId: Id}, (result)=>{
-        let row = '<div class="row">'+
-        '<label for="name" class="col-sm-12 col-form-label"><h2>' + result.customer_fname+ ' ' + result.customer_lname+'</h2></label>' +
-        '<label for="email" class="col-sm-4 col-form-label text-end">Email</label>' +
-        '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_email + '</label>' +
-        '<label for="contact" class="col-sm-4 col-form-label text-end">Contact</label>' +
-        '<label for="contact" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_contact + '</label>' +
-        '<label for="address" class="col-sm-4 col-form-label text-end">Address</label>' +
-        '<label for="address" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_add1+ ' '+result.customer_add2+ ' '+result.customer_add3+ '</label>' +
-        '<label for="postalCode" class="col-sm-4 col-form-label text-end">Postal Code</label>' +
-        '<label for="postalCode" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_postal_code + '</label>' +
-        '<label for="nic" class="col-sm-4 col-form-label text-end">NIC</label>' +
-        '<label for="nic" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_nic + '</label>' +
-        '<label for="gender" class="col-sm-4 col-form-label text-end">Gender</label>' ;
+let viewCustomerDetails = (Id) => {
+    $.post("../controller/CustomerController.php?status=viewCustomerDetails", {
+        customerId: Id
+    }, (result) => {
+        let row = '<div class="row">' +
+            '<label for="name" class="col-sm-12 col-form-label"><h2>' + result.customer_fname + ' ' + result.customer_lname + '</h2></label>' +
+            '<label for="email" class="col-sm-4 col-form-label text-end">Email</label>' +
+            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_email + '</label>' +
+            '<label for="contact" class="col-sm-4 col-form-label text-end">Contact</label>' +
+            '<label for="contact" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_contact + '</label>' +
+            '<label for="address" class="col-sm-4 col-form-label text-end">Address</label>' +
+            '<label for="address" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_add1 + ' ' + result.customer_add2 + ' ' + result.customer_add3 + '</label>' +
+            '<label for="postalCode" class="col-sm-4 col-form-label text-end">Postal Code</label>' +
+            '<label for="postalCode" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_postal_code + '</label>' +
+            '<label for="nic" class="col-sm-4 col-form-label text-end">NIC</label>' +
+            '<label for="nic" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_nic + '</label>' +
+            '<label for="gender" class="col-sm-4 col-form-label text-end">Gender</label>';
         if ((result.customer_gender) == 1) {
             row += '<label for="gender" class="col-sm-8 col-form-label text-start mb-2"> : male</label>';
         } else {
             row += '<label for="gender" class="col-sm-8 col-form-label text-start mb-2"> : female</label>';
         }
-        
+
         row += '<label for="birthday" class="col-sm-4 col-form-label text-end">Birthday</label>' +
-        '<label for="birthday" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_dob + '</label>' +
-        '<label for="status" class="col-sm-4 col-form-label text-end"> Status </label>';
+            '<label for="birthday" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_dob + '</label>' +
+            '<label for="status" class="col-sm-4 col-form-label text-end"> Status </label>';
         if ((result.customer_status) == 1) {
             row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:green">Active</span></label>';
         } else {
             row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:red">Deactivate</span></label>';
         }
         row += '<label for="createDate" class="col-sm-4 col-form-label text-end">Create Date  </label>' +
-        '<label for="createDate" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_create_date + '</label>' +
-            
-        '</div>'
+            '<label for="createDate" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_create_date + '</label>' +
+
+            '</div>'
         $('#viewCustomerContent').html(row).show()
-    },'json')
+    }, 'json')
 }
 
-let editCustomerDetails = (Id) =>{
-    $.post("../controller/customerController.php?status=viewCustomerDetails", {customerId: Id}, (result) =>{
+let editCustomerDetails = (Id) => {
+    $.post("../controller/customerController.php?status=viewCustomerDetails", {
+        customerId: Id
+    }, (result) => {
         $('#editCustomerId').val(btoa(result.customer_id));
         $('#editCustomerFirstName').val(result.customer_fname);
         $('#editCustomerLastName').val(result.customer_lname);
@@ -382,83 +390,193 @@ let editCustomerDetails = (Id) =>{
     }, 'json')
 }
 
-//food item
-let foodItemTableBody = (result) =>{
+//dining table
+let diningTableBody = (result) => {
     let row = '';
     for (let index = 0; index < result.length; index++) {
-        row += '<tr>'+
-        '<th scope="row">'+result[index].food_item_id+'</th>'+
-        '<td><img src="../../images/foodItem-images/' + result[index].food_item_image + '" width="40" height="40"></td>' +
-        '<td>'+result[index].food_item_name+'</td>'+
-        '<td>'+result[index].food_item_unit_price+'</td><td>';
-        if ((result[index].food_item_status) ==1) {
-            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateFoodItem(\'' + btoa(result[index].food_item_id) + '\')">Active</button>';
-        }else{
-            row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateFoodItem(\'' + btoa(result[index].food_item_id) + '\')">Deactivate</button>';
+        row += '<tr>' +
+            '<th scope="row">' + result[index].dining_table_id + '</th>' +
+            '<td>' + result[index].dining_table_name + '</td>' +
+            '<td>' + result[index].dining_table_psn_cnt + '</td><td>';
+        if ((result[index].dining_table_status) == 1) {
+            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Available</button>';
+        } else {
+            row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Booked</button>';
         }
         row += '</td>' +
-        '<td>'+
-        '<div class="d-inline-flex justify-content-start">' +
-        '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewFoodItem" onclick="viewFoodDetails(\'' + btoa(result[index].food_item_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
-        '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editFoodItem" onclick="editFoodItemDetails(\'' + btoa(result[index].food_item_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-        '</td>'+
-        '</tr>'; 
+            '<td>' +
+            '<div class="d-inline-flex justify-content-start">' +
+            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDiningTable" onclick="viewDiningTableDetails(\'' + btoa(result[index].dining_table_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editDiningTable" onclick="editDiningTable(\'' + btoa(result[index].dining_table_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '</td>' +
+            '</tr>';
+    }
+    $('#diningTable').html(row).show()
+}
+
+let viewDiningTableDetails = (Id) => {
+    $.post("../controller/DiningTableController.php?status=viewDiningTableDetails", {
+        diningTableId: Id
+    }, (result) => {
+        console.log(result)
+        let row = '<div class="row">' +
+            '<label for="name" class="col-sm-12 col-form-label"><h2>' + result.dining_table_name + '</h2></label>' +
+            '<label for="tableCapacity" class="col-sm-4 col-form-label text-end">Table Capacity</label>' +
+            '<label for="tableCapacity" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.dining_table_psn_cnt + '</label>' +
+            '<label for="status" class="col-sm-4 col-form-label text-end"> Status </label>';
+        if ((result.dining_table_status) == 1) {
+            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:green">Available</span></label>';
+        } else {
+            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:red">Booked</span></label>';
+
+        }
+        row += '</div>'
+        $('#viewDiningTableContent').html(row).show()
+    }, 'json')
+}
+
+let editDiningTable = (Id) => {
+    $.post("../controller/DiningTableController.php?status=viewDiningTableDetails", {
+        diningTableId: Id
+    }, (result) => {
+        $('#editDiningTableId').val(btoa(result.dining_table_id));
+        $('#editTableName').val(result.dining_table_name);
+        $('#editTableCapacity').val(result.dining_table_psn_cnt);
+    }, 'json')
+
+}
+
+let deactivateDiningTable = (Id) => {
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to change the status',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    }).then(willOUT => {
+        if (willOUT) {
+            $.post('../controller/DiningTableController.php?status=changeDiningTableStatus', {
+                diningTableId: Id,
+                diningTableStatus: "0"
+            }, (result) => {
+                if ([result[0] == 1]) {
+                    toastr.success("Table is Booked");
+                    diningTableBody(result[1])
+                } else {
+                    toastr.success(result[1]);
+                }
+            }, 'json')
+        }
+    })
+}
+
+let activateDiningTable = (Id) => {
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to change the status',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    }).then(willOUT => {
+        if (willOUT) {
+            $.post('../controller/DiningTableController.php?status=changeDiningTableStatus', {
+                diningTableId: Id,
+                diningTableStatus: "1"
+            }, (result) => {
+                if ([result[0] == 1]) {
+                    toastr.success("Dining Table available now");
+                    diningTableBody(result[1])
+                } else {
+                    toastr.success(result[1]);
+                }
+            }, 'json')
+        }
+    })
+}
+
+//food items
+let foodItemTableBody = (result) => {
+    let row = '';
+    for (let index = 0; index < result.length; index++) {
+        row += '<tr>' +
+            '<th scope="row">' + result[index].food_item_id + '</th>' +
+            '<td><img src="../../images/foodItem-images/' + result[index].food_item_image + '" width="40" height="40"></td>' +
+            '<td>' + result[index].food_item_name + '</td>' +
+            '<td>' + result[index].food_item_unit_price + '</td><td>';
+        if ((result[index].food_item_status) == 1) {
+            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateFoodItem(\'' + btoa(result[index].food_item_id) + '\')">Available</button>';
+        } else {
+            row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateFoodItem(\'' + btoa(result[index].food_item_id) + '\')">Out of Stock</button>';
+
+        }
+        row += '</td>' +
+            '<td>' +
+            '<div class="d-inline-flex justify-content-start">' +
+            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewFoodItem" onclick="viewFoodItemDetails(\'' + btoa(result[index].food_item_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editFoodItem" onclick="editFoodItemDetails(\'' + btoa(result[index].food_item_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '</td>' +
+            '</tr>';
     }
     $('#foodItemTable').html(row).show()
 }
 
-//dining table
-let diningTableBody = (result) =>{
-    let row = '';
-    for (let index = 0; index < result.length; index++) {
-       row += '<tr>'+
-            '<th scope="row">'+ result[index].dining_table_id +'</th>'+
-            '<td>'+ result[index].dining_table_name +'</td>'+
-            '<td>'+ result[index].dining_table_psn_cnt +'</td><td>';
-            if ((result[index].dining_table_status) == 1) {
-            row += '<button class="btn btn-outline-danger rounded shadow" onclick="deactivateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Booked</button>';
-            } else {
-                 row += '<button class="btn btn-outline-success rounded shadow" onclick="activateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Available</button>';
-            }
-       row += '</td>'+
-                '<td>' +
-                '<div class="d-inline-flex justify-content-start">' +
-                '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDiningTable" onclick="viewDiningTableDetails(\'' + btoa(result[index].dining_table_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editDiningTable" onclick="editDiningTable(\'' + btoa(result[index].dining_table_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '</td>'+
-            '</tr>';
-            }
-            $('#diningTable').html(row).show()
-}
-
-let viewDiningTableDetails = (Id) =>{
-    $.post("../controller/DiningTableController.php?status=viewDiningTableDetails",{diningTableId: Id},(result)=>{
-        console.log(result)
-        let row = '<div class="row">'+
-        '<label for="name" class="col-sm-12 col-form-label"><h2>' + result.dining_table_name +'</h2></label>' +
-        '<label for="tableCapacity" class="col-sm-4 col-form-label text-end">Table Capacity</label>' +
-        '<label for="tableCapacity" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.dining_table_psn_cnt + '</label>' +
-        '<label for="status" class="col-sm-4 col-form-label text-end"> Status </label>';
-        if ((result.dining_table_status) == 1) {
-            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:green">Booked</span></label>';
+let viewFoodItemDetails = (Id) => {
+    $.post("../controller/FoodItemController.php?status=viewFoodItemDetails", {
+        foodItemId: Id 
+    }, (result) => {
+        $.post("../controller/CategoryController.php?status=viewCategoryDetails",{
+            categoryId: categoryId
+        }, (data) =>{
+            
+        })
+        let row = '<div class ="row">' +
+            '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">' +
+            '<img src="../../images/foodItem-images/' + result.food_item_image + '" alt="" width="350px" height="350px" class="m-auto">' +
+            '</div>' +
+            '<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="padding-left: 8rem;">' +
+            '<div class="row">' +
+            '<label for="name" class="col-sm-12 col-form-label" ><h2>' + result.food_item_name + '</h2></label>' +
+            '<label for="email" class="col-sm-4 col-form-label text-end"> Unit Price </label>' +
+            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.food_item_unit_price + '</label>' +
+            '<label for="email" class="col-sm-4 col-form-label text-end"> Category Name </label>' +
+            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.food_item_category + '</label>' +
+            '<label for="email" class="col-sm-4 col-form-label text-end"> Sub Category Name </label>' +
+            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.food_item_sub_category + '</label>' +
+            '<label for="email" class="col-sm-4 col-form-label text-end"> Status </label>';
+        if ((result.food_item_status) == 1) {
+            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:green">Available</span></label>';
         } else {
-            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:red">Available</span></label>';
+            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:red">Out of Stock</span></label>';
+
         }
-        row +='</div>'
-        $('#viewDiningTableContent').html(row).show()
+        row += '</div>' +
+            '</div>' +
+            '</div>';
+        $('#viewFoodItemContent').html(row).show()
+    }, 'json')
+}
+
+let editFoodItemDetails =(Id) =>{
+    $.post("../controller/FoodItemController.php?status=viewFoodItemDetails",{
+        foodItemId: Id
+    },(result)=>{
+        $('#editFoodItemId').val(btoa(result.food_item_id));
+        $('#editFoodItemName').val(result.food_item_name);
+        $('#editUnitPrice').val(result.food_item_unit_price);
+        $('#editCategory').val(result.food_item_category);
+        $('#editSubCategory').val(result.food_item_sub_category);
+        let url = "../../images/foodItem-images" + result.food_item_image;
+        $('#food_pre_image').attr('src', url).height(200).width(200);
     },'json')
 }
 
-let editDiningTable = (Id)=>{
-    $.post("../controller/DiningTableController.php?status=viewDiningTableDetails", {diningTableId: Id}, (result)=>{
-        $('#editDiningTableId').val(btoa(result.dining_table_id));
-        $('#editTableName').val(result.dining_table_name);
-        $('#editTableCapacity').val(result.dining_table_psn_cnt);
-    },'json')
-
-}
-
-let deactivateDiningTable=(Id)=>{
+let deactivateFoodItem = (Id) => {
     swal({
         title: 'Are you sure',
         text: 'Do you want to change the status',
@@ -466,23 +584,27 @@ let deactivateDiningTable=(Id)=>{
         buttons: true,
         dangerMode: true,
         allowOutsideClick: false,
-        closeOnClickOutside:false,
+        closeOnClickOutside: false,
         closeOnEsc: false,
-    }).then(willOUT=>{
+    }).then(willOUT => {
         if (willOUT) {
-            $.post('../controller/DiningTableController.php?status=changeDiningTableStatus', {diningTableId: Id, diningTableStatus: "0"},(result)=>{
-                if ([result[0]==1]) {
-                    toastr.success("Table status successfully  changed");
-                    diningTableBody(result[1])
-                }else{
+            $.post('../controller/FoodItemController.php?status=changeFoodItemStatus', {
+                foodItemId: Id,
+                foodItemStatus: "0"
+            }, (result) => {
+                if ([result[0] == 1]) {
+                    toastr.success("Food Item is Out of Stock");
+                    foodItemTableBody(result[1])
+                } else {
                     toastr.success(result[1]);
                 }
-            },'json')
+            }, 'json')
+
         }
     })
 }
 
-let activateDiningTable=(Id)=>{
+let activateFoodItem = (Id) => {
     swal({
         title: 'Are you sure',
         text: 'Do you want to change the status',
@@ -490,20 +612,22 @@ let activateDiningTable=(Id)=>{
         buttons: true,
         dangerMode: true,
         allowOutsideClick: false,
-        closeOnClickOutside:false,
+        closeOnClickOutside: false,
         closeOnEsc: false,
-    }).then(willOUT=>{
+    }).then(willOUT => {
         if (willOUT) {
-            $.post('../controller/DiningTableController.php?status=changeDiningTableStatus', {diningTableId: Id, diningTableStatus: "1"},(result)=>{
-                if ([result[0]==1]) {
-                    toastr.success("Table status successfully  changed");
-                    diningTableBody(result[1])
-                }else{
+            $.post('../controller/FoodItemController.php?status=changeFoodItemStatus', {
+                foodItemId: Id,
+                foodItemStatus: "1"
+            }, (result) => {
+                if ([result[0] == 1]) {
+                    toastr.success("Food Item is Now Available");
+                    foodItemTableBody(result[1])
+                } else {
                     toastr.success(result[1]);
                 }
-            },'json')
+            }, 'json')
+
         }
     })
 }
-
-

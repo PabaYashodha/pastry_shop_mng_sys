@@ -64,17 +64,31 @@ $(document).ready(() => {
     const editCustomerPostalCode = $('#editCustomerPostalCode');
     const editCustomerNic = $('#editCustomerNic');
 
-    const foodItemName = $('#foodItemName');
-    const unitPrice = $('#unitPrice');
-    const categoryName =$('#categoryName');
-    const subCategoryName = $('#subCategoryName');
-    const foodItemImage = $('#foodItemImage');
-
     const tableName = $('#tableName');
     const tableCapacity = $('#tableCapacity');
 
     const editTableName = $('#editTableName');
     const editTableCapacity = $('#editTableCapacity');
+
+    const foodItemName = $('#foodItemName');
+    const unitPrice = $('#unitPrice');
+    const category = $('#category');
+    const subCategory = $('subCategory');
+    const foodItemImage = $('foodItemImage');
+
+    const editFoodItemName = $('#editFoodItemName');
+    const editUnitPrice = $('#editUnitPrice');
+    const editCategory = $('#editCategory');
+    const editSubCategory = $('#editSubCategory');
+    const editFoodItemImage = $('#editFoodItemImage');
+
+    const deliveryPersonName = $('#deliveryPersonName');
+    const deliveryPersonAge = $('#deliveryPersonAge');
+    const deliveryPersonContact = $('#deliveryPersonContact');
+    const deliveryPersonEmail = $('#deliveryPersonEmail');
+    const deliveryPersonAdd1 = $('#deliveryPersonAdd1');
+    const deliveryPersonAdd2 = $('#deliveryPersonAdd2');
+    const deliveryPersonAdd3 = $('#deliveryPersonAdd3');
 
     const patName = /^[a-zA-Z\.\s]+$/;//validation rgx for text
     const patEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,6})+$/;//validation rgx for email
@@ -911,110 +925,6 @@ $(document).ready(() => {
         })  
     });
     
-    $("#foodItemSubmit").click(() => {//food item for validation submit btn id is foodItemSubmit
-        let foodItemNameVal = foodItemName.val()
-        let unitPriceVal = unitPrice.val()
-        let categoryNameVal =categoryName.val()
-        let subCategoryNameVal = subCategoryName.val()
-        let foodItemImageVal = foodItemImage.val()
-
-        if (foodItemNameVal=="" && unitPriceVal == "" && categoryNameVal == "" && subCategoryNameVal=="" && foodItemImageVal =="") {
-            toastr.error("Please fill the form");
-            $([foodItemName, unitPrice, categoryName, subCategoryName, foodItemImage]).each(function() {
-                $(this).removeClass("is-valid").addClass("is-invalid")
-            });
-            foodItemName.focus();
-            return false;
-        }
-        if (foodItemNameVal == "") {
-            addInvalidClass(foodItemName, "Please fill the item name");
-            return false;
-        }
-        if (unitPriceVal == "") {
-            addInvalidClass(unitPrice, "Please add price");
-            return false;
-        }
-        if (categoryNameVal == "") {
-            addInvalidClass(categoryName, "Please add price");
-            return false;
-        }
-        if (subCategoryNameVal == "") {
-            addInvalidClass(subCategoryName, "Please add price");
-            return false;
-        }
-        if (foodItemImageVal == "") {
-            addInvalidClass(foodItemImage, "Please add price");
-            return false;
-        }
-        swal({
-            title : 'Are You Sure',
-            text : 'Do you want to submit this form',
-            icon : 'warning',
-            buttons : true,
-            dangerMode : true,
-            allowEscapeKey : false,
-            allowOutsideClick : false,
-            closeOnClickOutside : false,
-            closeOnEsc : false,
-        }).then((willOUT) =>{
-            if(willOUT) {
-                $.ajax({
-                    method : "POST",
-                    url : "../controller/FoodItemController.php?status=addFoodItem",
-                    data : new FormData($('#FoodItemForm')[0]),
-                    dataType : "json",
-                    enctype : "multipart/form-data",
-                    processData : false,
-                    contentType : false,
-                    async :true,
-                    cache : false,
-                    beforeSend : function() {
-                       swal({
-                           title : "Loading..",
-                           text : " ",
-                           icon : "../../images/96x96.gif",
-                           buttons :false,
-                           allowOutsideClick : false,
-                           allowEscapeKey : false,
-                           closeOnClickOutside : false,
-                           closeOnEsc : false,
-                       });
-                    },
-                    success : function(result) {
-                        if (result[0] ==1) {
-                            swal({
-                                title : "Good Job !",
-                                text : "User Successfully Added",
-                                icon : "success",
-                                buttons :false,
-                                timer : 1000,
-                            });
-                            // userTableBody(result[1]);
-                        }
-                        if (result[0] ==2) {
-                            swal({
-                                title : "Warning !",
-                                text : result[1],
-                                icon : "warning",
-                            });
-                        }
-                    },
-                    error : function(error){
-                        console.log(error)
-                    }
-                });
-            }else{
-                swal({
-                    title : "Warning !",
-                    text : 'User not added ',
-                    icon : "warning",
-                    buttons :false,
-                    timer : 1000,
-                });
-            }
-        })
-    });
-
     $('#tableFormSubmit').click(() =>{
         let tableNameVal = tableName.val();
         let tableCapacityVal = tableCapacity.val();
@@ -1046,8 +956,7 @@ $(document).ready(() => {
             closeOnClickOutside : false,
             closeOnEsc : false,
         }).then((willOUT) =>{
-            if (willOUT) {
-                // $("#addDiningTable").modal('hide')
+            if (willOUT) {             
                 $.ajax({
                     method : "POST",
                     url : "../controller/DiningTableController.php?status=addDiningTable",
@@ -1069,6 +978,9 @@ $(document).ready(() => {
                         });
                     },success : function (result) {
                         if (result[0] ==1) {
+                            $("#diningTableForm").trigger('reset');
+                            $(".is-valid").removeClass('is-valid');
+                            $("#addDiningTable").modal('hide')
                             swal({
                                 title : "Good Job!",
                                 text : "Dining Table Successfully Added",
@@ -1076,14 +988,13 @@ $(document).ready(() => {
                                 buttons : false,
                                 timer : 1000,
                             });
-                            diningTableBody(result[1]);
-                            $("#diningTableForm").trigger('reset');
-                            $(".is-valid").removeClass('is-valid');
+                            console.log(JSON.parse(atob(result[1])))
+                            diningTableBody(JSON.parse(atob(result[1])));                            
                         }
                         if (result[0]==2) {
                             swal({
                                 title : "Warning!",
-                                text : result[1],
+                                text : atob(result[1]),
                                 icon :"warning",
                             });
                         }
@@ -1191,6 +1102,209 @@ $(document).ready(() => {
             }
         })
     });
+
+    $("#foodItemFormSubmit").click(()=>{
+        let foodItemNameVal = foodItemName.val()
+        let unitPriceVal = unitPrice.val()
+        let categoryVal = category.val()
+        let subCategoryVal = subCategory.val()
+        let foodItemImageVal = foodItemImage.val()
+
+        if (foodItemNameVal == "" && unitPriceVal == "" && categoryVal == "" && subCategoryVal == "" && foodItemImageVal =="") {
+           toastr.error("Please fill the form");
+           $([foodItemName, unitPrice, category, subCategory, foodItemImage]).each(function () {
+               $(this).removeClass("is-valid").addClass("is-invalid")
+           });
+           foodItemName.focus();
+           return false;
+        }
+        if (foodItemNameVal == "") {
+            addInvalidClass(foodItemName, "Please enter food item name");
+            return false;
+        }
+        if (unitPriceVal == "") {
+            addInvalidClass(unitPrice, "Please add unit price");
+            return false;
+        }
+        if (categoryVal == "") {
+            addInvalidClass(category, "Please enter category");
+            return false;
+        }
+        if (subCategoryVal == ""){
+            addInvalidClass(subCategory, "Please enter subcategory");
+            return false;
+        }
+        if (foodItemImageVal == "") {
+            addInvalidClass(foodItemImage, "Please add an image");
+            return false;
+        }
+        swal({
+            title :'Are you sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,
+            dangerMode : true,
+            allowOutsideClick : false,
+            closeOnClickOutside :false,
+            closeOnEsc : false,
+        }).then((willOUT) =>{
+            if (willOUT) {
+                $.ajax({
+                    method : "POST",
+                    url : "../controller/FoodItemController.php?status=addFoodItem",
+                    data : new FormData($('#foodItemForm')[0]),
+                    dataType : "json",
+                    enctype : "multipart/form-data",
+                    processData : false,
+                    contentType : false,
+                    async : true,
+                    cache : false,
+                    beforeSend : function() {
+                        swal({
+                            title : "Loading...",
+                            text : " ",
+                            icon : "../../images/96x96.gif",
+                            buttons : false,
+                            allowOutsideClick : false,
+                            closeOnEsc : false,
+                            closeOnClickOutside : false,
+                        });
+                    },success : function(result) {
+                        if (result[0] == 1) {
+                            swal({
+                                title : "Good Job !",
+                                text : "Food Item Successfully Added",
+                                icon : "success",
+                                buttons : false,
+                                timer : 1000,
+                            });
+                            foodItemTableBody(result[1]);
+                            $("#foodItemForm").trigger('reset');
+                            $(".is-valid").removeClass('is-valid');
+                        }
+                        if (result[0] == 2) {
+                            swal({
+                                title : "Warning !",
+                                text : result[1],
+                                icon : "warning",
+                            });
+                        }
+                    },
+                    error : function(error) {
+                        console.log(error)
+                    }
+                });
+            }else{
+                swal({
+                    title : "Warning !",
+                    text : 'Food Item not added',
+                    icon : "warning",
+                    buttons : false,
+                    timer :1000,
+                })
+            }
+        })
+    });
+
+    $("#editFoodItemFormSubmit").click(()=>{
+        let editFoodItemNameVal = editFoodItemName.val()
+        let editUnitPriceVal = editUnitPrice.val()
+        let editCategoryVal = editCategory.val()
+        let editSubCategoryVal = editSubCategory.val()
+        let editFoodItemImageVal = editFoodItemImage.val()
+
+        if (editFoodItemNameVal== "" && editUnitPriceVal=="" && editCategoryVal=="" && editSubCategoryVal=="" && editFoodItemImageVal=="") {
+            toastr.error("Please fill the form");
+            $([editFoodItemName, editUnitPrice, editCategory, editCategory,  editFoodItemImage]).each(function(){
+                $(this).removeClass("is-valid").addClass("is-invalid")
+            });
+            editFoodItemName.focus();
+            return false;
+        }
+        if (editFoodItemNameVal == "") {
+            addInvalidClass(editFoodItemName, "Please enter food item name");
+            return false;
+        }
+        if (editUnitPriceVal == "") {
+            addInvalidClass(editUnitPrice, "Please enter unit price");
+            return false;
+        }
+        if (editCategoryVal == "") {
+            addInvalidClass(editCategory, "Please enter category name");
+            return false;
+        }
+        if (editCategoryVal == "") {
+            addInvalidClass(editCategoryVal, "Please add sub category name");
+            return false;
+        }
+        if (editFoodItemImageVal == "") {
+            addInvalidClass(editFoodItemImage, "Please add image");
+            return false;
+        }
+        swal({
+            title :'Are you sure',
+            text :'Do you want to submit this form',
+            icon :'warning',
+            buttons :true,
+            dangerMode :true,
+            allowOutsideClick :false,
+            allowEscapeKey : false,
+            closeOnClickOutside :false,
+            closeOnEsc :false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method : "POST",
+                    url : "../controller/FoodItemController.php?status=editFoodItem",
+                    data : new FormData($('#editFoodItem')[0]),
+                    dataType : "json",
+                    enctype : "multipart/form-data",
+                    processData : false,
+                    contentType : false,
+                    async : true,
+                    cache : false,
+                    beforeSend : function () {
+                        swal({
+                            title : "Loading..",
+                            text : " ",
+                            icon : "../../images/96x96.gif",
+                            buttons : false,
+                            allowOutsideClick :false,
+                            allowEscapeKey : false,
+                            closeOnClickOutside : false,
+                            closeOnEsc : false,
+                        });
+                    },
+                    success : function (result) {
+                        if (result[0] == 1) {
+                            swal({
+                                title : "Good Job!",
+                                text : "Food Item Successfully changed ",
+                                icon : "success",
+                                buttons :false,
+                                timer : 1000,
+                            });
+                            foodItemTableBody(result[1]);
+                        }
+                        if (result[0] == 2) {
+                            swal({
+                                title : "Warning !",
+                                text : result[1],
+                                icon : "warning",
+                            });
+                        }
+                    },
+                    error : function (error) {
+                        console.log(error)
+                    }
+                });
+            }
+        })
+    });
+
+    $("#deliveryPersonFormSubmit").click(()=>{
+
+    })
     let addInvalidClass = (Id, message) => {
         let id = Id
         toastr.error(message);
@@ -1200,6 +1314,7 @@ $(document).ready(() => {
         let id = Id
          id.removeClass("is-invalid").addClass("is-valid");
     }
+
 
     firstName.change(() => { removeInvalidClass(firstName) });
     lastName.change(() => { removeInvalidClass(lastName) });
@@ -1262,17 +1377,23 @@ $(document).ready(() => {
     editCustomerPostalCode.change(()=> {removeInvalidClass(editCustomerPostalCode)});
     editCustomerNic.change(()=> {removeInvalidClass(editCustomerNic)});
 
-    foodItemName.change(()=> {removeInvalidClass(foodItemName)});
-    unitPrice.change(()=> {removeInvalidClass(unitPrice)});
-    categoryName.change(()=> {removeInvalidClass(categoryName)});
-    subCategoryName.change(()=> {removeInvalidClass(subCategoryName)});
-    foodItemImage.change(()=> {removeInvalidClass(foodItemImage)});
-
     tableName.change(()=> {removeInvalidClass(tableName)});
     tableCapacity.change(()=> {removeInvalidClass(tableCapacity)});
 
     editTableName.change(()=>{removeInvalidClass(editTableName)});
     editTableCapacity.change(()=>{removeInvalidClass(editTableCapacity)});
+
+    foodItemName.change(()=> {removeInvalidClass(foodItemName)});
+    unitPrice.change(()=> {removeInvalidClass(unitPrice)});
+    category.change(()=> {removeInvalidClass(category)});
+    subCategory.change(()=> {removeInvalidClass(subCategory)});
+    foodItemImage.change(()=> {removeInvalidClass(foodItemImage)});
+
+    editFoodItemName.change(()=>{removeInvalidClass(editFoodItemName)});
+    editUnitPrice.change(()=>{removeInvalidClass(editUnitPrice)});
+    editCategory.change(()=>{removeInvalidClass(editCategory)});
+    editSubCategory.change(()=>{removeInvalidClass(editSubCategory)});
+    editFoodItemImage.change(()=>{removeInvalidClass(editFoodItemImage)});
 });
 
 

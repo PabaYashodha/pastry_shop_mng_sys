@@ -3,15 +3,9 @@ body {
   font-size: 0.9rem;
 }
 
-button.cusBut {
-  width: 75px;
-  margin-right: 5px;
-  background-color: #0d6efd !important;
-}
-
-button.cusBut:hover {
-  background-color: #2e6da4 !important;
-  color: white !important;
+thead {
+  background-color: #2f2e41;
+  color: #ffffff;
 }
 
 .btn-pill {
@@ -145,8 +139,8 @@ nav {
 }
 
 .cardBlue {
-  background: -webkit-gradient(linear, right top, left bottom, from(#0099ff), to(#ffffff));
-  background: linear-gradient(to bottom left, #0099ff 0%, #ffffff 100%);
+  background: -webkit-gradient(linear, right bottom, left top, from(#ffffff), to(#0099ff));
+  background: linear-gradient(to top left, #ffffff 0%, #0099ff 100%);
 }
 
 .cardYellow {
@@ -155,12 +149,19 @@ nav {
 }
 
 .cardPurple {
-  background: -webkit-gradient(linear, left top, right bottom, from(#a897e1), to(#ffffff));
-  background: linear-gradient(to bottom right, #a897e1 0%, #ffffff 100%);
+  background: -webkit-gradient(linear, left bottom, right top, from(#ffffff), to(#a897e1));
+  background: linear-gradient(to top right, #ffffff 0%, #a897e1 100%);
 }
 
 .cardGreen {
-  background: -webkit-gradient(linear, left bottom, right top, from(#4cecb6), to(#ffffff));
-  background: linear-gradient(to top right, #4cecb6 0%, #ffffff 100%);
+  background: -webkit-gradient(linear, left top, right bottom, from(#ffffff), to(#4cecb6));
+  background: linear-gradient(to bottom right, #ffffff 0%, #4cecb6 100%);
+}
+
+nav.breadcrumb {
+  font-size: 15px;
+  font-weight: bolder;
+  height: 10px;
+  background: #ffffff;
 }
 /*# sourceMappingURL=style.css.map */
