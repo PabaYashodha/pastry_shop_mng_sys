@@ -1,0 +1,20 @@
+# <IfModule mod_rewrite.c>
+#     Options -Multiviews
+#     # Make PHP code look like other code types
+#     RewriteEngine on
+#     AddType application/x-httpd-php .asp .py .pl
+#     AddType application/x-httpd-php .bop .foo .133t
+#     AddType application/x-httpd-php .htm .html
+
+#     # Rewrite /foo/bar to /foo/bar.php
+#     RewriteCond %{REQUEST_FILENAME} !-d
+#     RewriteCond %{REQUEST_FILENAME} !-f
+#     RewriteRule ^([^.?]+)$ %{REQUEST_URI}.php [L]
+#     # Return 404 if original request is /foo/bar.php
+#     RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.php[? ].*$"
+#     RewriteRule .* - [L,R=404]
+
+#     # NOTE! FOR APACHE ON WINDOWS: Add [NC] to RewriteCond like this:
+#     # RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.php[? ].*$" [NC]
+# </IfModule>
+# Options -Indexes
