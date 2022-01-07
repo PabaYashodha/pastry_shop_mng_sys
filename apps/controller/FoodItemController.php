@@ -107,7 +107,7 @@ switch ($status) {
             throw new Exception("Unit Price is required");
         }
         if ($category == "") {
-            throw new Exception("Categor is required"); 
+            throw new Exception("Category is required"); 
         }
         if ($subCategory == "") {
             throw new Exception("Su category is required");

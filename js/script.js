@@ -22,7 +22,7 @@ $(document).ready(function () {
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         // dom:'Bfrtip',
-        buttons: [ 'copy', 'excel', 'print','pdf', 'csv' ],
+        buttons: ['copy', 'excel', 'print', 'pdf', 'csv'],
         bSort: false,
         pageLength: 10,
         pagingType: "full_numbers"
@@ -528,12 +528,12 @@ let foodItemTableBody = (result) => {
 
 let viewFoodItemDetails = (Id) => {
     $.post("../controller/FoodItemController.php?status=viewFoodItemDetails", {
-        foodItemId: Id 
+        foodItemId: Id
     }, (result) => {
-        $.post("../controller/CategoryController.php?status=viewCategoryDetails",{
+        $.post("../controller/CategoryController.php?status=viewCategoryDetails", {
             categoryId: categoryId
-        }, (data) =>{
-            
+        }, (data) => {
+
         })
         let row = '<div class ="row">' +
             '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">' +
@@ -562,10 +562,10 @@ let viewFoodItemDetails = (Id) => {
     }, 'json')
 }
 
-let editFoodItemDetails =(Id) =>{
-    $.post("../controller/FoodItemController.php?status=viewFoodItemDetails",{
+let editFoodItemDetails = (Id) => {
+    $.post("../controller/FoodItemController.php?status=viewFoodItemDetails", {
         foodItemId: Id
-    },(result)=>{
+    }, (result) => {
         $('#editFoodItemId').val(btoa(result.food_item_id));
         $('#editFoodItemName').val(result.food_item_name);
         $('#editUnitPrice').val(result.food_item_unit_price);
@@ -573,7 +573,7 @@ let editFoodItemDetails =(Id) =>{
         $('#editSubCategory').val(result.food_item_sub_category);
         let url = "../../images/foodItem-images" + result.food_item_image;
         $('#food_pre_image').attr('src', url).height(200).width(200);
-    },'json')
+    }, 'json')
 }
 
 let deactivateFoodItem = (Id) => {
@@ -630,4 +630,28 @@ let activateFoodItem = (Id) => {
 
         }
     })
+}
+
+//Category  
+let categoryTableBody = (result) => {
+    console.log(result);
+    let row = '';
+    for (let index = 0; index < result.length; index++) {
+        row += '<tr>' +
+                '<th scope="row">'+result[index].category_id + '</th>'+
+                '<td>'+result[index].category_name+'</td><td>';
+                if ((result[index].category_status) ==1) {
+                    row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateCategory(\'' + btoa(result[index].category_id) + '\')">Available</button>';
+                }else{
+                    row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateCategory(\'' + btoa(result[index].category_id) + '\')">Out of Stock</button>';
+                }
+                row +='</td>'+
+                '<td>'+
+                '<div class="d-inline-flex justify-content-start">' +
+                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '</td>'+
+            '</tr>';
+    }
+    $('#categoryTable').html(row).show()
 }

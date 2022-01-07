@@ -37,3 +37,8 @@ let getFoodItemData = ()=>{
         foodItemTableBody(result);
     },'json')
 }
+let getCategoryData = () =>{
+    $.get("../controller/CategoryController.php?status=getCategoryData", (result)=>{
+         categoryTableBody(result);
+    },'json')
+}

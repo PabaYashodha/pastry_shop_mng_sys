@@ -17,6 +17,7 @@ require_once "sidebar.php"
 </style>
 
 
+
 <?php require_once "scriptInclude.php" ?>
 
 <?php require_once "footer.php" ?>
