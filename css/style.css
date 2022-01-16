@@ -20,6 +20,29 @@ nav {
   background-color: #2f2e41;
 }
 
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  background-color: #cccccc !important;
+  color: #0e0e0e !important;
+}
+
+.nav-pills .nav-link2.active, .nav-pills .show > .nav-link2 {
+  color: #fff !important;
+  background-color: #2f2e41 !important;
+}
+
+.nav-link2:focus, .nav-link2:hover {
+  color: #0e0e0e !important;
+  background-color: #cccccc !important;
+}
+
+.nav-link2 {
+  color: #2f2e41 !important;
+}
+
+.nav-pills .nav-link2 {
+  margin-left: 5px !important;
+}
+
 .list-group-item {
   background-color: #2f2e41;
 }

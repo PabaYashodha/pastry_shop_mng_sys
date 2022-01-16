@@ -72,14 +72,14 @@ $(document).ready(() => {
 
     const foodItemName = $('#foodItemName');
     const unitPrice = $('#unitPrice');
-    const category = $('#category');
-    const subCategory = $('subCategory');
+    const foodItemCategory = $('#foodItemCategory');
+    const foodItemSubCategory = $('foodItemSubCategory');
     const foodItemImage = $('foodItemImage');
 
     const editFoodItemName = $('#editFoodItemName');
     const editUnitPrice = $('#editUnitPrice');
-    const editCategory = $('#editCategory');
-    const editSubCategory = $('#editSubCategory');
+    const editFoodItemCategory = $('#editFoodItemCategory');
+    const editFoodItemSubCategory = $('#editFoodItemSubCategory');
     const editFoodItemImage = $('#editFoodItemImage');
 
     // const deliveryPersonName = $('#deliveryPersonName');
@@ -91,6 +91,11 @@ $(document).ready(() => {
     // const deliveryPersonAdd3 = $('#deliveryPersonAdd3');
 
     const categoryName = $('#categoryName');
+    
+    const editCategoryName = $('#editCategoryName');
+
+    const subCategoryName = $('#subCategoryName');
+    const subCategoryCategoryItem = $('#subCategoryCategoryItem');
 
     const patName = /^[a-zA-Z\.\s]+$/;//validation rgx for text
     const patEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,6})+$/;//validation rgx for email
@@ -1106,11 +1111,11 @@ $(document).ready(() => {
     $("#foodItemFormSubmit").click(()=>{
         let foodItemNameVal = foodItemName.val()
         let unitPriceVal = unitPrice.val()
-        let categoryVal = category.val()
-        let subCategoryVal = subCategory.val()
+        let foodItemCategoryVal = foodItemCategory.val()
+        let foodItemSubCategoryVal = foodItemSubCategory.val()
         let foodItemImageVal = foodItemImage.val()
 
-        if (foodItemNameVal == "" && unitPriceVal == "" && categoryVal == "" && subCategoryVal == "" && foodItemImageVal =="") {
+        if (foodItemNameVal == "" && unitPriceVal == "" && foodItemCategoryVal == "" && foodItemSubCategoryVal == "" && foodItemImageVal =="") {
            toastr.error("Please fill the form");
            $([foodItemName, unitPrice, category, subCategory, foodItemImage]).each(function () {
                $(this).removeClass("is-valid").addClass("is-invalid")
@@ -1126,12 +1131,12 @@ $(document).ready(() => {
             addInvalidClass(unitPrice, "Please add unit price");
             return false;
         }
-        if (categoryVal == "") {
-            addInvalidClass(category, "Please enter category");
+        if (foodItemCategoryVal == "") {
+            addInvalidClass(foodItemCategory, "Please enter category");
             return false;
         }
-        if (subCategoryVal == ""){
-            addInvalidClass(subCategory, "Please enter subcategory");
+        if (foodItemSubCategoryVal == ""){
+            addInvalidClass(foodItemSubCategory, "Please enter subcategory");
             return false;
         }
         if (foodItemImageVal == "") {
@@ -1209,11 +1214,11 @@ $(document).ready(() => {
     $("#editFoodItemFormSubmit").click(()=>{
         let editFoodItemNameVal = editFoodItemName.val()
         let editUnitPriceVal = editUnitPrice.val()
-        let editCategoryVal = editCategory.val()
-        let editSubCategoryVal = editSubCategory.val()
+        let editFoodItemCategoryVal = editFoodItemCategory.val()
+        let editFoodItemSubCategoryVal = editFoodItemSubCategory.val()
         let editFoodItemImageVal = editFoodItemImage.val()
 
-        if (editFoodItemNameVal== "" && editUnitPriceVal=="" && editCategoryVal=="" && editSubCategoryVal=="" && editFoodItemImageVal=="") {
+        if (editFoodItemNameVal== "" && editUnitPriceVal=="" && editFoodItemCategoryVal=="" && editFoodItemSubCategoryVal=="" && editFoodItemImageVal=="") {
             toastr.error("Please fill the form");
             $([editFoodItemName, editUnitPrice, editCategory, editCategory,  editFoodItemImage]).each(function(){
                 $(this).removeClass("is-valid").addClass("is-invalid")
@@ -1229,11 +1234,11 @@ $(document).ready(() => {
             addInvalidClass(editUnitPrice, "Please enter unit price");
             return false;
         }
-        if (editCategoryVal == "") {
+        if (editFoodItemCategoryVal == "") {
             addInvalidClass(editCategory, "Please enter category name");
             return false;
         }
-        if (editCategoryVal == "") {
+        if (editFoodItemSubCategoryVal == "") {
             addInvalidClass(editCategoryVal, "Please add sub category name");
             return false;
         }
@@ -1303,7 +1308,7 @@ $(document).ready(() => {
     });
 
     $("#categoryFormSubmit").click(()=>{
-       let categoryNameVal =categoryName.val();
+       let categoryNameVal = categoryName.val();
 
        if (categoryNameVal =="") {
            toastr.error("Please fill the form");
@@ -1349,7 +1354,6 @@ $(document).ready(() => {
                         closeOnClickOutside : false,
                        });
                    },success : function (result) {
-                       console.log(result)
                        if (result[0] == 1) {
                            swal({
                             title : "Good Job!",
@@ -1384,6 +1388,177 @@ $(document).ready(() => {
                })
            }
        })
+    });
+
+    $("#editCategoryFormSubmit").click(()=>{
+        let editCategoryNameVal = editCategoryName.val();
+
+        if (editCategoryNameVal == "") {
+            toastr.error("Please fill the form");
+            $([editCategoryName]).each(function(){
+                $(this).removeClass("is-valid").addClass("is-invalid");
+            })
+            editCategoryName.focus();
+            return false;
+        }
+        if (editCategoryName == "") {
+            addInvalidClass(editCategoryName, "Please enter category name");
+            return false;
+        }
+        swal({
+            title : 'Are you sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,
+            dangerMode : true,
+            allowEscapeKey : false,
+            allowOutsideClick : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $("editCategory").modal('hide')
+               $.ajax({
+                method : "POST",
+                url : "../controller/CategoryController.php?status=editCategory",
+                data : new FormData($('#editCategoryForm')[0]),
+                dataType : "json",
+                enctype : "multipart/form-data",
+                processData : false,
+                contentType : false,
+                async : true,
+                beforeSend : function() {
+                    swal({
+                        title : "Loading...",
+                            text : " ",
+                            icon : "../../images/96x96.gif",
+                            buttons : false,
+                            allowOutsideClick : false,
+                            closeOnEsc : false,
+                            closeOnClickOutside : false,
+                    });
+                },success : function(result) {
+                    if (result[0] == 1) {
+                        swal({
+                            title : "Good Job!",
+                            text : "Category Successfully Updated",
+                            icon : "success",
+                            buttons : false,
+                            timer : 1000,
+                        });
+                        categoryTableBody(result[1]);
+                        $("#editCategoryForm").trigger('reset');
+                        $(".is-valid").removeClass('is-valid');
+                    }
+                    if (result[0]==2) {
+                        swal({
+                            title : "Warning!",
+                            text : result[1],
+                            icon :"warning",
+                        });
+                    }
+                },
+                error : function(error) {
+                    console.log(error)
+                }
+               });
+            }else{
+                swal({
+                    title : "Warning!",
+                    text : "Dining Table Not Added",
+                    icon : "warning",
+                    timer: 1000,
+                });
+            }
+        })
+    });
+
+    $("#subCategoryFormSubmit").click(()=>{
+        let subCategoryNameVal = subCategoryName.val();
+        let subCategoryCategoryItemVal = subCategoryCategoryItem.val();
+
+        if (subCategoryNameVal =="" && subCategoryCategoryItemVal=="") {
+            toastr.error("Please fill the form");
+            $([subCategoryName, subCategoryCategoryItem]).each(function () {
+                $(this).removeClass("is-valid").addClass("is-invalid")
+            })
+            subCategoryName.focus();
+            return false;
+        }
+        if (subCategoryName == "") {
+            addInvalidClass(subCategoryName, "Please enter sub category name");
+            return false;
+        }
+        if (subCategoryCategoryItem == "") {
+            addInvalidClass(subCategoryCategoryItem, "Please enter category name");
+            return false;
+        }
+        swal({
+            title : 'Are you sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,
+            dangerMode : true,
+            allowEscapeKey : false,
+            allowOutsideClick : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method : "POST",
+                   url : "../controller/SubCategoryController.php?status=addSubCategory",
+                   data : new FormData($('#subCategoryForm')[0]),
+                   dataType : "json",
+                   enctype : "multipart/form-data",
+                   processData : false,
+                   contentType : false,
+                   async : true,
+                   beforeSend : function() {
+                       swal({
+                        title : "Loading...",
+                        text : " ",
+                        icon : "../../images/96x96.gif",
+                        buttons : false,
+                        allowOutsideClick : false,
+                        closeOnEsc : false,
+                        closeOnClickOutside : false,
+                       });
+                   },success : function(result) {
+                       if (result[0]==1) {
+                           swal({
+                            title : "Good Job!",
+                            text : "Category name Successfully Added",
+                            icon : "success",
+                            buttons : false,
+                            timer : 1000,
+                           });
+                           subCategoryTableBody(result[1]);
+                           $("#subCategoryForm").trigger('reset');
+                           $(".is-valid").removeClass('is-valid');
+                           $('#addSubCategory').modal('hide')
+                       }
+                       if (result[0] == 2) {
+                        swal({
+                            title : "Warning!",
+                            text : result[1],
+                            icon :"warning",
+                           });
+                       }
+                   },
+                   error : function (error){
+                    console.log(error)
+                }
+                });
+            }else{
+                swal({
+                    title : "Warning!",
+                    text : "Category Not Added",
+                    icon : "warning",
+                    timer: 1000,
+                   })
+            }
+        })
     });
 
     let addInvalidClass = (Id, message) => {
@@ -1466,17 +1641,22 @@ $(document).ready(() => {
 
     foodItemName.change(()=> {removeInvalidClass(foodItemName)});
     unitPrice.change(()=> {removeInvalidClass(unitPrice)});
-    category.change(()=> {removeInvalidClass(category)});
-    subCategory.change(()=> {removeInvalidClass(subCategory)});
+    foodItemCategory.change(()=> {removeInvalidClass(foodItemCategory)});
+    foodItemSubCategory.change(()=> {removeInvalidClass(foodItemSubCategory)});
     foodItemImage.change(()=> {removeInvalidClass(foodItemImage)});
 
     editFoodItemName.change(()=>{removeInvalidClass(editFoodItemName)});
     editUnitPrice.change(()=>{removeInvalidClass(editUnitPrice)});
-    editCategory.change(()=>{removeInvalidClass(editCategory)});
-    editSubCategory.change(()=>{removeInvalidClass(editSubCategory)});
+    editFoodItemCategory.change(()=>{removeInvalidClass(editFoodItemCategory)});
+    editFoodItemSubCategory.change(()=>{removeInvalidClass(editFoodItemSubCategory)});
     editFoodItemImage.change(()=>{removeInvalidClass(editFoodItemImage)});
 
     categoryName.change(()=>{removeInvalidClass(categoryName)});
+
+    editCategoryName.change(()=>{removeInvalidClass(editCategoryName)});
+
+    subCategoryName.change(()=>{removeInvalidClass(subCategoryName)});
+    subCategoryCategoryItem.change(()=>{removeInvalidClass(subCategoryCategoryItem)});
 });
 
 

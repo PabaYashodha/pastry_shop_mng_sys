@@ -1,12 +1,21 @@
 $.get("../controller/DashboardController.php?status=getModule", (result) => {
     // console.log(result);
     let li = '';
-
+    let path = window.location.pathname;
+    let page = path.split("/").pop();
     for (let index = 0; index < result.length; index++) {
-        li += '<li class="sideBTN p-0 "><a href="'+result[index].module_url+'" class="nav-link text-light flex-column" style="padding:0.73rem; padding-left:1.7rem" ><i class="'+result[index].module_logo+'"></i><span class="moduleName"> &nbsp;'+ result[index].module_name +'</span></a></li>'  
+        li += '<li class="sideBTN p-0 "><a href="'+result[index].module_url+'" class="nav-link text-light flex-column';
+        if (result[index].module_url == page) {
+            li += ' active';
+        }
+        li += '" style="padding:0.73rem; padding-left:1.7rem" ><i class="'+result[index].module_logo+'"></i><span class="moduleName"> &nbsp;'+ result[index].module_name +'</span></a></li>';  
     }
     $('#getModule').html(li).show();
 }, 'json')
+
+// var path = window.location.pathname;
+// var page = path.split("/").pop();
+// console.log( page );
 
 let getUserData = () =>{
     $.get("../controller/UserController.php?status=getUserData", (result) => {
@@ -37,8 +46,17 @@ let getFoodItemData = ()=>{
         foodItemTableBody(result);
     },'json')
 }
+
 let getCategoryData = () =>{
     $.get("../controller/CategoryController.php?status=getCategoryData", (result)=>{
          categoryTableBody(result);
+         categoryOption(result);
+         subCategoryCategoryTableLine(result);
+    },'json')
+}
+
+let getSubCategoryData = () =>{
+    $.get("../controller/SubCategoryController.php?status=getSubCategoryData",(result)=>{
+        subCategoryTableBody(result);
     },'json')
 }

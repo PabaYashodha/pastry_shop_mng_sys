@@ -32,4 +32,37 @@ class category{
         $getCategoryData = $conn->query($sql) or die($conn->error);
         return $getCategoryData;
     }
+
+    public function viewCategoryDetails($categoryId)
+    {
+        $conn= $this->db->connection();
+        $sql = "SELECT * FROM `category` WHERE `category_id` = '$categoryId'";
+        $viewCategory = $conn->query($sql) or die($conn->error);
+        return $viewCategory;
+    }
+
+    public function editCategory($categoryId, $categoryName)
+    {
+        $conn= $this->db->connection();
+        $sql = "UPDATE `category` SET `category_name` = '$categoryName' WHERE `category_id` = '$categoryId'";
+        $editCategory = $conn->query($sql) or die($conn->error);
+        return $editCategory;
+    }
+
+    public function changeCategoryStatus($categoryId,$categoryStatus)
+    {
+        $conn= $this->db->connection();
+        $sql = "UPDATE `category` SET `category_status` = '$categoryStatus' WHERE `category_id` = '$categoryId'";
+        $changeCategoryStatus =$conn->query($sql) or die($conn->error);
+        return $changeCategoryStatus;
+    }
+
+    public function deleteCategory($categoryId)
+    {
+        $conn= $this->db->connection();
+        $sql = "DELETE FROM `category` WHERE `category_id` = '$categoryId'";
+        $deleteCategory = $conn->query($sql) or die($conn->error);
+        return $deleteCategory;
+    }
+    
 }

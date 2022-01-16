@@ -8,8 +8,8 @@ switch ($status) {
         try {
             $foodItemName = $_POST['foodItemName'];
             $unitPrice = $_POST['unitPrice'];
-            $category = $_POST['category'];
-            $subCategory = $_POST['subCategory'];
+            $foodItemCategory = $_POST['foodItemCategory'];
+            $foodItemSubCategory = $_POST['foodItemSubCategory'];
 
             if ($foodItemName == "") {
                 throw new Exception("Food item name is required");
@@ -17,10 +17,10 @@ switch ($status) {
             if ($unitPrice == "") {
                 throw new Exception("Unit price is required");
             }
-            if ($category == "") {
+            if ($foodItemCategory == "") {
                 throw new Exception("Category is required");
             }
-            if ($subCategory == "") {
+            if ($foodItemSubCategory == "") {
                 throw new Exception("Sub category is required");
             }
             $result = $foodItemObj->existFoodItem($foodItemName);
@@ -37,7 +37,7 @@ switch ($status) {
             } else {
                 throw new Exception("image is required");
             }
-            $result = $foodItemObj->addFoodItem($foodItemName, $unitPrice, $category, $subCategory, $foodItemImage);
+            $result = $foodItemObj->addFoodItem($foodItemName, $unitPrice, $foodItemCategory, $foodItemSubCategory, $foodItemImage);
             if ($result == 1) {
                 $res = 1;
                 $result = $foodItemObj->getFoodItemData();
@@ -97,8 +97,8 @@ switch ($status) {
     try {
         $foodItemName = $_POST['editFoodItemName'];
         $unitPrice = $_POST['editUnitPrice'];
-        $category = $_POST['editCategory'];
-        $subCategory = $_POST['editSubCategory'];
+        $foodItemCategory = $_POST['editFoodItemCategory'];
+        $foodItemSubCategory = $_POST['editFoodItemSubCategory'];
 
         if ($foodItemName == "") {
             throw new Exception("Food item nae is required");
@@ -106,11 +106,11 @@ switch ($status) {
         if ($unitPrice == "") {
             throw new Exception("Unit Price is required");
         }
-        if ($category == "") {
+        if ($foodItemCategory == "") {
             throw new Exception("Category is required"); 
         }
-        if ($subCategory == "") {
-            throw new Exception("Su category is required");
+        if ($foodItemSubCategory == "") {
+            throw new Exception("Sub category is required");
         }
         if ($_FILES["editFoodItemImage"]["name"]!= "") {
             $foodItemImage = $_FILES["editFoodItemImage"]["name"];
@@ -122,7 +122,7 @@ switch ($status) {
         }else{
             throw new Exception("Image is required");
         }
-        $result = $foodItemObj->addFoodItem($foodItemName, $unitPrice, $category, $subCategory, $foodItemImage);
+        $result = $foodItemObj->addFoodItem($foodItemName, $unitPrice, $foodItemCategory, $foodItemSubCategory, $foodItemImage);
         if ($result ==1 ) {
             $res = 1;
             $result = $foodItemObj->getFoodItemData();
@@ -140,4 +140,6 @@ switch ($status) {
     $data[1] = $msg;
     echo json_encode($data);
     break;
+
+
 }

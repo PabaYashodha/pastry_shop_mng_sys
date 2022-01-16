@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     toastr.options = {
         "closeButton": false,
         "debug": false,
@@ -17,7 +18,7 @@ $(document).ready(function () {
         "hideMethod": "fadeOut"
     }
 
-    $('#dataTable').DataTable({
+    $('.table').DataTable({
         dom: "<'row'<'col-sm-3'l><'col-sm-6'B><'col-sm-3'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -418,7 +419,6 @@ let viewDiningTableDetails = (Id) => {
     $.post("../controller/DiningTableController.php?status=viewDiningTableDetails", {
         diningTableId: Id
     }, (result) => {
-        console.log(result)
         let row = '<div class="row">' +
             '<label for="name" class="col-sm-12 col-form-label"><h2>' + result.dining_table_name + '</h2></label>' +
             '<label for="tableCapacity" class="col-sm-4 col-form-label text-end">Table Capacity</label>' +
@@ -569,8 +569,8 @@ let editFoodItemDetails = (Id) => {
         $('#editFoodItemId').val(btoa(result.food_item_id));
         $('#editFoodItemName').val(result.food_item_name);
         $('#editUnitPrice').val(result.food_item_unit_price);
-        $('#editCategory').val(result.food_item_category);
-        $('#editSubCategory').val(result.food_item_sub_category);
+        $('#editFoodItemCategoryName').val(result.food_item_category);
+        $('#editFoodItemSubCategory').val(result.food_item_sub_category);
         let url = "../../images/foodItem-images" + result.food_item_image;
         $('#food_pre_image').attr('src', url).height(200).width(200);
     }, 'json')
@@ -634,24 +634,171 @@ let activateFoodItem = (Id) => {
 
 //Category  
 let categoryTableBody = (result) => {
-    console.log(result);
     let row = '';
+    let count = 1;
     for (let index = 0; index < result.length; index++) {
         row += '<tr>' +
-                '<th scope="row">'+result[index].category_id + '</th>'+
-                '<td>'+result[index].category_name+'</td><td>';
-                if ((result[index].category_status) ==1) {
-                    row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateCategory(\'' + btoa(result[index].category_id) + '\')">Available</button>';
-                }else{
-                    row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateCategory(\'' + btoa(result[index].category_id) + '\')">Out of Stock</button>';
-                }
-                row +='</td>'+
-                '<td>'+
-                '<div class="d-inline-flex justify-content-start">' +
-                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '</td>'+
+            '<th scope="row">' + count + '</th>' +
+            '<td>' + result[index].category_name + '</td><td>';
+        if ((result[index].category_status) == 1) {
+            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateCategory(\'' + btoa(result[index].category_id) + '\')">Available</button>';
+        } else {
+            row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateCategory(\'' + btoa(result[index].category_id) + '\')">Out of Stock</button>';
+        }
+        row += '</td>' +
+            '<td>' +
+            '<div class="d-inline-flex justify-content-start">' +
+            '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategory" onclick="deleteCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '</td>' +
             '</tr>';
+        count++;
     }
     $('#categoryTable').html(row).show()
+}
+
+let categoryOption = (result) => {
+    let row = '';
+    for (let index = 0; index < result.length; index++) {
+        row += '<option value="' + result[index].category_id + '">' + result[index].category_name + '</option>';
+    }
+    $('#subCategoryCategoryItems').html(row).show()
+    $('#editSubCategoryCategoryItems').html(row).show()
+}
+
+let editCategoryDetails = (Id) => {
+    $.post("../controller/CategoryController.php?status=viewCategoryDetails", {
+        categoryId: Id
+    }, (result) => {
+        $('#editCategoryId').val(btoa(result.category_id));
+        $('#editCategoryName').val(result.category_name);
+    }, 'json')
+}
+
+let deactivateCategory = (Id) => {
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to change the status',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    }).then(willOUT => {
+        if (willOUT) {
+            $.post('../controller/CategoryController.php?status=changeCategoryStatus', {
+                categoryId: Id,
+                categoryStatus: "0"
+            }, (result) => {
+                if ([result[0] == 1]) {
+                    toastr.success("Category is Out of Stock");
+                    categoryTableBody(result[1])
+                } else {
+                    toastr.success(result[1]);
+                }
+            }, 'json')
+
+        }
+    })
+}
+
+let activateCategory = (Id) => {
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to change the status',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    }).then(willOUT => {
+        if (willOUT) {
+            $.post('../controller/CategoryController.php?status=changeCategoryStatus', {
+                categoryId: Id,
+                categoryStatus: "1"
+            }, (result) => {
+                if ([result[0] == 1]) {
+                    toastr.success("Category is now Available");
+                    categoryTableBody(result[1])
+                } else {
+                    toastr.success(result[1]);
+                }
+            }, 'json')
+        }
+    })
+}
+
+let deleteCategoryDetails = (Id) => {
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to delete this category',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    }).then(willOUT => {
+        if (willOUT) {
+            $.post('../controller/CategoryController.php?status=deleteCategory', {
+                categoryId: Id
+            }, (result) => {
+                if ([result[0] == 1]) {
+                    toastr.success("Category successfully deleted");
+                    categoryTableBody(result[1])
+                } else {
+                    toastr.success(result[1]);
+                }
+            }, 'json')
+        }
+    })
+}
+
+//sub category
+let subCategoryTableBody = (result) => {
+    let row = '';
+    let count = 1;
+    for (let index = 0; index < result.length; index++) {
+        row += '<tr>' +
+            '<th scope="row">' + count + '</th>' +
+            '<td>' + result[index].sub_category_name + '</td>' +
+            '<td>'+ result[index].category_category_id +'</td><td>';
+            
+            if ((result[index].sub_category_status) == 1) {
+                row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateSubCategory(\'' + btoa(result[index].sub_category_id) + '\')">Available</button>';
+            } else {
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateSubCategory(\'' + btoa(result[index].sub_category_id) + '\')">Out of Stock</button>';
+            }
+        row += '</td>' +
+            '<td>' +
+            '<div class="d-inline-flex justify-content-start">' +
+            '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editSubCategory" onclick="editSubCategoryDetails(\'' + btoa(result[index].sub_category_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubCategory" onclick="deleteSubCategoryDetails(\'' + btoa(result[index].sub_category_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '</td>' +
+            '</tr>';
+        count++;
+    }
+    $('#subCategoryTable').html(row).show()
+}
+
+// let subCategoryCategoryTableBody =(result)=>{
+//     let line = '';
+//     for (let index = 0; index < result.length; index++) {
+//        line += '<td>'+result[index].category_name+'</td>'
+//     }
+//     $('#subCategoryTable').html(line).show()
+// }
+
+
+
+let editSubCategoryDetails = (Id) => {
+    $.post("../controller/SubCategoryController.php?status=viewSubCategoryDetails", {
+        subCategoryId: Id
+    }, (result) => {
+        $('#editSubCategoryId').val(btoa(result.sub_category_id));
+        $('#editSubCategoryName').val(result.sub_category_name);
+        $('#editSubCategoryCategoryItems').val(result.sub)
+    })
 }
