@@ -64,5 +64,13 @@ class category{
         $deleteCategory = $conn->query($sql) or die($conn->error);
         return $deleteCategory;
     }
+
+    public function getCategoryById($categoryId)
+    {
+        $conn= $this->db->connection();
+        $sql = "SELECT `category_name` FROM `category` WHERE `category_id` ='$categoryId'";
+        $getCategoryName = $conn->query($sql) or die($conn->error);
+        return $getCategoryName;
+    }
     
 }

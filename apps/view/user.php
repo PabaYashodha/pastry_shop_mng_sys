@@ -4,11 +4,11 @@ require_once "sidebar.php";
 ?>
 
 <div id="content" class="content-expanded">
-    <div class="card shadow-lg " style="border-radius: 20px; padding:0.4rem">
+    <div class="card shadow-lg " style="border-radius: 10px; padding:0.4rem">
             <nav aria-label="breadcrumb" class="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none;"> Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">User</li>
+                    <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none;"> HOME</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">USER</li>
                 </ol>
             </nav>
     </div>

@@ -51,12 +51,14 @@ let getCategoryData = () =>{
     $.get("../controller/CategoryController.php?status=getCategoryData", (result)=>{
          categoryTableBody(result);
          categoryOption(result);
-         subCategoryCategoryTableLine(result);
     },'json')
 }
 
 let getSubCategoryData = () =>{
     $.get("../controller/SubCategoryController.php?status=getSubCategoryData",(result)=>{
         subCategoryTableBody(result);
+        subCategoryOption(result);
     },'json')
 }
+
+

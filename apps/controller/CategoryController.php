@@ -43,6 +43,13 @@ switch ($status) {
         echo json_encode($categoryArray);
         break;
 
+    case 'getCategoryById':
+        $categoryId = base64_decode($_GET['categoryId']);
+        $getCategoryName = $categoryObj->getCategoryById($categoryId);
+        $row = $getCategoryName->fetch_assoc();
+        echo json_encode($row);
+        break;
+
     case 'viewCategoryDetails':
         $categoryId = base64_decode($_POST['categoryId']);
         $viewCategory = $categoryObj->viewCategoryDetails($categoryId);

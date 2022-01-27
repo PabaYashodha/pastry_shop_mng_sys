@@ -97,10 +97,14 @@ $(document).ready(() => {
     const subCategoryName = $('#subCategoryName');
     const subCategoryCategoryItem = $('#subCategoryCategoryItem');
 
+    const editSubCategoryName = $('#editSubCategoryName');
+    const editSubCategoryCategoryItem = $('#editSubCategoryCategoryItem');
+
     const patName = /^[a-zA-Z\.\s]+$/;//validation rgx for text
     const patEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,6})+$/;//validation rgx for email
     const patCon = /^(07)([0-9]){8}$/;//validation rgx for contact
     const patNIC = /^([0-9]{9}[x|X|v|V]|[0-9]{12})+$/;//validation rgx for nic
+    const allowImagePattern = /(\.jpg|\.jpeg|\.png)$/i; //image validation
 
     contact.blur(() => {
         const url = "../controller/UserController.php?status=checkContactIsExist";
@@ -1246,6 +1250,10 @@ $(document).ready(() => {
             addInvalidClass(editFoodItemImage, "Please add image");
             return false;
         }
+        if (!allowImagePattern.exec(editFoodItemImageVal)) {
+            addInvalidClass(editFoodItemImage, "Please select an image");
+            return false;
+        }
         swal({
             title :'Are you sure',
             text :'Do you want to submit this form',
@@ -1449,6 +1457,7 @@ $(document).ready(() => {
                         categoryTableBody(result[1]);
                         $("#editCategoryForm").trigger('reset');
                         $(".is-valid").removeClass('is-valid');
+                        $('#editCategory').modal('hide')
                     }
                     if (result[0]==2) {
                         swal({
@@ -1561,6 +1570,93 @@ $(document).ready(() => {
         })
     });
 
+    $('#editSubCategoryFormSubmit').click(()=>{
+        let editSubCategoryNameVal = editSubCategoryName.val();
+        let editSubCategoryCategoryItemVal = editSubCategoryCategoryItem.val();
+
+        if (editSubCategoryNameVal == "" && editSubCategoryCategoryItemVal =="" ) {
+            toastr.error("Please fill the form");
+            $([editSubCategoryName,editSubCategoryCategoryItem]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid")
+            })
+            editSubCategoryName.focus();
+            return false;
+        }
+        if (editSubCategoryName == "") {
+            addInvalidClass(editSubCategoryName, "Please enter sub category name");
+            return false;
+        }
+        if (editSubCategoryCategoryItem == "") {
+            addInvalidClass(editSubCategoryCategoryItems, "Please enter category name");
+            return false;
+        }
+        swal({
+            title : 'Are you sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,
+            dangerMode : true,
+            allowEscapeKey : false,
+            allowOutsideClick : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method : "POST",
+                    url : "../controller/SubCategoryController.php?status=editSubCategory",
+                    data : new FormData($('#editSubCategoryForm')[0]),
+                    dataType : "json",
+                    enctype : "multipart/form-data",
+                    processData : false,
+                    contentType : false,
+                    async : true,
+                    beforeSend: function() {
+                        swal({
+                            title : "Loading...",
+                            text : " ",
+                            icon : "../../images/96x96.gif",
+                            buttons : false,
+                            allowOutsideClick : false,
+                            closeOnEsc : false,
+                            closeOnClickOutside : false,
+                        });
+                    },success : function(result) {
+                        if (result[0]==1) {
+                            swal({
+                                title : "Good Job!",
+                                text : "Category name Successfully Changed",
+                                icon : "success",
+                                buttons : false,
+                                timer : 1000,
+                            });
+                            subCategoryTableBody(result[1]);
+                            $("#subCategoryForm").trigger('reset');
+                           $(".is-valid").removeClass('is-valid');
+                           $('#editSubCategory').modal('hide')
+                        }
+                        if (result[0]==2) {
+                            swal({
+                                title : "Warning!",
+                                text : result[1],
+                                icon :"warning",
+                            });
+                        }
+                    },error:function(error) {
+                        console.log(error)
+                    }
+                });
+            }else{
+                swal({
+                    title : "Warning!",
+                    text : "Sub Category Not Changed",
+                    icon : "warning",
+                    timer: 1000,
+                })
+            }
+        })
+    });
+
     let addInvalidClass = (Id, message) => {
         let id = Id
         toastr.error(message);
@@ -1657,6 +1753,9 @@ $(document).ready(() => {
 
     subCategoryName.change(()=>{removeInvalidClass(subCategoryName)});
     subCategoryCategoryItem.change(()=>{removeInvalidClass(subCategoryCategoryItem)});
+
+    editSubCategoryName.change(()=>{removeInvalidClass(editSubCategoryName)});
+    editSubCategoryCategoryItem.change(()=>{removeInvalidClass(editSubCategoryCategoryItem)});
 });
 
 

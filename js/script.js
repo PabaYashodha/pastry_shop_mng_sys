@@ -53,7 +53,7 @@ let preview = (input) => {
         let reader = new FileReader();
         reader.onload = function (e) {
             $('#pre_image').attr('src', e.target.result).height(200).width(200);
-            $('#food_pre_image').attr('src', e.target.result).height(300).width(300);
+            $('#food_pre_image').attr('src', e.target.result).height(150).width(150);
             // console.log(e);
         };
         reader.readAsDataURL(input.files[0]);
@@ -529,12 +529,7 @@ let foodItemTableBody = (result) => {
 let viewFoodItemDetails = (Id) => {
     $.post("../controller/FoodItemController.php?status=viewFoodItemDetails", {
         foodItemId: Id
-    }, (result) => {
-        $.post("../controller/CategoryController.php?status=viewCategoryDetails", {
-            categoryId: categoryId
-        }, (data) => {
-
-        })
+    }, (result) => { 
         let row = '<div class ="row">' +
             '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">' +
             '<img src="../../images/foodItem-images/' + result.food_item_image + '" alt="" width="350px" height="350px" class="m-auto">' +
@@ -545,9 +540,9 @@ let viewFoodItemDetails = (Id) => {
             '<label for="email" class="col-sm-4 col-form-label text-end"> Unit Price </label>' +
             '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.food_item_unit_price + '</label>' +
             '<label for="email" class="col-sm-4 col-form-label text-end"> Category Name </label>' +
-            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.food_item_category + '</label>' +
+            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + foodItemCategoryName(result.food_item_category_food_item_category_id).category_name + '</label>' +
             '<label for="email" class="col-sm-4 col-form-label text-end"> Sub Category Name </label>' +
-            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.food_item_sub_category + '</label>' +
+            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + foodItemSubCategoryName(result.sub_category_sub_category_id).sub_category_name + '</label>' +
             '<label for="email" class="col-sm-4 col-form-label text-end"> Status </label>';
         if ((result.food_item_status) == 1) {
             row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:green">Available</span></label>';
@@ -562,6 +557,39 @@ let viewFoodItemDetails = (Id) => {
     }, 'json')
 }
 
+//get food item category name for view food item details
+let foodItemCategoryName = (Id)=>{
+    var result = '';
+    $.ajax({
+        url : '../controller/CategoryController.php?status=getCategoryById',
+        type : 'GET',
+        dataType : 'JSON',
+        data : {categoryId : btoa(Id)},
+        async : false,
+        success : function(data) {
+            result=data
+        }
+    })
+    return result;
+    // console.log(result)
+}
+
+//get food item sub category name for view food item details
+let foodItemSubCategoryName = (Id)=>{
+    var result ='';
+    $.ajax({
+        url : '../controller/SubCategoryController.php?status=getSubCategoryById',
+        type : 'GET',
+        dataType : 'JSON',
+        data : {subCategoryId : btoa(Id)},
+        async : false,
+        success : function(data) {
+            result = data
+        }
+    })
+    return result;
+}
+
 let editFoodItemDetails = (Id) => {
     $.post("../controller/FoodItemController.php?status=viewFoodItemDetails", {
         foodItemId: Id
@@ -569,10 +597,32 @@ let editFoodItemDetails = (Id) => {
         $('#editFoodItemId').val(btoa(result.food_item_id));
         $('#editFoodItemName').val(result.food_item_name);
         $('#editUnitPrice').val(result.food_item_unit_price);
-        $('#editFoodItemCategoryName').val(result.food_item_category);
-        $('#editFoodItemSubCategory').val(result.food_item_sub_category);
-        let url = "../../images/foodItem-images" + result.food_item_image;
-        $('#food_pre_image').attr('src', url).height(200).width(200);
+
+        $.post("../controller/CategoryController.php?status=getCategoryData",(category)=>{
+            let row='';
+            for (let index = 0; index < category.length; index++) {
+               row += '<option value= "'+category[index].category_id+'"';
+               if (category[index].category_id== result.food_item_category_food_item_category_id) {
+                   row += 'selected';
+               }
+               row+= '>' +category[index].category_name+ '</option>';
+            }
+            $('#editFoodItemCategoryName').html(row).show();
+        },'json')
+
+        $.post("../controller/SubCategoryController.php?status=getSubCategoryData",(subCategory)=>{
+            let row='';
+            for (let index = 0; index < subCategory.length; index++) {
+               row += '<option value= "'+subCategory[index].sub_category_id+'"';
+               if (subCategory[index].sub_category_id == result.sub_category_sub_category_id) {
+                   row += 'selected';
+               }
+               row += '>'+subCategory[index].sub_category_name+'</option>';
+            }
+            $('#editFoodItemSubCategory').html(row).show()
+        },'json')
+        let url = "../../images/foodItem-images/" + result.food_item_image;
+        $('#edit_food_pre_image').attr('src', url).height(150).width(150);
     }, 'json')
 }
 
@@ -662,8 +712,16 @@ let categoryOption = (result) => {
     for (let index = 0; index < result.length; index++) {
         row += '<option value="' + result[index].category_id + '">' + result[index].category_name + '</option>';
     }
-    $('#subCategoryCategoryItems').html(row).show()
-    $('#editSubCategoryCategoryItems').html(row).show()
+    $('#subCategoryCategoryItem').html(row).show()
+    $('#foodItemCategory').html(row).show()
+}
+
+let subCategoryOption  = (result)=>{
+    let row='';
+    for (let index = 0; index < result.length; index++) {
+        row +=  '<option value="' + result[index].sub_category_id + '">' + result[index].sub_category_name + '</option>';
+    }
+    $('#foodItemSubCategory').html(row).show()
 }
 
 let editCategoryDetails = (Id) => {
@@ -761,10 +819,12 @@ let subCategoryTableBody = (result) => {
     let row = '';
     let count = 1;
     for (let index = 0; index < result.length; index++) {
+        // let a = subCategoryCategoryName(result[index].category_category_id)
+        // console.log(a)
         row += '<tr>' +
             '<th scope="row">' + count + '</th>' +
             '<td>' + result[index].sub_category_name + '</td>' +
-            '<td>'+ result[index].category_category_id +'</td><td>';
+            '<td>'+ subCategoryCategoryName(result[index].category_category_id).category_name +'</td><td>';
             
             if ((result[index].sub_category_status) == 1) {
                 row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateSubCategory(\'' + btoa(result[index].sub_category_id) + '\')">Available</button>';
@@ -783,22 +843,120 @@ let subCategoryTableBody = (result) => {
     $('#subCategoryTable').html(row).show()
 }
 
-// let subCategoryCategoryTableBody =(result)=>{
-//     let line = '';
-//     for (let index = 0; index < result.length; index++) {
-//        line += '<td>'+result[index].category_name+'</td>'
-//     }
-//     $('#subCategoryTable').html(line).show()
-// }
-
-
+let subCategoryCategoryName = (Id) =>{
+    var result = '';
+    $.ajax({
+        url:'../controller/CategoryController.php?status=getCategoryById',
+        type:'GET',
+        dataType:'JSON',
+        data: {categoryId:btoa(Id)},
+        async:false,
+        success: function (data) {
+            result = data
+            //console.log(result);
+        }
+    })
+    return result;
+    // console.log(result);
+}
 
 let editSubCategoryDetails = (Id) => {
     $.post("../controller/SubCategoryController.php?status=viewSubCategoryDetails", {
         subCategoryId: Id
     }, (result) => {
         $('#editSubCategoryId').val(btoa(result.sub_category_id));
-        $('#editSubCategoryName').val(result.sub_category_name);
-        $('#editSubCategoryCategoryItems').val(result.sub)
+        $('#editSubCategoryName').val(result.sub_category_name); //assign edit sub category name's value
+        $.post("../controller/CategoryController.php?status=getCategoryData" ,(data) =>{
+            // console.log(data.length);
+            let row ='';
+            for (let index = 0; index < data.length; index++) {
+                row += '<option value="' + data[index].category_id+'"';
+                if (data[index].category_id == result.category_category_id) {
+                    row += 'selected';
+                }
+                row +='>' + data[index].category_name + '</option>';
+            } 
+            $('#editSubCategoryCategoryItem').html(row).show()
+        },'json')
+    },'json')
+}  
+
+let deactivateSubCategory = (Id)=>{
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to change the status',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    }).then(willOUT=>{
+        if (willOUT) {
+            $.post('../controller/SubCategoryController.php?status=changeSubCategoryStatus',{
+                subCategoryId:Id,
+                subCategoryStatus: "0"
+            },(result)=>{
+                if ([result[0]==1]) {
+                    toastr.success("Sub Category is out of stock");
+                    subCategoryTableBody(result[1])
+                }else{
+                    toastr.success(result[1]);
+                }
+            },'json')
+        }
+    })
+}  
+
+let  activateSubCategory =(Id)=>{
+     swal({
+        title: 'Are you sure',
+        text: 'Do you want to change the status',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+     }).then(willOUT=>{
+         if (willOUT) {
+             $.post("../controller/SubCategoryController.php?status=changeSubCategoryStatus",{
+                 subCategoryId : Id,
+                 subCategoryStatus: "1"
+             },(result)=>{
+                 if ([result[0]==1]) {
+                     toastr.success("Sub Category is now available");
+                     subCategoryTableBody(result[1])
+                 }else{
+                     toastr.success(result[1]);
+                 }
+             },'json')
+         }
+     })
+}
+
+let deleteSubCategoryDetails = (Id)=>{
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to delete this category',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    }).then(willOUT=>{
+        if (willOUT) {
+            $.post("../controller/SubCategoryController.php?status=deleteSubCategory",{
+                subCategoryId:Id
+            },(result)=>{
+                if ([result[0]==1]) {
+                    toastr.success("Sub Category successfully deleted");
+                    subCategoryTableBody(result[1])
+                }else{
+                    toastr.success(result[1]);
+                }
+            },'json')
+        }
     })
 }
