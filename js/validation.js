@@ -100,6 +100,26 @@ $(document).ready(() => {
     const editSubCategoryName = $('#editSubCategoryName');
     const editSubCategoryCategoryItem = $('#editSubCategoryCategoryItem');
 
+    const rowItemName = $('#rowItemName');
+
+    const editRowItemName = $('#editRowItemName');
+
+    const stockRowItemName = $('#stockRowItemName');
+    const stockReferenceNo = $('#stockReferenceNo');
+    const stockAddingCount = $('#stockAddingCount');
+    const stockCurrentCount = $('#stockCurrentCount');
+    const stockCostPerUnit = $('#stockCostPerUnit');
+    const stockMnfData = $('#stockMnfData');
+    const stockExpDate = $('#stockExpDate');
+
+    const grnDate = $('#grnDate');
+    const grnPrice = $('#grnPrice');
+    const grnSupplierName =$('#grnSupplierName');
+
+    const editGrnDate = $('#editGrnDate');
+    const editGrnPrice = $('#editGrnPrice');
+    const editGrnSupplierName = $('#editGrnSupplierName');
+
     const patName = /^[a-zA-Z\.\s]+$/;//validation rgx for text
     const patEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,6})+$/;//validation rgx for email
     const patCon = /^(07)([0-9]){8}$/;//validation rgx for contact
@@ -936,6 +956,7 @@ $(document).ready(() => {
         })  
     });
     
+    //submit dining table form 
     $('#tableFormSubmit').click(() =>{
         let tableNameVal = tableName.val();
         let tableCapacityVal = tableCapacity.val();
@@ -1438,12 +1459,12 @@ $(document).ready(() => {
                 beforeSend : function() {
                     swal({
                         title : "Loading...",
-                            text : " ",
-                            icon : "../../images/96x96.gif",
-                            buttons : false,
-                            allowOutsideClick : false,
-                            closeOnEsc : false,
-                            closeOnClickOutside : false,
+                        text : " ",
+                        icon : "../../images/96x96.gif",
+                        buttons : false,
+                        allowOutsideClick : false,
+                        closeOnEsc : false,
+                        closeOnClickOutside : false,
                     });
                 },success : function(result) {
                     if (result[0] == 1) {
@@ -1474,7 +1495,7 @@ $(document).ready(() => {
             }else{
                 swal({
                     title : "Warning!",
-                    text : "Dining Table Not Added",
+                    text : "Dining Table Not Updated",
                     icon : "warning",
                     timer: 1000,
                 });
@@ -1631,7 +1652,7 @@ $(document).ready(() => {
                                 timer : 1000,
                             });
                             subCategoryTableBody(result[1]);
-                            $("#subCategoryForm").trigger('reset');
+                            $("#editSubCategoryForm").trigger('reset');
                            $(".is-valid").removeClass('is-valid');
                            $('#editSubCategory').modal('hide')
                         }
@@ -1650,6 +1671,466 @@ $(document).ready(() => {
                 swal({
                     title : "Warning!",
                     text : "Sub Category Not Changed",
+                    icon : "warning",
+                    timer: 1000,
+                })
+            }
+        })
+    });
+
+    $('#rowItemFormSubmit').click(()=>{
+        let rowItemNameVal = rowItemName.val();
+
+        if (rowItemNameVal == "") {
+            toastr.error("Please fill the form");
+            $([rowItemName]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid")
+            })
+            rowItemName.focus();
+            return false;
+        }
+        if (rowItemName=="") {
+            addInvalidClass(rowItemName, "Please enter row item");
+            return false;
+        }
+        swal({
+            title : 'Are you sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,
+            dangerMode : true,
+            allowEscapeKey : false,
+            allowOutsideClick : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method : "POST",
+                    url : "../controller/RowItemController.php?status=addRowItem",
+                    data : new FormData($('#rowItemForm')[0]),
+                    dataType : "json",
+                    enctype : "multipart/form-data",
+                    processData : false,
+                    contentType :false,
+                    async : true,
+                    beforeSend : function() {
+                        swal({
+                            title : "Loading...",
+                            text : " ",
+                            icon : "../../images/96x96.gif",
+                            buttons : false,
+                            allowOutsideClick : false,
+                            closeOnEsc : false,
+                            closeOnClickOutside : false,
+                           });
+                        },success : function(result) {
+                            if (result[0]==1) {
+                                swal({
+                                    title : "Good Job!",
+                                    text : "Row Item successfully added",
+                                    icon : "success",
+                                    buttons : false,
+                                    timer : 1000,
+                                });
+                                rowItemTableBody(result[1]);
+                                $("#rowItemForm").trigger('reset');
+                                $(".is-valid").removeClass('is-valid');
+                                $('#addRowItems').modal('hide')
+                        } 
+                        if (result[0] == 2) {
+                            swal({
+                                title : "Warning!",
+                                text : result[1],
+                                icon :"warning",
+                               });
+                           }
+                        },
+                    error: function(error) {
+                        console.log(error)
+                    }
+                });
+            }else{
+                swal({
+                    title:"Warning!",
+                    text : "Row item not added",
+                    icon :"warning",
+                    timer : 1000,
+                })
+            }
+        })
+    });
+
+    $("#editRowItemFormSubmit").click(()=>{
+        let editRowItemNameVal = editRowItemName.val();
+
+        if (editRowItemNameVal == "") {
+            toastr.error("Please fill the form");
+            $([editRowItemName]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid");
+            })
+            editRowItemName.focus();
+            return false;
+        }
+        if (editRowItemNameVal == "") {
+            addInvalidClass(editRowItemName, "Please enter row item name");
+            return false;
+        }
+        swal({
+            title : 'Are you sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,
+            dangerMode : true,
+            allowEscapeKey : false,
+            allowOutsideClick : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false, 
+        }).then((willOUT)=>{
+            if (willOUT) {
+                // $("editRowItem").modal('hide')
+                $.ajax({
+                    method : "POST",
+                url : "../controller/RowItemController.php?status=editRowItem",
+                data : new FormData($('#editRowItemForm')[0]),
+                dataType : "json",
+                enctype : "multipart/form-data",
+                processData : false,
+                contentType : false,
+                async : true,
+                beforeSend : function() {
+                    swal({
+                        title : "Loading...",
+                        text : " ",
+                        icon : "../../images/96x96.gif",
+                        buttons : false,
+                        allowOutsideClick : false,
+                        closeOnEsc : false,
+                        closeOnClickOutside : false,
+                    });
+                },success : function(result) {
+                    if (result[0]==1) {
+                        swal({
+                            title : "Good Job!",
+                            text : "row item Successfully Updated",
+                            icon : "success",
+                            buttons : false,
+                            timer : 1000,
+                        });
+                        rowItemTableBody(result[1]);
+                        $("#editRowItemForm").trigger('reset');
+                        $(".is-valid").removeClass('is-valid');
+                        $("#editRowItem").modal('hide')
+                    }
+                    if (result[0]==2) {
+                        swal({
+                            title : "Warning!",
+                            text : result[1],
+                            icon :"warning",
+                        });
+                    }
+                } ,error:function(error) {
+                    console.log(error)
+                }             
+              });
+            }else{
+                swal({
+                    title : "Warning!",
+                    text : "Row Item  Not Updated",
+                    icon : "warning",
+                    timer: 1000,
+                });
+            }
+        })
+    });
+
+    $("#stockFormSubmit").click(()=>{
+        let stockRowItemNameVal = stockRowItemName.val();
+        let stockReferenceNoVal =stockReferenceNo.val();
+        let stockAddingCountVal = stockAddingCount.val();
+        let stockCurrentCountVal = stockCurrentCount.val();
+        let stockCostPerUnitVal = stockCostPerUnit.val();
+        let stockMnfDataVal = stockMnfData.val();
+        let stockExpDateVal = stockExpDate.val();
+
+        if (stockRowItemNameVal == "" && stockReferenceNo=="" && stockAddingCountVal=="" && stockCurrentCountVal=="" && stockCostPerUnitVal=="" && stockMnfDataVal=="" && stockExpDateVal=="") {
+            toastr.error("Please fill the form");
+            $([stockRowItemName, stockAddingCount,stockCurrentCount,stockCostPerUnit,stockMnfData, stockExpDate]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid")
+            })
+             stockRowItemName.focus();
+            return false;
+        }
+        if (stockRowItemNameVal == "") {
+            addInvalidClass(stockRowItemName, "Please enter row item name");
+            return false;
+        }
+        if (stockReferenceNoVal=="") {
+            addInvalidClass(stockReferenceNo, "Please enter reference id")
+        }
+        if (stockAddingCountVal=="") {
+           addInvalidClass(stockAddingCount, "Please enter stock count");
+           return false; 
+        }
+        if (stockCurrentCountVal=="") {
+            addInvalidClass(stockCurrentCount,"Please enter current count");
+            return false;
+        }
+        if (stockCostPerUnitVal=="") {
+            addInvalidClass(stockCostPerUnit,"Please enter unit price");
+            return false;
+        }
+        if (stockMnfDataVal=="") {
+            addInvalidClass(stockMnfData, "Please enter manufacture date");
+            return false;
+        }
+        if (stockExpDateVal=="") {
+            addInvalidClass(stockExpDate,"Please enter expire date");
+            return false;
+        }
+        swal({
+            title : 'Are you sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,
+            dangerMode : true,
+            allowEscapeKey : false,
+            allowOutsideClick : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method :"POST",
+                    url :"../controller/StockController.php?status=addStock",
+                    data : new FormData($('#stockForm')[0]),
+                    dataType : "json",
+                    enctype : "multipart/form-data",
+                    processData : false,
+                    contentType : false,
+                    async : true,
+                    beforeSend  : function() {
+                        swal({
+                            title : "Loading...",
+                            text : " ",
+                            icon : "../../images/96x96.gif",
+                            buttons : false,
+                            allowOutsideClick : false,
+                            closeOnEsc : false,
+                            closeOnClickOutside : false,
+                        });
+                    },success : function(result) {
+                        if (result[0]==1) {
+                            $('#stockForm').trigger('reset');
+                            $(".is-valid").removeClass("is-invalid");
+                            $("#addStock").modal('hide')
+                            swal({
+                                title : "Good Job!",
+                                text : "Stock Successfully Added",
+                                icon : "success",
+                                buttons : false,
+                                timer : 1000,
+                            });
+                        }
+                        if (result[0]==2) {
+                            swal({
+                                title : "Warning!",
+                                text : result[1],
+                                icon :"warning",
+                            });
+                        }
+                    },
+                    error : function(error) {
+                        console.log(error)
+                    }
+                });
+            }else{
+                swal({
+                    title : "Warning!",
+                    text : "Stock Not Added",
+                    icon : "warning",
+                    timer: 1000,
+                })
+            }
+        })
+    });
+
+    $("#grnFormSubmit").click(()=>{
+        let grnDateVal = grnDate.val();
+        let grnPriceVal = grnPrice.val();
+        let grnSupplierNameVal = grnSupplierName.val();
+
+        if (grnDateVal=="" && grnPriceVal=="" && grnSupplierNameVal=="") {
+            toastr.error("Please fill the form");
+            $([grnDate,grnPrice]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid");
+            })
+            grnDate.focus();
+            return false;
+        }
+        if (grnDateVal=="") {
+            addInvalidClass(grnDate, "Please enter date");
+            return false;
+        }
+        if (grnPrice=="") {
+            addInvalidClass(grnPrice,"Please enter price");
+            return false;
+        }
+        if (grnSupplierName=="") {
+            addInvalidClass(grnSupplierName,"Please enter supplier contact name");
+        }
+        swal({
+            title : 'Are you sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,
+            dangerMode : true,
+            allowEscapeKey : false,
+            allowOutsideClick : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method : "POST",
+                    url : "../controller/GrnController.php?status=addGrn",
+                    data : new FormData($('#grnForm')[0]),
+                    dataType : "json",
+                    enctype : "multipart/form-data",
+                    processData : false,
+                    contentType : false,
+                    async : true,
+                    beforeSend : function() {
+                        swal({
+                            title : "Loading...",
+                            text : " ",
+                            icon : "../../images/96x96.gif",
+                            buttons : false,
+                            allowOutsideClick : false,
+                            closeOnEsc : false,
+                            closeOnClickOutside : false,
+                        });
+                    },success : function(result) {
+                        if (result[0]==1) {
+                            $("#grnForm").trigger('reset');
+                            $(".is-valid").removeClass("is-valid");
+                            $("#addGrn").modal('hide')
+                            swal({
+                                title : "Good Job!",
+                                text : "GRN Successfully Added",
+                                icon : "success",
+                                buttons : false,
+                                timer : 1000,
+                            });
+                        }
+                        if (result[0]==2) {
+                            swal({
+                                title : "Warning!",
+                                text : result[1],
+                                icon :"warning",
+                            });
+                        }
+                    },
+                    error : function(error) {
+                        console.log(error)
+                    }
+                });
+            }else{
+                swal({
+                    title : "Warning!",
+                    text : "GRN Not Added",
+                    icon : "warning",
+                    timer: 1000,
+                });
+            }
+        })
+    });
+
+    $("#editGrnFormSubmit").click(()=>{
+        let editGrnDateVal = editGrnDate.val();
+        let editGrnPriceVal = editGrnPrice.val();
+        let editGrnSupplierNameVal = editGrnSupplierName.val();
+        
+        if (editGrnDateVal == "" && editGrnPriceVal=="" && editGrnSupplierNameVal=="") {
+            toastr.error("Please fill the form");
+            $([editGrnDate,editGrnPrice,editGrnSupplierName]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid")
+            })
+            editGrnDate.focus();
+            return false;
+        }
+        if (editGrnDate=="") {
+            addInvalidClass(editGrnDate,"Please enter date");
+            return false;
+        }
+        if (editGrnPrice=="") {
+            addInvalidClass(editGrnPrice,"Please enter price");
+            return false;
+        }
+        if (editGrnSupplierName=="") {
+            addInvalidClass(editGrnSupplierName,"Please select supplier name");
+            return false;
+        }
+        swal({
+            title : 'Are you sure',
+            text : 'Do you want to submit this form',
+            icon : 'warning',
+            buttons : true,
+            dangerMode : true,
+            allowEscapeKey : false,
+            allowOutsideClick : false,
+            closeOnClickOutside : false,
+            closeOnEsc : false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method : "POST",
+                    url : "../controller/GrnController.php?status=editGrn",
+                    data : new FormData($('#editGrnForm')[0]),
+                    dataType : "json",
+                    enctype : "multipart/form-data",
+                    processData : false,
+                    contentType : false,
+                    async : true,
+                    beforeSend : function() {
+                        swal({
+                            title : "Loading...",
+                            text : " ",
+                            icon : "../../images/96x96.gif",
+                            buttons : false,
+                            allowOutsideClick : false,
+                            closeOnEsc : false,
+                            closeOnClickOutside : false,
+                        });
+                    }, success : function(result) {
+                        if (result[0]==1) {
+                            swal({
+                                title : "Good Job!",
+                                text : "Grn Successfully Changed",
+                                icon : "success",
+                                buttons : false,
+                                timer : 1000,
+                            });
+                            grnTableBody(result[1]);
+                            $("#editGrnForm").trigger('reset');
+                            $(".is-valid").removeClass('is-valid');
+                            $("#editGrn").modal('hide');
+                        }
+                        if (result[0]==2) {
+                            swal({
+                                title : "Warning!",
+                                text : result[1],
+                                icon :"warning",
+                            });
+                        }
+                    },error:function(error) {
+                    console.log(error);
+                    }
+                });
+            }else{
+                swal({
+                    title : "Warning!",
+                    text : "GRN Not Changed",
                     icon : "warning",
                     timer: 1000,
                 })
@@ -1756,6 +2237,27 @@ $(document).ready(() => {
 
     editSubCategoryName.change(()=>{removeInvalidClass(editSubCategoryName)});
     editSubCategoryCategoryItem.change(()=>{removeInvalidClass(editSubCategoryCategoryItem)});
+
+    rowItemName.change(()=>{removeInvalidClass(rowItemName)});
+
+    editRowItemName.change(()=>{removeInvalidClass(editRowItemName)});
+
+    stockRowItemName.change(()=>{removeInvalidClass(stockRowItemName)});
+    stockReferenceNo.change(()=>removeInvalidClass(stockReferenceNo));
+    stockAddingCount.change(()=>{removeInvalidClass(stockAddingCount)});
+    stockCurrentCount.change(()=>{removeInvalidClass(stockCurrentCount)});
+    stockCostPerUnit.change(()=>{removeInvalidClass(stockCostPerUnit)});
+    stockMnfData.change(()=>{removeInvalidClass(stockMnfData)});
+    stockExpDate.change(()=>{removeInvalidClass(stockExpDate)});
+
+    grnDate.change(()=>{removeInvalidClass(grnDate)});
+    grnPrice.change(()=>{removeInvalidClass(grnPrice)});
+    grnSupplierName.change(()=>{removeInvalidClass(grnSupplierName)});
+
+    editGrnDate.change(()=>{removeInvalidClass(editGrnDate)});
+    editGrnPrice.change(()=>{removeInvalidClass(editGrnPrice)});
+    editGrnSupplierName.change(()=>{removeInvalidClass(editGrnSupplierName)});
+     
 });
 
 

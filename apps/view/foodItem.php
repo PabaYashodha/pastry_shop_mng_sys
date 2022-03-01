@@ -114,7 +114,7 @@ require_once "sidebar.php";
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
             <div class="modal-header text-light" style="background-color:#2f2e41;">
-                <h5 class="modal-title"><i class="fad fa-burger-soda fa-2x" style="margin-right: 10px;"></i>Add Food Item</h5>
+                <h5 class="modal-title"><i class="fad fa-burger-soda fa-lg" style="margin-right: 10px;"></i>Add Food Item</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

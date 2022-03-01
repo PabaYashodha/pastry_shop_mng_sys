@@ -109,23 +109,23 @@ switch ($status) {
         echo json_encode($data);
         break;
 
-    case 'deleteCategory':
-        $categoryId = base64_decode($_POST['categoryId']);
-        $deleteCategory = $categoryObj->deleteCategory($categoryId);
-        if ($deleteCategory == 1) {
-            $res = 1;
-            $getCategoryData = $categoryObj->getCategoryData();
-            $categoryArray = array();
-            while ($row = $getCategoryData->fetch_assoc()) {
-                array_push($categoryArray, $row);
-            }
-            $msg = $categoryArray;
-        } else {
-            $res = 2;
-            $ms = "Oops category can't delete";
-        }
-        $data[0] = $res;
-        $data[1] = $msg;
-        echo json_encode($data);
-        break;
+    // case 'deleteCategory':
+    //     $categoryId = base64_decode($_POST['categoryId']);
+    //     $deleteCategory = $categoryObj->deleteCategory($categoryId);
+    //     if ($deleteCategory == 1) {
+    //         $res = 1;
+    //         $getCategoryData = $categoryObj->getCategoryData();
+    //         $categoryArray = array();
+    //         while ($row = $getCategoryData->fetch_assoc()) {
+    //             array_push($categoryArray, $row);
+    //         }
+    //         $msg = $categoryArray;
+    //     } else {
+    //         $res = 2;
+    //         $ms = "Oops category can't delete";
+    //     }
+    //     $data[0] = $res;
+    //     $data[1] = $msg;
+    //     echo json_encode($data);
+    //     break;
 }

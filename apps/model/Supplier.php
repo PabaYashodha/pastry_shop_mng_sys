@@ -43,6 +43,14 @@ class Supplier
         $result =$conn->query($sql) or die($conn->error);
         return $result;
     }
+
+    public function getSupplierNameById($supplierId)
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT `supplier_contact_name` FROM `supplier` WHERE `supplier_id` = '$supplierId'";
+        $getGrnSupplierName = $conn->query($sql) or die($conn->error);
+        return $getGrnSupplierName;
+    }
     
 }
 ?>

@@ -121,4 +121,11 @@ switch ($status) {
         $data[1] = $msg;
         echo json_encode($data);
         break;
+
+    case 'getSupplierNameById':
+        $supplierId = base64_decode($_GET['supplierId']);
+        $getGrnSupplierName = $supplierObj->getSupplierNameById($supplierId);
+        $row = $getGrnSupplierName->fetch_assoc();
+        echo json_encode($row);
+        break;
 }

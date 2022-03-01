@@ -26,6 +26,7 @@ let getUserData = () =>{
 let getSupplierData = () =>{
     $.get("../controller/SupplierController.php?status=getSupplierData", (result) => {
         supplierTableBody(result);
+        supplierNameOption(result); //get supplier names to the grn form by dropdown
     }, 'json')
 }
 
@@ -58,6 +59,19 @@ let getSubCategoryData = () =>{
     $.get("../controller/SubCategoryController.php?status=getSubCategoryData",(result)=>{
         subCategoryTableBody(result);
         subCategoryOption(result);
+    },'json')
+}
+
+let getRowItemData =()=>{
+    $.get("../controller/RowItemController.php?status=getRowItemData",(result)=>{
+        rowItemTableBody(result);
+        rowItemOption(result);
+    },'json')
+}
+
+let getGrnData= ()=>{
+    $.get("../controller/GrnController.php?status=getGrnData",(result)=>{
+        grnTableBody(result);
     },'json')
 }
 

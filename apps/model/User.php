@@ -13,7 +13,7 @@ class User
     public function newEmp()
     { //get new employee id
         $conn = $this->db->connection();
-        $sql = "SELECT count(user_id) FROM user";
+        $sql = "SELECT count(`user_id`) FROM `user`";
         $result = $conn->query($sql);
         $row = $result->num_rows;
         if ($row == 0) {
