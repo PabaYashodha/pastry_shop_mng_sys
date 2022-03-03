@@ -36,7 +36,7 @@ require_once "sidebar.php";
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
-                                    <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addFoodItem"><i class="far fa-plus"></i> ADD FOOD ITEM</button>
+                                    <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addFoodItem" style="background-color: #2f2e41;"><i class="far fa-plus"></i> ADD FOOD ITEM</button>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

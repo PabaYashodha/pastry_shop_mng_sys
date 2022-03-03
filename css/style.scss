@@ -58,6 +58,7 @@ nav {
   overflow-y: auto;
   background: #2f2e41;
   transition: all 0.2s;
+  color: #2f2e41 !important;
 }
 
 .sidebar-collapsed {
@@ -167,5 +168,9 @@ nav.breadcrumb{
     height: 10px;  
     background: #ffffff;
 
+}
+.datalist{
+    display: none !important;
+    background-color: #2f2e41 !important;
 }
 

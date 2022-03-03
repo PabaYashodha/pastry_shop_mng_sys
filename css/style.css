@@ -22,7 +22,6 @@ nav {
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   background-color: #cccccc !important;
-  color: #0e0e0e !important;
 }
 
 .nav-pills .nav-link2.active, .nav-pills .show > .nav-link2 {
@@ -60,6 +59,7 @@ nav {
   background: #2f2e41;
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
+  color: #2f2e41 !important;
 }
 
 .sidebar-collapsed {
@@ -186,5 +186,10 @@ nav.breadcrumb {
   font-weight: bolder;
   height: 10px;
   background: #ffffff;
+}
+
+.datalist {
+  display: none !important;
+  background-color: #2f2e41 !important;
 }
 /*# sourceMappingURL=style.css.map */

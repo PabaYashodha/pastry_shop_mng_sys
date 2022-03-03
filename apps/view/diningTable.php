@@ -20,14 +20,14 @@ require_once "sidebar.php";
         <div class="card-body">
             <div class="row mb-3">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addDiningTable"><i class="far fa-plus"></i> ADD DINING TABLE</button>
+                    <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addDiningTable" style="background-color: #2f2e41;"><i class="far fa-plus"></i> ADD DINING TABLE</button>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <table class="table  table-hover table-responsive-*" id="dataTable">
-                        <thead class="table-primary">
+                        <thead>
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Table Name</th>

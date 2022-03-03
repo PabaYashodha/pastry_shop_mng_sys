@@ -8,7 +8,7 @@ $.get("../controller/DashboardController.php?status=getModule", (result) => {
         if (result[index].module_url == page) {
             li += ' active';
         }
-        li += '" style="padding:0.73rem; padding-left:1.7rem" ><i class="'+result[index].module_logo+'"></i><span class="moduleName"> &nbsp;'+ result[index].module_name +'</span></a></li>';  
+        li += '" style="padding:0.73rem; padding-left:1.7rem;" ><i class="'+result[index].module_logo+'"></i><span class="moduleName"> &nbsp;'+ result[index].module_name +'</span></a></li>';  
     }
     $('#getModule').html(li).show();
 }, 'json')
