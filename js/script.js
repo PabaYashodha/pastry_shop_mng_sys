@@ -18,7 +18,7 @@ $(document).ready(function () {
         "hideMethod": "fadeOut"
     }
 
-    $('.table').DataTable({
+    $('.dataTable').DataTable({
         dom: "<'row'<'col-sm-3'l><'col-sm-6'B><'col-sm-3'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -27,17 +27,6 @@ $(document).ready(function () {
         bSort: false,
         pageLength: 10,
         pagingType: "full_numbers"
-    });
-    
-    $('#table-stock').DataTable({
-        // dom: "<'row'<'col-sm-3'l><'col-sm-6'B><'col-sm-3'f>>" +
-        //     "<'row'<'col-sm-12'tr>>" +
-        //     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        // dom:'Bfrtip',
-        //  buttons: ['copy', 'excel', 'print', 'pdf', 'csv'],
-         bSort: false,
-         pageLength: 10,
-         pagingType: "full_numbers"
     });
 
 
@@ -59,28 +48,12 @@ $(document).ready(function () {
      //add row in to the add stock table
      //button click event to add a row
      $('#addRow').click(function (){
-      markup = '<tr>'+
-      '<th scope="row"><button type="button" id="btnDelete" class="btn btn-outline-danger ">&cross;</button></i></th>'+
-      '<td>'+
-      '<input list="stockRowItemNames" class="form-control" id="stockRowItemName" name="stockRowItemName">'+
-      '<datalist class="datalist" id="stockRowItemNames"></datalist>'+
-      '</td>'+
-      '<td><input type="date" class="form-control"></td>'+
-      '<td><input type="date" class="form-control"></td>'+
-      '<td><input type="number" class="form-control"></td>'+
-      '<td><input type="number" class="form-control"></td>'+
-      '<td><input type="number" class="form-control"></td>'+
-      '</tr>';
-      tableBody = $("#stockTbody");
-      tableBody.append(markup);
+     
      })
 
-     //remove row
-     $('#btnDelete').click(function() {
-         $(this).closest('tr').remove();
-     });
-      
 });
+
+
 
 let preview = (input) => {
     if (input.files && input.files[0]) {
@@ -1233,6 +1206,9 @@ let editRowItemDetails = (Id) =>{
      },'json')
  }
 
-
-
- 
+//  let getStockNetCost = (tblRowCnt)=>{
+//     let stockReceivedQuantity = +$('#stockReceivedQuantity' + tblRowCnt).val();//change the string value to integer by +
+//     let stockCostPerUnit = parseFloat($('#stockCostPerUnit' + tblRowCnt).val()); // change the value string to float
+//     let stockNetCost = stockReceivedQuantity * stockCostPerUnit;
+//     $('#stockNetCost' + tblRowCnt).val(stockNetCost.toFixed(2));
+// };
