@@ -1,4 +1,17 @@
-$(document).ready(() => {
+$(document).ready(()=>{
+    // const deliveryPersonName = $('#deliveryPersonName');
+    // const deliveryPersonAge = $('#deliveryPersonAge');
+    // const deliveryPersonContact = $('#deliveryPersonContact');
+    // const deliveryPersonEmail = $('#deliveryPersonEmail');
+    // const deliveryPersonAdd1 = $('#deliveryPersonAdd1');
+    // const deliveryPersonAdd2 = $('#deliveryPersonAdd2');
+    // const deliveryPersonAdd3 = $('#deliveryPersonAdd3');
+
+    const patName = /^[a-zA-Z\.\s]+$/; //validation rgx for text
+    const patEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,6})+$/; //validation rgx for email
+    const patCon = /^(07)([0-9]){8}$/; //validation rgx for contact
+    const patNIC = /^([0-9]{9}[x|X|v|V]|[0-9]{12})+$/; //validation rgx for nic
+    const allowImagePattern = /(\.jpg|\.jpeg|\.png)$/i; //image validation
 
     const firstName = $("#firstName"); //first name of user form
     const lastName = $("#lastName"); //last name of user form
@@ -11,107 +24,6 @@ $(document).ready(() => {
     const add2 = $("#add2"); //street of user form 
     const add3 = $("#add3"); //lane of user form
     const image = $("#image"); //image of user form
-
-    const editFirstName = $('#editFirstName');
-    const editLastName = $('#editLastName');
-    const editContact = $('#editContact');
-    const editBirthday = $('#editBirthday');
-    // const editGender =  $('#editGender');
-    const editNic = $('#editNic');
-    const editEmail = $('#editEmail');
-    const editRole = $('#editRole');
-    const editAdd1 = $('#editAdd1');
-    const editAdd2 = $('#editAdd2');
-    const editAdd3 = $('#editAdd3');
-
-    const supplierName = $('#supplierName');
-    const supplierContactName = $('#supplierContactName');
-    const supplierEmail = $('#supplierEmail');
-    const supplierContact = $('#supplierContact');
-    const supplierAdd1 = $('#supplierAdd1');
-    const supplierAdd2 = $('#supplierAdd2');
-    const supplierAdd3 = $('#supplierAdd3');
-
-    const editSupplierName = $('#editSupplierName');
-    const editSupplierContactName = $('#editSupplierContactName');
-    const editSupplierEmail = $('#editSupplierEmail');
-    const editSupplierContact = $('#editSupplierContact');
-    const editSupplierAdd1 = $('#editSupplierAdd1');
-    const editSupplierAdd2 = $('#editSupplierAdd2');
-    const editSupplierAdd3 = $('#editSupplierAdd3');
-
-    const customerFirstName = $('#customerFirstName');
-    const customerLastName = $('#customerLastName');
-    const customerContact = $('#customerContact');
-    const customerEmail = $('#customerEmail');
-    // const customerGender = $('#customerGender');
-    const customerBirthday = $('#customerBirthday');
-    const customerAdd1 = $('#customerAdd1');
-    const customerAdd2 = $('#customerAdd2');
-    const customerAdd3 = $('#customerAdd3');
-    const customerPostalCode = $('#customerPostalCode');
-    const customerNic = $('#customerNic');
-
-    const editCustomerFirstName = $('#editCustomerFirstName');
-    const editCustomerLastName = $('#editCustomerLastName');
-    const editCustomerContact = $('#editCustomerContact');
-    const editCustomerEmail = $('#editCustomerEmail');
-    // const editCustomerGender = $('#editCustomerGender');
-    const editCustomerBirthday = $('#editCustomerBirthday');
-    const editCustomerAdd1 = $('#editCustomerAdd1');
-    const editCustomerAdd2 = $('#editCustomerAdd2');
-    const editCustomerAdd3 = $('#editCustomerAdd3');
-    const editCustomerPostalCode = $('#editCustomerPostalCode');
-    const editCustomerNic = $('#editCustomerNic');
-
-    const tableName = $('#tableName');
-    const tableCapacity = $('#tableCapacity');
-
-    const editTableName = $('#editTableName');
-    const editTableCapacity = $('#editTableCapacity');
-
-    const foodItemName = $('#foodItemName');
-    const unitPrice = $('#unitPrice');
-    const foodItemCategory = $('#foodItemCategory');
-    const foodItemSubCategory = $('foodItemSubCategory');
-    const foodItemImage = $('foodItemImage');
-
-    const editFoodItemName = $('#editFoodItemName');
-    const editUnitPrice = $('#editUnitPrice');
-    const editFoodItemCategory = $('#editFoodItemCategory');
-    const editFoodItemSubCategory = $('#editFoodItemSubCategory');
-    const editFoodItemImage = $('#editFoodItemImage');
-
-    // const deliveryPersonName = $('#deliveryPersonName');
-    // const deliveryPersonAge = $('#deliveryPersonAge');
-    // const deliveryPersonContact = $('#deliveryPersonContact');
-    // const deliveryPersonEmail = $('#deliveryPersonEmail');
-    // const deliveryPersonAdd1 = $('#deliveryPersonAdd1');
-    // const deliveryPersonAdd2 = $('#deliveryPersonAdd2');
-    // const deliveryPersonAdd3 = $('#deliveryPersonAdd3');
-
-    const categoryName = $('#categoryName');
-
-    const editCategoryName = $('#editCategoryName');
-
-    const subCategoryName = $('#subCategoryName');
-    const subCategoryCategoryItem = $('#subCategoryCategoryItem');
-
-    const editSubCategoryName = $('#editSubCategoryName');
-    const editSubCategoryCategoryItem = $('#editSubCategoryCategoryItem');
-
-    const rowItemName = $('#rowItemName');
-
-    const editRowItemName = $('#editRowItemName');
-
-   
-
-
-    const patName = /^[a-zA-Z\.\s]+$/; //validation rgx for text
-    const patEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,6})+$/; //validation rgx for email
-    const patCon = /^(07)([0-9]){8}$/; //validation rgx for contact
-    const patNIC = /^([0-9]{9}[x|X|v|V]|[0-9]{12})+$/; //validation rgx for nic
-    const allowImagePattern = /(\.jpg|\.jpeg|\.png)$/i; //image validation
 
     contact.blur(() => {
         const url = "../controller/UserController.php?status=checkContactIsExist";
@@ -299,6 +211,17 @@ $(document).ready(() => {
         })
     });
 
+    const editFirstName = $('#editFirstName');
+    const editLastName = $('#editLastName');
+    const editContact = $('#editContact');
+    const editBirthday = $('#editBirthday');
+    // const editGender =  $('#editGender');
+    const editNic = $('#editNic');
+    const editEmail = $('#editEmail');
+    const editRole = $('#editRole');
+    const editAdd1 = $('#editAdd1');
+    const editAdd2 = $('#editAdd2');
+    const editAdd3 = $('#editAdd3');
     $("#saveEditForm").click(() => { //user edit form submit validation
 
         let editFirstNameVal = editFirstName.val()
@@ -439,6 +362,13 @@ $(document).ready(() => {
         let password = $("#password").val();
     });
 
+    const supplierName = $('#supplierName');
+    const supplierContactName = $('#supplierContactName');
+    const supplierEmail = $('#supplierEmail');
+    const supplierContact = $('#supplierContact');
+    const supplierAdd1 = $('#supplierAdd1');
+    const supplierAdd2 = $('#supplierAdd2');
+    const supplierAdd3 = $('#supplierAdd3');
     $("#supplierFormSubmit").click(() => { //supplier form submit
 
         let supplierNameVal = supplierName.val()
@@ -555,6 +485,13 @@ $(document).ready(() => {
         })
     });
 
+    const editSupplierName = $('#editSupplierName');
+    const editSupplierContactName = $('#editSupplierContactName');
+    const editSupplierEmail = $('#editSupplierEmail');
+    const editSupplierContact = $('#editSupplierContact');
+    const editSupplierAdd1 = $('#editSupplierAdd1');
+    const editSupplierAdd2 = $('#editSupplierAdd2');
+    const editSupplierAdd3 = $('#editSupplierAdd3');
     $("#saveEditSupplierForm").click(() => { //supplier edit form submit
 
         let editSupplierNameVal = editSupplierName.val()
@@ -670,6 +607,17 @@ $(document).ready(() => {
         })
     });
 
+    const customerFirstName = $('#customerFirstName');
+    const customerLastName = $('#customerLastName');
+    const customerContact = $('#customerContact');
+    const customerEmail = $('#customerEmail');
+    // const customerGender = $('#customerGender');
+    const customerBirthday = $('#customerBirthday');
+    const customerAdd1 = $('#customerAdd1');
+    const customerAdd2 = $('#customerAdd2');
+    const customerAdd3 = $('#customerAdd3');
+    const customerPostalCode = $('#customerPostalCode');
+    const customerNic = $('#customerNic');
     $("#customerFormSubmit").click(() => { //customer form submit validation
 
         let customerFirstNameVal = customerFirstName.val()
@@ -809,6 +757,17 @@ $(document).ready(() => {
         })
     });
 
+    const editCustomerFirstName = $('#editCustomerFirstName');
+    const editCustomerLastName = $('#editCustomerLastName');
+    const editCustomerContact = $('#editCustomerContact');
+    const editCustomerEmail = $('#editCustomerEmail');
+    // const editCustomerGender = $('#editCustomerGender');
+    const editCustomerBirthday = $('#editCustomerBirthday');
+    const editCustomerAdd1 = $('#editCustomerAdd1');
+    const editCustomerAdd2 = $('#editCustomerAdd2');
+    const editCustomerAdd3 = $('#editCustomerAdd3');
+    const editCustomerPostalCode = $('#editCustomerPostalCode');
+    const editCustomerNic = $('#editCustomerNic');
     $("#saveEditCustomerForm").click(() => { //customer form submit validation
 
         let editCustomerFirstNameVal = editCustomerFirstName.val()
@@ -949,6 +908,8 @@ $(document).ready(() => {
         })
     });
 
+    const tableName = $('#tableName');
+    const tableCapacity = $('#tableCapacity');
     //submit dining table form 
     $('#tableFormSubmit').click(() => {
         let tableNameVal = tableName.val();
@@ -1038,6 +999,8 @@ $(document).ready(() => {
         })
     });
 
+    const editTableName = $('#editTableName');
+    const editTableCapacity = $('#editTableCapacity');
     $("#saveEditTableFormSubmit").click(() => {
         let editTableNameVal = editTableName.val();
         let editTableCapacityVal = editTableCapacity.val();
@@ -1128,6 +1091,11 @@ $(document).ready(() => {
         })
     });
 
+    const foodItemName = $('#foodItemName');
+    const unitPrice = $('#unitPrice');
+    const foodItemCategory = $('#foodItemCategory');
+    const foodItemSubCategory = $('foodItemSubCategory');
+    const foodItemImage = $('foodItemImage');
     $("#foodItemFormSubmit").click(() => {
         let foodItemNameVal = foodItemName.val()
         let unitPriceVal = unitPrice.val()
@@ -1232,6 +1200,11 @@ $(document).ready(() => {
         })
     });
 
+    const editFoodItemName = $('#editFoodItemName');
+    const editUnitPrice = $('#editUnitPrice');
+    const editFoodItemCategory = $('#editFoodItemCategory');
+    const editFoodItemSubCategory = $('#editFoodItemSubCategory');
+    const editFoodItemImage = $('#editFoodItemImage');
     $("#editFoodItemFormSubmit").click(() => {
         let editFoodItemNameVal = editFoodItemName.val()
         let editUnitPriceVal = editUnitPrice.val()
@@ -1332,6 +1305,7 @@ $(document).ready(() => {
         })
     });
 
+    const categoryName = $('#categoryName');
     $("#categoryFormSubmit").click(() => {
         let categoryNameVal = categoryName.val();
 
@@ -1416,6 +1390,7 @@ $(document).ready(() => {
         })
     });
 
+    const editCategoryName = $('#editCategoryName');
     $("#editCategoryFormSubmit").click(() => {
         let editCategoryNameVal = editCategoryName.val();
 
@@ -1501,6 +1476,8 @@ $(document).ready(() => {
         })
     });
 
+    const subCategoryName = $('#subCategoryName');
+    const subCategoryCategoryItem = $('#subCategoryCategoryItem');
     $("#subCategoryFormSubmit").click(() => {
         let subCategoryNameVal = subCategoryName.val();
         let subCategoryCategoryItemVal = subCategoryCategoryItem.val();
@@ -1590,6 +1567,8 @@ $(document).ready(() => {
         })
     });
 
+    const editSubCategoryName = $('#editSubCategoryName');
+    const editSubCategoryCategoryItem = $('#editSubCategoryCategoryItem');
     $('#editSubCategoryFormSubmit').click(() => {
         let editSubCategoryNameVal = editSubCategoryName.val();
         let editSubCategoryCategoryItemVal = editSubCategoryCategoryItem.val();
@@ -1679,6 +1658,7 @@ $(document).ready(() => {
         })
     });
 
+    const rowItemName = $('#rowItemName');
     $('#rowItemFormSubmit').click(() => {
         let rowItemNameVal = rowItemName.val();
 
@@ -1763,6 +1743,7 @@ $(document).ready(() => {
         })
     });
 
+    const editRowItemName = $('#editRowItemName');
     $("#editRowItemFormSubmit").click(() => {
         let editRowItemNameVal = editRowItemName.val();
 
@@ -1856,21 +1837,23 @@ $(document).ready(() => {
      const stockReceivedQuantity = $('#stockReceivedQuantity');
      const stockCostPerUnit = $('#stockCostPerUnit');
      const stockNetCost = $('#stockNetCost');
-     const stockTotalNetCost = $('#stockTotalNetCost');
-
-    
+     const stockDiscount = $('#stockDiscount');
+     const stockTotalCost = $('#stockTotalCost');
+     const stockTotalDiscount = $('#stockTotalDiscount');
     $("#addRow").click(() => {
         let stockRowItemNameVal = stockRowItemName.val();
         let stockMnfDateVal = stockMnfDate.val();
         let stockExpDateVal = stockExpDate.val();
         let stockReceivedQuantityVal = stockReceivedQuantity.val();
         let stockCostPerUnitVal = stockCostPerUnit.val();
-        let stockNetCostVal =parseFloat(stockNetCost.val());
-        let stockTotalNetCostVal = parseFloat(stockTotalNetCost.val());
-
-        if (stockRowItemNameVal == "" || stockMnfDateVal == "" || stockExpDateVal == "" || stockReceivedQuantityVal == "" || stockCostPerUnitVal == "" || stockNetCostVal == "") {
+        let stockNetCostVal = parseFloat(stockNetCost.val());
+        let stockDiscountVal = +stockDiscount.val();
+        let stockTotalCostVal = parseFloat(stockTotalCost.val());
+        let stockTotalDiscountVal = +(stockTotalDiscount.val());
+       
+        if (stockRowItemNameVal == "" || stockMnfDateVal == "" || stockExpDateVal == "" || stockReceivedQuantityVal == "" || stockCostPerUnitVal == "" || stockNetCostVal<0 || stockDiscountVal<0) {
             toastr.error("Fill the fields");
-            $([stockRowItemName, stockMnfDate, stockExpDate, stockReceivedQuantity, stockCostPerUnit, stockNetCost]).each(function () {
+            $([stockRowItemName, stockMnfDate, stockExpDate, stockReceivedQuantity, stockCostPerUnit, stockNetCost, stockDiscount]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid")
             })
             stockRowItemName.focus();
@@ -1894,61 +1877,198 @@ $(document).ready(() => {
         }
         if (stockCostPerUnitVal=="") {
             addInvalidClass(stockCostPerUnit, "Add cost per unit");
-        } else {
+            return false;
+        } 
+        if (stockDiscountVal<0) {
+            addInvalidClass(stockDiscount, "Add discount");
+            return false;
+        }
+        if (stockNetCostVal<0) {
+            addInvalidClass(stockNetCost, "Add net cost");
+            return false;
+        }else {
             markup = '<tr>' +
                 '<td scope="row"><button type="button" class="btn btn-outline-danger btnDelete ">&cross;</button></i></td>' +
                 '<td>' +
-                '<input list="stockRowItemNames" class="form-control"  name="stockTableRowItemName[]" readonly value="'+stockRowItemNameVal+'">' +
+                '<input list="stockRowItemNames" class="form-control" type="text"  readonly value="'+stockRowItemNameVal+'">' +
+                '<input type="hidden" list="stockRowItemId" class="form-control"  name="stockTableRowItemId[]" readonly value="'+stockRowItemNameVal+'">' +
                 '</td>' +
                 '<td><input name="stockTableMnfDate[]" type="text" class="form-control" readonly value="'+stockMnfDateVal+'"></td>' +
                 '<td><input name="stockTableExpDate[]" type="text" class="form-control" readonly value="'+stockExpDateVal+'"></td>' +
-                '<td><input name="stockTableReceivedQuantity[]"  type="number" class="form-control" readonly value="'+stockReceivedQuantityVal+'"></td>' +
-                '<td><input name="stockTableCostPerUnit[]"  type="number" class="form-control" readonly value="'+stockCostPerUnitVal+'"></td>' +
-                '<td><input name="stockTableNetCost[]" readonly type="number" class="form-control netCost" readonly value="'+stockNetCostVal+'"></td>' +
+                '<td><input name="stockTableReceivedQuantity[]"  type="number" class="form-control text-end" readonly value="'+stockReceivedQuantityVal+'"></td>' +
+                '<td><input name="stockTableCostPerUnit[]"  type="number" class="form-control text-end" readonly value="'+stockCostPerUnitVal+'"></td>' +
+                '<td><input name="stockTableDiscount[]"  type="number" class="form-control text-end" readonly value="'+stockDiscountVal+'"></td>' +
+                '<td><input name="stockTableNetCost[]" readonly type="number" class="form-control netCost text-end" readonly value="'+stockNetCostVal+'"></td>' +
                 '</tr>';
             tableBody = $("#stockTbody");
             tableBody.append(markup);
             
             //new total add and fill the net cost and net total input fields
-            let newTotal = stockNetCostVal + stockTotalNetCostVal;
-            $('#stockTotalNetCost , #stockNetTotal').val(newTotal.toFixed(2));
+            let newTotal = stockNetCostVal + stockTotalCostVal;
+            $('#stockTotalCost').val(newTotal.toFixed(2));
+            if (stockTotalDiscountVal==""){
+                $('#stockTotalCost').val(""); //empty the current value
+                $('#stockTotalCost , #stockNetTotal').val(newTotal.toFixed(2));
+            }else{
+                let netTotal = newTotal - (newTotal * stockTotalDiscountVal)/100
+                $('#stockNetTotal').val(netTotal.toFixed(2));
+            }
+            stockRowItemName.val(""); //empty the input fields values 
+            stockMnfDate.val("");
+            stockExpDate.val("");
+            stockReceivedQuantity.val("");
+            stockCostPerUnit.val("");
+            stockDiscount.val("");
+            stockNetCost.val("");
 
-
-        stockRowItemName.val(""); //empty the input fields values 
-        stockMnfDate.val("");
-        stockExpDate.val("");
-        stockReceivedQuantity.val("");
-        stockCostPerUnit.val("");
-        stockNetCost.val("");
-
-        //remove valid  mark n empty fields
-        $([stockRowItemName, stockMnfDate, stockExpDate, stockReceivedQuantity, stockCostPerUnit, stockNetCost]).each(function(){
-            $(this).removeClass("is-valid");
-        }) 
-       
+            //remove valid  mark n empty fields
+            $([stockRowItemName, stockMnfDate, stockExpDate, stockReceivedQuantity, stockCostPerUnit, stockDiscount, stockNetCost]).each(function(){
+                $(this).removeClass("is-valid");
+            }); 
         }
     });
 
-//get the net cost 
+
+    //get the net cost with discount
     $('#stockReceivedQuantity, #stockCostPerUnit').keyup(()=>{
         let stockReceivedQuantityVal = +stockReceivedQuantity.val();//change the string value to integer by +
-        let stockCostPerUnitVal = parseFloat(stockCostPerUnit.val()); // change the value string to float     
-        let stockNetCostVal = stockReceivedQuantityVal * stockCostPerUnitVal;
+        let stockCostPerUnitVal = parseFloat(stockCostPerUnit.val()); // change the value string to float  
+        let stockDiscountVal = +stockDiscount.val();
+        let stockCostVal = stockReceivedQuantityVal * stockCostPerUnitVal;
+        let stockNetCostVal = stockCostVal - (stockCostVal * stockDiscountVal)/100;//before add received quantity an cost per unit, insert discount nd get value
         $('#stockNetCost').val(stockNetCostVal.toFixed(2)); //net cost value for one item
     });
    
-    
-    //remove row in add stock table
-    $('#stockTbody').on("click",'.btnDelete',function(){
-        let stockTotalNetCostVal = parseFloat(stockTotalNetCost.val());
-        let deleteRowValueVal = +$(this).parents("tr").find(".netCost").val();
-        stockTotalNetCostVal = stockTotalNetCostVal- deleteRowValueVal;
-        $('#stockTotalNetCost , #stockNetTotal').val(stockTotalNetCostVal.toFixed(2)); //stock total net cost
-        $(this).closest('tr').remove(); 
-        
+    //after add received quantity an cost per unit, insert discount nd get value
+    $('#stockDiscount').keyup(()=>{
+        let stockReceivedQuantityVal = +stockReceivedQuantity.val();//change the string value to integer by +
+        let stockCostPerUnitVal = parseFloat(stockCostPerUnit.val()); // change the value string to float  
+        let stockDiscountVal = +stockDiscount.val();
+        let stockCostVal = stockReceivedQuantityVal * stockCostPerUnitVal;
+        let stockNetCostVal = stockCostVal - (stockCostVal * stockDiscountVal)/100;//after add received quantity an cost per unit, insert discount nd get value
+        $('#stockNetCost').val(stockNetCostVal.toFixed(2)); //net cost value for one item
     });
 
-   
+    // find the discount using net cost
+    $('#stockNetCost').keyup(()=>{
+        let stockReceivedQuantityVal = +stockReceivedQuantity.val();//change the string value to integer by +
+        let stockCostPerUnitVal = parseFloat(stockCostPerUnit.val()); // change the value string to float  
+        let stockNetCostVal = +stockNetCost.val();
+        let stockCostVal = stockReceivedQuantityVal * stockCostPerUnitVal;
+        let stockDiscountVal = ((stockCostVal - stockNetCostVal)*100)/stockCostVal;
+        $('#stockDiscount').val(stockDiscountVal.toFixed(0)); //net cost value for one item
+    });
+
+    //remove row in add stock table
+    $('#stockTbody').on("click",'.btnDelete',function(){
+        let stockTotalCostVal = parseFloat(stockTotalCost.val());
+        let deleteRowValueVal = +$(this).parents("tr").find(".netCost").val();
+        stockTotalCostVal = stockTotalCostVal- deleteRowValueVal;
+        $('#stockTotalCost , #stockNetTotal').val(stockTotalCostVal.toFixed(2)); //stock total net cost
+        $(this).closest('tr').remove(); 
+    });
+
+    //when add discount auto change the value
+    $('#stockTotalDiscount').keyup(()=>{
+        let stockTotalDiscountVal = +(stockTotalDiscount.val());
+        let stockTotalCostVal = parseFloat(stockTotalCost.val());
+        let netTotal = stockTotalCostVal - (stockTotalCostVal * stockTotalDiscountVal)/100;
+        $('#stockNetTotal').val(netTotal.toFixed(2));
+    });
+
+
+  const stockSupplierName = $('#stockSupplierName');
+    const stockCreteDate = $('#stockCreteDate');
+    const stockReferenceNumber = $('#stockReferenceNumber');
+    $("#stockFormSubmit").click(()=>{
+        let stockSupplierNameVal = stockSupplierName.val();
+        let stockCreteDateVal = stockCreteDate.val();
+        let stockReferenceNumberVal =stockReferenceNumber.val();
+
+        if (stockSupplierNameVal=="" || stockCreteDateVal=="" || stockReferenceNumberVal=="" ) {
+            toastr.error("Please fll ");
+            $([stockSupplierName, stockCreteDate, stockReferenceNumber]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid");
+            })
+            stockSupplierName.focus();
+            return false;
+        }
+        if (stockSupplierNameVal == "") {
+            addInvalidClass(stockSupplierName, "Add supplier name");
+            return false;
+        }
+        if (stockCreteDateVal=="") {
+            addInvalidClass(stockCreteDate, "Add date");
+            return false;
+        }
+        if (stockReferenceNumberVal=="") {
+            addInvalidClass(stockReferenceNumber, "add reference number");
+            return false;
+        }swal({
+            title: 'Are you sure',
+            text: 'Do you want to submit this form',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method: "POST",
+                    url: "../controller/StockController.php?status=addStock",
+                    data: new FormData($('#addStockForm')[0]),
+                    dataType: "json",
+                    enctype: "multipart/form-data",
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    beforeSend: function() {
+                        swal({
+                            title: "Loading...",
+                            text: " ",
+                            icon: "../../images/96x96.gif",
+                            buttons: false,
+                            allowOutsideClick: false,
+                            closeOnEsc: false,
+                            closeOnClickOutside: false,
+                        });
+                    },success: function(result) {
+                        if (result[0]==1) {
+                            swal({
+                                title: "Good Job!",
+                                text: "Stock Successfully Added",
+                                icon: "success",
+                                buttons: false,
+                                timer: 1000,
+                            });
+                            stockTableBody(result[1]);
+                            $("#addStockForm").trigger('reset');
+                        }
+                        if (result[0]==2) {
+                            swal({
+                                title: "Warning!",
+                                text: result[1],
+                                icon: "warning",
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }else{
+                swal({
+                    title: "Warning!",
+                    text: "Stock Not Added",
+                    icon: "warning",
+                    timer: 1000,
+                })
+            }
+        })
+    });
     let addInvalidClass = (Id, message) => {
         let id = Id
         toastr.error(message);
@@ -1988,181 +2108,79 @@ $(document).ready(() => {
     supplierContactName.change(() => {removeInvalidClass(supplierContactName)});
     supplierEmail.change(() => {removeInvalidClass(supplierEmail)});
     supplierContact.change(() => {removeInvalidClass(supplierContact)});
-    supplierAdd1.change(() => {
-        removeInvalidClass(supplierAdd1)
-    });
-    supplierAdd2.change(() => {
-        removeInvalidClass(supplierAdd2)
-    });
-    supplierAdd3.change(() => {
-        removeInvalidClass(supplierAdd3)
-    });
+    supplierAdd1.change(() => {removeInvalidClass(supplierAdd1)});
+    supplierAdd2.change(() => {removeInvalidClass(supplierAdd2)});
+    supplierAdd3.change(() => {removeInvalidClass(supplierAdd3)});
 
-    editSupplierName.change(() => {
-        removeInvalidClass(editSupplierName)
-    });
-    editSupplierContactName.change(() => {
-        removeInvalidClass(editSupplierContactName)
-    });
-    editSupplierEmail.change(() => {
-        removeInvalidClass(editSupplierEmail)
-    });
-    editSupplierContact.change(() => {
-        removeInvalidClass(editSupplierContact)
-    });
-    editSupplierAdd1.change(() => {
-        removeInvalidClass(editSupplierAdd1)
-    });
-    editSupplierAdd2.change(() => {
-        removeInvalidClass(editSupplierAdd2)
-    });
-    editSupplierAdd3.change(() => {
-        removeInvalidClass(editSupplierAdd3)
-    });
+    editSupplierName.change(() => {removeInvalidClass(editSupplierName)});
+    editSupplierContactName.change(() => {removeInvalidClass(editSupplierContactName)});
+    editSupplierEmail.change(() => {removeInvalidClass(editSupplierEmail)});
+    editSupplierContact.change(() => {removeInvalidClass(editSupplierContact)});
+    editSupplierAdd1.change(() => {removeInvalidClass(editSupplierAdd1)});
+    editSupplierAdd2.change(() => {removeInvalidClass(editSupplierAdd2)});
+    editSupplierAdd3.change(() => {removeInvalidClass(editSupplierAdd3)});
 
-    customerFirstName.change(() => {
-        removeInvalidClass(customerFirstName)
-    });
-    customerLastName.change(() => {
-        removeInvalidClass(customerLastName)
-    });
-    customerContact.change(() => {
-        removeInvalidClass(customerContact)
-    });
-    customerEmail.change(() => {
-        removeInvalidClass(customerEmail)
-    });
-    customerBirthday.change(() => {
-        removeInvalidClass(customerBirthday)
-    });
-    customerAdd1.change(() => {
-        removeInvalidClass(customerAdd1)
-    });
-    customerAdd2.change(() => {
-        removeInvalidClass(customerAdd2)
-    });
-    customerAdd3.change(() => {
-        removeInvalidClass(customerAdd3)
-    });
-    customerPostalCode.change(() => {
-        removeInvalidClass(customerPostalCode)
-    });
-    customerNic.change(() => {
-        removeInvalidClass(customerNic)
-    });
+    customerFirstName.change(() => {removeInvalidClass(customerFirstName)});
+    customerLastName.change(() => {removeInvalidClass(customerLastName)});
+    customerContact.change(() => {removeInvalidClass(customerContact)});
+    customerEmail.change(() => {removeInvalidClass(customerEmail)});
+    customerBirthday.change(() => {removeInvalidClass(customerBirthday)});
+    customerAdd1.change(() => {removeInvalidClass(customerAdd1)});
+    customerAdd2.change(() => {removeInvalidClass(customerAdd2)});
+    customerAdd3.change(() => {removeInvalidClass(customerAdd3)});
+    customerPostalCode.change(() => {removeInvalidClass(customerPostalCode)});
+    customerNic.change(() => {removeInvalidClass(customerNic)});
 
-    editCustomerFirstName.change(() => {
-        removeInvalidClass(editCustomerFirstName)
-    });
-    editCustomerLastName.change(() => {
-        removeInvalidClass(editCustomerLastName)
-    });
-    editCustomerContact.change(() => {
-        removeInvalidClass(editCustomerContact)
-    });
-    editCustomerEmail.change(() => {
-        removeInvalidClass(editCustomerEmail)
-    });
-    editCustomerBirthday.change(() => {
-        removeInvalidClass(editCustomerBirthday)
-    });
-    editCustomerAdd1.change(() => {
-        removeInvalidClass(editCustomerAdd1)
-    });
-    editCustomerAdd2.change(() => {
-        removeInvalidClass(editCustomerAdd2)
-    });
-    editCustomerAdd3.change(() => {
-        removeInvalidClass(editCustomerAdd3)
-    });
-    editCustomerPostalCode.change(() => {
-        removeInvalidClass(editCustomerPostalCode)
-    });
-    editCustomerNic.change(() => {
-        removeInvalidClass(editCustomerNic)
-    });
+    editCustomerFirstName.change(() => {removeInvalidClass(editCustomerFirstName)});
+    editCustomerLastName.change(() => {removeInvalidClass(editCustomerLastName)});
+    editCustomerContact.change(() => {removeInvalidClass(editCustomerContact)});
+    editCustomerEmail.change(() => {removeInvalidClass(editCustomerEmail)});
+    editCustomerBirthday.change(() => {removeInvalidClass(editCustomerBirthday)});
+    editCustomerAdd1.change(() => {removeInvalidClass(editCustomerAdd1)});
+    editCustomerAdd2.change(() => {removeInvalidClass(editCustomerAdd2)});
+    editCustomerAdd3.change(() => {removeInvalidClass(editCustomerAdd3)});
+    editCustomerPostalCode.change(() => {removeInvalidClass(editCustomerPostalCode)});
+    editCustomerNic.change(() => {removeInvalidClass(editCustomerNic)});
 
-    tableName.change(() => {
-        removeInvalidClass(tableName)
-    });
-    tableCapacity.change(() => {
-        removeInvalidClass(tableCapacity)
-    });
+    tableName.change(() => {removeInvalidClass(tableName)});
+    tableCapacity.change(() => {removeInvalidClass(tableCapacity)});
 
-    editTableName.change(() => {
-        removeInvalidClass(editTableName)
-    });
-    editTableCapacity.change(() => {
-        removeInvalidClass(editTableCapacity)
-    });
+    editTableName.change(() => {removeInvalidClass(editTableName)});
+    editTableCapacity.change(() => {removeInvalidClass(editTableCapacity)});
 
-    foodItemName.change(() => {
-        removeInvalidClass(foodItemName)
-    });
-    unitPrice.change(() => {
-        removeInvalidClass(unitPrice)
-    });
-    foodItemCategory.change(() => {
-        removeInvalidClass(foodItemCategory)
-    });
-    foodItemSubCategory.change(() => {
-        removeInvalidClass(foodItemSubCategory)
-    });
-    foodItemImage.change(() => {
-        removeInvalidClass(foodItemImage)
-    });
+    foodItemName.change(() => {removeInvalidClass(foodItemName)});
+    unitPrice.change(() => {removeInvalidClass(unitPrice)});
+    foodItemCategory.change(() => {removeInvalidClass(foodItemCategory)});
+    foodItemSubCategory.change(() => {removeInvalidClass(foodItemSubCategory)});
+    foodItemImage.change(() => {removeInvalidClass(foodItemImage)});
 
-    editFoodItemName.change(() => {
-        removeInvalidClass(editFoodItemName)
-    });
-    editUnitPrice.change(() => {
-        removeInvalidClass(editUnitPrice)
-    });
-    editFoodItemCategory.change(() => {
-        removeInvalidClass(editFoodItemCategory)
-    });
-    editFoodItemSubCategory.change(() => {
-        removeInvalidClass(editFoodItemSubCategory)
-    });
-    editFoodItemImage.change(() => {
-        removeInvalidClass(editFoodItemImage)
-    });
+    editFoodItemName.change(() => {removeInvalidClass(editFoodItemName)});
+    editUnitPrice.change(() => {removeInvalidClass(editUnitPrice)});
+    editFoodItemCategory.change(() => {removeInvalidClass(editFoodItemCategory)});
+    editFoodItemSubCategory.change(() => {removeInvalidClass(editFoodItemSubCategory)});
+    editFoodItemImage.change(() => {removeInvalidClass(editFoodItemImage)});
 
-    categoryName.change(() => {
-        removeInvalidClass(categoryName)
-    });
+    categoryName.change(() => {removeInvalidClass(categoryName)});
 
-    editCategoryName.change(() => {
-        removeInvalidClass(editCategoryName)
-    });
+    editCategoryName.change(() => {removeInvalidClass(editCategoryName)});
 
-    subCategoryName.change(() => {
-        removeInvalidClass(subCategoryName)
-    });
-    subCategoryCategoryItem.change(() => {
-        removeInvalidClass(subCategoryCategoryItem)
-    });
+    subCategoryName.change(() => {removeInvalidClass(subCategoryName)});
+    subCategoryCategoryItem.change(() => {removeInvalidClass(subCategoryCategoryItem)});
 
-    editSubCategoryName.change(() => {
-        removeInvalidClass(editSubCategoryName)
-    });
-    editSubCategoryCategoryItem.change(() => {
-        removeInvalidClass(editSubCategoryCategoryItem)
-    });
+    editSubCategoryName.change(() => {removeInvalidClass(editSubCategoryName)});
+    editSubCategoryCategoryItem.change(() => {removeInvalidClass(editSubCategoryCategoryItem)});
 
-    rowItemName.change(() => {
-        removeInvalidClass(rowItemName)
-    });
+    rowItemName.change(() => {removeInvalidClass(rowItemName)});
 
-    editRowItemName.change(() => {
-        removeInvalidClass(editRowItemName)
-    });
+    editRowItemName.change(() => {removeInvalidClass(editRowItemName)});
 
     stockRowItemName.change(()=>{removeInvalidClass(stockRowItemName)});
     stockMnfDate.change(()=>{removeInvalidClass(stockMnfDate)});
     stockExpDate.change(()=>{removeInvalidClass(stockExpDate)});
     stockReceivedQuantity.change(()=>{removeInvalidClass(stockReceivedQuantity)});
     stockCostPerUnit.change(()=>{removeInvalidClass(stockCostPerUnit)});
+
+    
 
     // grnDate.change(()=>{removeInvalidClass(grnDate)});
     // grnPrice.change(()=>{removeInvalidClass(grnPrice)});

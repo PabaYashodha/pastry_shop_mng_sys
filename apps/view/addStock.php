@@ -95,9 +95,17 @@ require_once "sidebar.php";
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                         <div class="row mb-3">
+                            <label for="stockDiscount" class="col-sm-3 col-form-label">Discount (%)</label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control" value="0" id="stockDiscount"  name="stockDiscount">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        <div class="row mb-3">
                             <label for="stockNetCost" class="col-sm-3 col-form-label">Net Cost</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" id="stockNetCost" readonly name="stockNetCost">
+                                <input type="number" class="form-control" id="stockNetCost" name="stockNetCost">
                             </div>
                         </div>
                     </div>
@@ -116,6 +124,7 @@ require_once "sidebar.php";
                             <th scope="col">Exp Date</th>
                             <th scope="col">Received Quantity(kg/l)</th>
                             <th scope="col">Cost Per Unit(Rs)</th>
+                            <th scope="col">Discount(%)</th>
                             <th scope="col">Net Cost(Rs)</th>
                         </tr>
                     </thead>
@@ -135,19 +144,26 @@ require_once "sidebar.php";
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th scope="col" colspan="6" class="text-end">Total</th>
-                            <th scope="col"><input type="text" class="form-control-plaintext text-end" value="0.00" name="stockTotalNetCost" readonly id="stockTotalNetCost"></th>
+                            <th scope="col" colspan="7" class="text-end">Total (Rs)</th>
+                            <th scope="col"><input type="text" class="form-control-plaintext text-end" value="0.00" name="stockTotalCost" readonly id="stockTotalCost"></th>
                         </tr>
                         <tr>
-                            <th scope="col" colspan="6" class="text-end">Discount</th>
-                            <th scope="col"><input type="text" class="form-control-plaintext text-end" value="0.00" readonly name="stockDiscount" id="stockDiscount"></th>
+                            <th scope="col" colspan="7" class="text-end">Discount (%)</th>
+                            <th scope="col"><input type="text" class="form-control-plaintext text-end" value="0"  name="stockTotalDiscount" id="stockTotalDiscount"></th>
                         </tr>
                         <tr>
-                            <th scope="col" colspan="6" class="text-end">Net Total</th>
-                            <th scope="col"><input type="text" class="form-control-plaintext text-end" value="0.00" readonly  name="stockNetTotal" id="stockNetTotal"></th>
+                            <th scope="col" colspan="7" class="text-end">Net Total (Rs)</th>
+                            <th scope="col"><input type="text" class="form-control-plaintext text-end" value="0.00" readonly name="stockNetTotal" id="stockNetTotal"></th>
                         </tr>
                     </tfoot>
                 </table>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="float-end d-inline-flex">
+                        <button type="reset" class="btn btn-danger">Reset</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="button" id="stockFormSubmit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

@@ -6,40 +6,45 @@ $status = $_REQUEST['status'];
 switch ($status) {
     case 'addStock':
         try {
-            $stockRowItemName = $_POST['stockRowItemName'];
+            $stockSupplierName = $_POST['stockSupplierName'];
+            $stockCreateDate = $_POST['stockCreteDate'];
             $stockReferenceNo = $_POST['stockReferenceNo'];
-            $stockAddingCount = $_POST['stockAddingCount'];
-            $stockCurrentCount = $_POST['stockCurrentCount'];
-            $stockCostPerUnit =$_POST['stockCostPerUnit'];
-            $stockMnfData = $_POST['stockMnfData'];
-            $stockExpDate = $_POST['stockExpDate'];
-
-            if ($stockRowItemName == "") {
-                throw new Exception("Row item name is required");
+            $stockRowItemId=$_POST['stockTableRowItemId'];
+            $stockMnfData=$_POST['stockTableMnfDate'];
+            $stockExpDate=$_POST['stockTableExpDate'];
+            $stockReceivedQuantity=$_POST['stockTableReceivedQuantity'];
+            $stockCostPerUnit=$_POST['stockTableCostPerUnit'];
+            $stockTotalCost = $_POST['stockTotalCost'];//total without discount
+            $stockDiscount =$_POST['stockTableDiscount']; // for each product discount
+            $stockTableNetCost = $_POST['stockTableNetCost'];//for one product total cost
+            $stockTotalDiscount=$_POST['stockTotalDiscount']; // total discount
+            $stockNetTotal=$_POST['stockNetTotal'];//total with discount
+            
+            if ($stockSupplierName== "") {
+                throw new Exception("Supplier name is required");
             }
             if ($stockReferenceNo=="") {
                 throw new Exception("Stock reference id is required");
             }
-            if ($stockAddingCount == "") {
-                throw new Exception("Stock adding count is required");
+            if ($stockCreateDate == "") {
+                throw new Exception("Stock date is required");
             }
-            if ($stockCurrentCount=="") {
-                throw new Exception("Stock current count is required");
+            if ($stockNetTotal=="") {
+                throw new Exception("net cost is required");
             }
-            if ($stockCostPerUnit=="") {
-                throw new Exception("Stock unit price s required");
+            //insert id return to the $addGrn
+            $addGrn = $stockObj->addGrn($stockSupplierName,$stockReferenceNo,$stockCreateDate,$stockNetTotal, $stockTotalDiscount);
+            if ($addGrn > 0) {
+                foreach ($stockRowItemId as $key => $value) {
+                    $addStock = $stockObj->addStock($stockReceivedQuantity[$key],$stockCostPerUnit[$key],$stockDiscount[$key],$stockMnfData[$key],$stockExpDate[$key],$stockTableNetCost[$key],$value, $addGrn);
+                }
             }
-            if ($stockMnfData=="") {
-                throw new Exception("Manufacture date is required");
-            }
-            if ($stockExpDate=="") {
-                throw new Exception("Expire date is required");
-            }
+
             // $existReferenceId = $stockObj->existReferenceId($stockReferenceNo);
             // if ($existReferenceId->num_rows ==0) {
             //     throw new Exception("Reference Id isn't correct ");
             // }
-            $addStock = $stockObj->addStock($stockRowItemName,$stockReferenceNo,$stockAddingCount,$stockCurrentCount,$stockCostPerUnit,$stockMnfData,$stockExpDate);
+           // $addStock = $stockObj->addStock($stockRowItemName,$stockReferenceNo,$stockAddingCount,$stockCurrentCount,$stockCostPerUnit,$stockMnfData,$stockExpDate);
             if ($addStock==1) {
                 $res=1;
                 $getStockData = $stockObj->getStockData();
