@@ -583,7 +583,7 @@ let foodItemCategoryName = (Id) => {
     // console.log(result)
 }
 
-//get food item sub category name for view food item details
+//get food item sub category name for view food item details ajax long form
 let foodItemSubCategoryName = (Id) => {
     var result = '';
     $.ajax({
