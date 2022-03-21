@@ -61,6 +61,9 @@ let preview = (input) => {
         reader.onload = function (e) {
             $('#pre_image').attr('src', e.target.result).height(200).width(200);
             $('#food_pre_image').attr('src', e.target.result).height(150).width(150);
+            $('#edit_food_pre_image').attr('src', e.target.result).height(150).width(150);
+            $('#category_pre_image').attr('src', e.target.result).height(150).width(150);
+            $('#edit_category_pre_image').attr('src', e.target.result).height(150).width(150);
             // console.log(e);
         };
         reader.readAsDataURL(input.files[0]);
@@ -608,6 +611,7 @@ let editFoodItemDetails = (Id) => {
         $('#editFoodItemId').val(btoa(result.food_item_id));
         $('#editFoodItemName').val(result.food_item_name);
         $('#editUnitPrice').val(result.food_item_unit_price);
+        $('#edit_food_pre_image').val(result.food_item_image);
 
         $.post("../controller/CategoryController.php?status=getCategoryData", (category) => {
             let row = '';
@@ -632,11 +636,13 @@ let editFoodItemDetails = (Id) => {
             }
             $('#editFoodItemSubCategory').html(row).show()
         }, 'json')
+
         let url = "../../images/foodItem-images/" + result.food_item_image;
         $('#edit_food_pre_image').attr('src', url).height(150).width(150);
     }, 'json')
 }
 
+//deactivate food item
 let deactivateFoodItem = (Id) => {
     swal({
         title: 'Are you sure',
@@ -664,7 +670,7 @@ let deactivateFoodItem = (Id) => {
         }
     })
 }
-
+//activate food item
 let activateFoodItem = (Id) => {
     swal({
         title: 'Are you sure',
@@ -693,13 +699,14 @@ let activateFoodItem = (Id) => {
     })
 }
 
-//Category  
+//Category table 
 let categoryTableBody = (result) => {
     let row = '';
     let count = 1;
     for (let index = 0; index < result.length; index++) {
         row += '<tr>' +
             '<th scope="row">' + count + '</th>' +
+            '<td><img src="../../images/foodItem-images/' + result[index].category_image + '" width="40" height="40"></td>' +
             '<td>' + result[index].category_name + '</td><td>';
         if ((result[index].category_status) == 1) {
             row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateCategory(\'' + btoa(result[index].category_id) + '\')">Available</button>';
@@ -712,13 +719,13 @@ let categoryTableBody = (result) => {
             '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
             '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategory" onclick="deleteCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
             '</td>' +
-            '</tr>';
+            '</tr>';       
         count++;
     }
     $('#categoryTable').html(row).show()
 }
 
-//get category data for food ite or and sub category form dropdown list
+//get category data for food item or and sub category form dropdown list
 let categoryOption = (result) => {
     let row = '';
     for (let index = 0; index < result.length; index++) {
@@ -737,13 +744,19 @@ let subCategoryOption = (result) => {
     $('#foodItemSubCategory').html(row).show()
 }
 
+//view category details
 let editCategoryDetails = (Id) => {
     $.post("../controller/CategoryController.php?status=viewCategoryDetails", {
         categoryId: Id
     }, (result) => {
         $('#editCategoryId').val(btoa(result.category_id));
         $('#editCategoryName').val(result.category_name);
+        $('#edit_category_pre_image').val(result.category_image);
+
+        let url = "../../images/foodItem-images/" + result.category_image;
+        $('#edit_category_pre_image').attr('src', url).height(150).width(150);
     }, 'json')
+
 }
 
 let deactivateCategory = (Id) => {

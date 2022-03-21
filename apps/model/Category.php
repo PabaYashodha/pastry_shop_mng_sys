@@ -17,10 +17,10 @@ class category{
         return $existCategory;
     }
 
-    public function addCategory($categoryName)
+    public function addCategory($categoryName,$categoryImage)
     {
         $conn = $this->db->connection();
-        $sql = "INSERT INTO `category` (`category_name`) VALUES ('$categoryName')";
+        $sql = "INSERT INTO `category` (`category_name`,`category_image`) VALUES ('$categoryName','$categoryImage')";
         $addCategoryData = $conn->query($sql) or die($conn->error);
         return $addCategoryData;
     }
@@ -41,10 +41,14 @@ class category{
         return $viewCategory;
     }
 
-    public function editCategory($categoryId, $categoryName)
+    public function editCategory($categoryId, $categoryName,$categoryImage)
     {
         $conn= $this->db->connection();
-        $sql = "UPDATE `category` SET `category_name` = '$categoryName' WHERE `category_id` = '$categoryId'";
+        if ($categoryImage== "") {
+            $sql = "UPDATE `category` SET `category_name` = '$categoryName' WHERE `category_id` = '$categoryId'";
+        }else{
+            $sql = "UPDATE `category` SET `category_name` = '$categoryName', `category_image`='$categoryImage' WHERE `category_id` = '$categoryId'";
+        }
         $editCategory = $conn->query($sql) or die($conn->error);
         return $editCategory;
     }
@@ -71,6 +75,18 @@ class category{
         $sql = "SELECT `category_name` FROM `category` WHERE `category_id` ='$categoryId'";
         $getCategoryName = $conn->query($sql) or die($conn->error);
         return $getCategoryName;
+    }
+    public function existEditCategoryName($categoryName)// select no 1 if category_name=$categoryName
+    {
+        $conn= $this->db->connection();
+        $sql= "SELECT 1 FROM `category` WHERE `category_name`='$categoryName'";
+        $existEditCategoryName = $conn->query($sql) or die($conn->error);
+        if ($existEditCategoryName->num_rows >1){
+            return false;
+        }else{
+            return true;
+        };
+
     }
     
 }

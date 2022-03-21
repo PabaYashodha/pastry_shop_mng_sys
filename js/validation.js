@@ -1204,17 +1204,18 @@ $(document).ready(()=>{
     const editUnitPrice = $('#editUnitPrice');
     const editFoodItemCategory = $('#editFoodItemCategory');
     const editFoodItemSubCategory = $('#editFoodItemSubCategory');
-    const editFoodItemImage = $('#editFoodItemImage');
+    // const editFoodItemImage = $('#editFoodItemImage');
+
     $("#editFoodItemFormSubmit").click(() => {
         let editFoodItemNameVal = editFoodItemName.val()
         let editUnitPriceVal = editUnitPrice.val()
         let editFoodItemCategoryVal = editFoodItemCategory.val()
         let editFoodItemSubCategoryVal = editFoodItemSubCategory.val()
-        let editFoodItemImageVal = editFoodItemImage.val()
+        // let editFoodItemImageVal = editFoodItemImage.val()
 
-        if (editFoodItemNameVal == "" && editUnitPriceVal == "" && editFoodItemCategoryVal == "" && editFoodItemSubCategoryVal == "" && editFoodItemImageVal == "") {
+        if (editFoodItemNameVal == "" && editUnitPriceVal == "" && editFoodItemCategoryVal == "" && editFoodItemSubCategoryVal == "") {
             toastr.error("Please fill the form");
-            $([editFoodItemName, editUnitPrice, editCategory, editCategory, editFoodItemImage]).each(function () {
+            $([editFoodItemName, editUnitPrice, editCategory, editCategory]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid")
             });
             editFoodItemName.focus();
@@ -1236,14 +1237,14 @@ $(document).ready(()=>{
             addInvalidClass(editCategoryVal, "Please add sub category name");
             return false;
         }
-        if (editFoodItemImageVal == "") {
-            addInvalidClass(editFoodItemImage, "Please add image");
-            return false;
-        }
-        if (!allowImagePattern.exec(editFoodItemImageVal)) {
-            addInvalidClass(editFoodItemImage, "Please select an image");
-            return false;
-        }
+        // if (editFoodItemImageVal == "") {
+        //     addInvalidClass(editFoodItemImage, "Please add image");
+        //     return false;
+        // }
+        // if (!allowImagePattern.exec(editFoodItemImageVal)) {
+        //     addInvalidClass(editFoodItemImage, "Please select an image");
+        //     return false;
+        // }
         swal({
             title: 'Are you sure',
             text: 'Do you want to submit this form',
@@ -1259,7 +1260,7 @@ $(document).ready(()=>{
                 $.ajax({
                     method: "POST",
                     url: "../controller/FoodItemController.php?status=editFoodItem",
-                    data: new FormData($('#editFoodItem')[0]),
+                    data: new FormData($('#editFoodItemForm')[0]),
                     dataType: "json",
                     enctype: "multipart/form-data",
                     processData: false,
@@ -1306,12 +1307,14 @@ $(document).ready(()=>{
     });
 
     const categoryName = $('#categoryName');
+    const categoryImage = $('#categoryImage');
     $("#categoryFormSubmit").click(() => {
         let categoryNameVal = categoryName.val();
+        let categoryImageVal = categoryImage.val();
 
-        if (categoryNameVal == "") {
+        if (categoryNameVal == "" && categoryImageVal=="") {
             toastr.error("Please fill the form");
-            $([categoryName]).each(function () {
+            $([categoryName, categoryImage]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid")
             })
             categoryName.focus();
@@ -1320,6 +1323,9 @@ $(document).ready(()=>{
         if (categoryName == "") {
             addInvalidClass(categoryName, "Please enter category name");
             return false;
+        }
+        if (categoryImage) {
+            
         }
         swal({
             title: 'Are you sure',

@@ -95,10 +95,12 @@ switch ($status) {
 
    case 'editFoodItem':   
     try {
+        $foodItemId= base64_decode($_POST['editFoodItemId']);
         $foodItemName = $_POST['editFoodItemName'];
         $unitPrice = $_POST['editUnitPrice'];
-        $foodItemCategory = $_POST['editFoodItemCategory'];
+        $foodItemCategory = $_POST['editFoodItemCategoryName'];
         $foodItemSubCategory = $_POST['editFoodItemSubCategory'];
+       // $foodItemImage= $_POST['editFoodItemImage'];
 
         if ($foodItemName == "") {
             throw new Exception("Food item nae is required");
@@ -117,12 +119,10 @@ switch ($status) {
             $foodItemImageExt = substr($foodItemImage, strrpos($foodItemImage, '.'));
             $foodItemImage = time(). $foodItemImageExt;
             $temp_loc =$_FILES["editFoodItemImage"]["tmp_name"];
-            $new_loc = "../../images/fodItem-images/$foodItemImage";
+            $new_loc = "../../images/foodItem-images/$foodItemImage";
             move_uploaded_file($temp_loc, $new_loc);
-        }else{
-            throw new Exception("Image is required");
         }
-        $result = $foodItemObj->addFoodItem($foodItemName, $unitPrice, $foodItemCategory, $foodItemSubCategory, $foodItemImage);
+        $result = $foodItemObj->editFoodItem($foodItemId,$foodItemName, $unitPrice, $foodItemCategory, $foodItemSubCategory, $foodItemImage);
         if ($result ==1 ) {
             $res = 1;
             $result = $foodItemObj->getFoodItemData();

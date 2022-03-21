@@ -68,6 +68,7 @@ require_once "sidebar.php";
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
+                                                <th scope="col">Image</th>
                                                 <th scope="col">Category Name</th>
                                                 <th scope="col">Status</th>
                                                 <th scope="col">Option</th>
@@ -89,6 +90,7 @@ require_once "sidebar.php";
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
+                                                <th scope="col">Image</th>
                                                 <th scope="col">Sub Category Name</th>
                                                 <th scope="col">Category Name</th>
                                                 <th scope="col">Status</th>
@@ -141,12 +143,6 @@ require_once "sidebar.php";
                                 <label for="foodItemCategory" class="col-sm-3 col-form-label">Category</label>
                                 <div class="col-sm-9">
                                     <select class="form-select" aria-label="Default select example" id="foodItemCategory" name="foodItemCategory">
-                                        <!-- <option selected value="">-- Select Category --</option>
-                                        <option value="1">Savories & Buns</option>
-                                        <option value="2">Breads</option>
-                                        <option value="3">Sweet Foods</option>
-                                        <option value="4">Vegetarian Foods</option>
-                                        <option value="5">Drinks</option> -->
                                     </select>
                                 </div>
                             </div>
@@ -156,23 +152,6 @@ require_once "sidebar.php";
                                 <label for="foodItemSubCategory" class="col-sm-3 col-form-label">Sub Category</label>
                                 <div class="col-sm-9">
                                     <select class="form-select" aria-label="Default select example" id="foodItemSubCategory" name="foodItemSubCategory">
-                                        <!-- <option selected value="">-- Select Sub Category --</option>
-                                        <option value="1">Cool Drinks</option>
-                                        <option value="2">Hot Drinks</option>
-                                        <option value="3">Typical Sri Lankan Breads</option>
-                                        <option value="4">Healthy Breads</option>
-                                        <option value="5">Sandwiches</option>
-                                        <option value="5">Cutlets</option>
-                                        <option value="5">Rolls</option>
-                                        <option value="5">Pastries</option>
-                                        <option value="5">Samosa</option>
-                                        <option value="5">Rotties</option>
-                                        <option value="5">Croissants</option>
-                                        <option value="5">Buns</option>
-                                        <option value="5">Burgers</option>
-                                        <option value="5">Donuts</option>
-                                        <option value="5">Muffins</option>
-                                        <option value="5">Cakes</option> -->
                                     </select>
                                 </div>
                             </div>
@@ -180,7 +159,7 @@ require_once "sidebar.php";
                                 <div class="row mb-3">
                                     <label for="foodItemImage" class="col-sm-3 col-form-label">Image</label>
                                     <div class="col-sm-9">
-                                        <input class="form-control" type="file"  id="foodItemImage" name="foodItemImage" accept="image/png, image/jpg, image/jpeg" onchange="preview(this)">
+                                        <input class="form-control" type="file" id="foodItemImage" name="foodItemImage" accept="image/png, image/jpg, image/jpeg" onchange="preview(this)">
                                     </div>
                                 </div>
                             </div>
@@ -278,7 +257,7 @@ require_once "sidebar.php";
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="row mb-3">
-                                <div class="col-3 float-end">&nbsp;
+                                    <div class="col-3 float-end">&nbsp;
                                     </div>
                                     <div class="col-9 float-end">
                                         <img id="edit_food_pre_image">
@@ -289,6 +268,7 @@ require_once "sidebar.php";
                                 <div class="float-end d-inline-flex">
                                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Reset</button>
                                     &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="hidden" id="editFoodItemId" name="editFoodItemId">
                                     <button type="button" id="editFoodItemFormSubmit" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
@@ -323,7 +303,23 @@ require_once "sidebar.php";
                                 </div>
                             </div>
                         </div>
-
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="row mb-3">
+                                <label for="categoryImage" class="col-sm-3 col-form-label">Image</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="file" id="categoryImage" name="categoryImage" accept="image/png, image/jpg, image/jpeg" onchange="preview(this)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="row mb-3">
+                                <div class="col-3 float-end">&nbsp;
+                                </div>
+                                <div class="col-9 float-end">
+                                    <img id="category_pre_image">
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="float-end d-inline-flex">
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Reset</button>
@@ -349,7 +345,7 @@ require_once "sidebar.php";
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            <form action="" method="post" role="form" id="editCategoryForm">
+                <form action="" method="post" role="form" id="editCategoryForm">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="row mb-3">
@@ -359,7 +355,23 @@ require_once "sidebar.php";
                                 </div>
                             </div>
                         </div>
-
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="row mb-3">
+                                <label for="editCategoryImage" class="col-sm-3 col-form-label">Image</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="file" id="editCategoryImage" name="editCategoryImage" accept="image/png, image/jpg, image/jpeg" onchange="preview(this)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="row mb-3">
+                                <div class="col-3 float-end">&nbsp;
+                                </div>
+                                <div class="col-9 float-end">
+                                    <img id="edit_category_pre_image">
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="float-end d-inline-flex">
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Reset</button>
@@ -402,8 +414,16 @@ require_once "sidebar.php";
                             <div class="row mb-3">
                                 <label for="subCategoryCategoryItem" class="col-sm-3 col-form-label">Category Name</label>
                                 <div class="col-sm-9">
-                                    <select class="form-select" aria-label="Default select example" id="subCategoryCategoryItem" name="subCategoryCategoryItem">                                  
+                                    <select class="form-select" aria-label="Default select example" id="subCategoryCategoryItem" name="subCategoryCategoryItem">
                                     </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="row mb-3">
+                                <label for="subCategoryFoodItemImage" class="col-sm-3 col-form-label">Image</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="file" id="subCategoryFoodItemImage" name="subCategoryFoodItemImage" accept="image/png, image/jpg, image/jpeg" onchange="preview(this)">
                                 </div>
                             </div>
                         </div>
@@ -447,7 +467,7 @@ require_once "sidebar.php";
                             <div class="row mb-3">
                                 <label for="editSubCategoryCategoryItem" class="col-sm-3 col-form-label">Category Name</label>
                                 <div class="col-sm-9">
-                                    <select class="form-select" aria-label="Default select example" id="editSubCategoryCategoryItem" name="editSubCategoryCategoryItem">                                  
+                                    <select class="form-select" aria-label="Default select example" id="editSubCategoryCategoryItem" name="editSubCategoryCategoryItem">
                                     </select>
                                 </div>
                             </div>
@@ -470,7 +490,7 @@ require_once "sidebar.php";
 
 <?php require_once "scriptInclude.php" ?>
 <script>
-    $(window).load(getFoodItemData(), getCategoryData() ,getSubCategoryData());
+    $(window).load(getFoodItemData(), getCategoryData(), getSubCategoryData());
     // $(window).load();
 </script>
 <?php require_once "footer.php" ?>

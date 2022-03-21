@@ -15,7 +15,17 @@ switch ($status) {
             if ($existCategory->num_rows != 0) {
                 throw new Exception("Category name is already exist");
             }
-            $addCategoryData = $categoryObj->addCategory($categoryName);
+            if ($_FILES["categoryImage"]["name"] != "") {
+                $categoryImage = $_FILES["categoryImage"]["name"];
+                $foodItemImageExt = substr($categoryImage, strrpos($categoryImage, '.'));
+                $categoryImage = time() . $foodItemImageExt;
+                $temp_loc = $_FILES["categoryImage"]["tmp_name"];
+                $new_loc = "../../images/foodItem-images/$categoryImage";
+                move_uploaded_file($temp_loc, $new_loc);
+            } else {
+                throw new Exception("image is required");
+            }
+            $addCategoryData = $categoryObj->addCategory($categoryName, $categoryImage);
             if ($addCategoryData == 1) {
                 $res = 1;
                 $getCategoryData = $categoryObj->getCategoryData();
@@ -61,15 +71,25 @@ switch ($status) {
         try {
             $categoryId = base64_decode($_POST['editCategoryId']);
             $categoryName = $_POST['editCategoryName'];
+            $categoryImage = "";
 
             if ($categoryName == "") {
                 throw new Exception("Category name is required");
             }
-            $existCategory = $categoryObj->existCategory($categoryName);
-            if ($existCategory->num_rows != 0) {
+            $existEditCategoryName = $categoryObj->existEditCategoryName($categoryName);
+            //var_dump($existEditCategoryName) ;
+            if ($existEditCategoryName == false) {
                 throw new Exception("Category name is already exist");
             }
-            $editCategory = $categoryObj->editCategory($categoryId, $categoryName);
+            if ($_FILES["editCategoryImage"]["name"]!= "") {
+                $categoryImage = $_FILES["editCategoryImage"]["name"];
+                $foodItemImageExt = substr($categoryImage, strrpos($categoryImage, '.'));
+                $categoryImage = time(). $foodItemImageExt;
+                $temp_loc =$_FILES["editCategoryImage"]["tmp_name"];
+                $new_loc = "../../images/foodItem-images/$categoryImage";
+                move_uploaded_file($temp_loc, $new_loc);
+            }
+            $editCategory = $categoryObj->editCategory($categoryId, $categoryName,$categoryImage);
             if ($editCategory == 1) {
                 $res = 1;
                 $getCategoryData = $categoryObj->getCategoryData();
