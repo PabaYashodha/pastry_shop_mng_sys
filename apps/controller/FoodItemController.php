@@ -100,7 +100,7 @@ switch ($status) {
         $unitPrice = $_POST['editUnitPrice'];
         $foodItemCategory = $_POST['editFoodItemCategoryName'];
         $foodItemSubCategory = $_POST['editFoodItemSubCategory'];
-       // $foodItemImage= $_POST['editFoodItemImage'];
+        $foodItemImage= "";
 
         if ($foodItemName == "") {
             throw new Exception("Food item nae is required");

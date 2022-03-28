@@ -19,7 +19,17 @@ switch ($status) {
             if ($existSubCategoryName->num_rows != 0) {
                 throw new Exception("Sub category name is already existed");
             }
-            $addSubCategory = $subCategoryObj->addSubCategory($subCategoryName, $subCategoryCategoryItem);
+            if ($_FILES["subCategoryImage"]["name"] != "") {
+                $subCategoryImage = $_FILES["subCategoryImage"]["name"];
+                $foodItemImageExt = substr($subCategoryImage, strrpos($subCategoryImage, '.'));
+                $subCategoryImage = time() . $foodItemImageExt;
+                $temp_loc = $_FILES["subCategoryImage"]["tmp_name"];
+                $new_loc = "../../images/foodItem-images/$subCategoryImage";
+                move_uploaded_file($temp_loc, $new_loc);
+            } else {
+                throw new Exception("image is required");
+            }
+            $addSubCategory = $subCategoryObj->addSubCategory($subCategoryName, $subCategoryCategoryItem,$subCategoryImage);
             if ($addSubCategory == 1) {
                 $res = 1;
                 $getSubCategoryData = $subCategoryObj->getSubCategoryData();
@@ -59,18 +69,27 @@ switch ($status) {
             $subCategoryId = base64_decode($_POST['editSubCategoryId']);
             $subCategoryName = $_POST['editSubCategoryName'];
             $subCategoryCategoryItem = $_POST['editSubCategoryCategoryItem'];
+            $subCategoryImage = "";
 
             if ($subCategoryName == "") {
                 throw new Exception("Sub category name is required");
             }
-            $existSubCategoryName = $subCategoryObj->existSubCategory($subCategoryName);
-            if ($existSubCategoryName->num_rows != 0) {
+            $existEditSubCategoryName = $subCategoryObj->existEditSubCategory($subCategoryName);
+            if ($existEditSubCategoryName ==false ) {
                 throw new Exception("Sub category name is already existed");
             }
             if ($subCategoryCategoryItem == "") {
                 throw new Exception("Category name is required");
             }
-            $editSubCategory = $subCategoryObj->editSubCategory($subCategoryId, $subCategoryName, $subCategoryCategoryItem);
+            if ($_FILES["editSubCategoryImage"]["name"]!= "") {
+                $subCategoryImage = $_FILES["editSubCategoryImage"]["name"];
+                $foodItemImageExt = substr($subCategoryImage, strrpos($subCategoryImage, '.'));
+                $subCategoryImage = time(). $foodItemImageExt;
+                $temp_loc =$_FILES["editSubCategoryImage"]["tmp_name"];
+                $new_loc = "../../images/foodItem-images/$subCategoryImage";
+                move_uploaded_file($temp_loc, $new_loc);
+            }
+            $editSubCategory = $subCategoryObj->editSubCategory($subCategoryId, $subCategoryName, $subCategoryCategoryItem,$subCategoryImage);
             if ($editSubCategory == 1) {
                 $res = 1;
                 $getSubCategoryData = $subCategoryObj->getSubCategoryData();

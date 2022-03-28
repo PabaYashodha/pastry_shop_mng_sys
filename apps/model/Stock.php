@@ -15,14 +15,14 @@ class Stock
         $conn = $this->db->connection();
         $sql = "INSERT INTO `stock`(`stock_count`,`stock_current_count`,`stock_cost_per_unit`,`stock_discount`,stock_mnf_date`,`stock_exp_date`,`stock_net_cost`,`row_item_row_item_id`,`grn_grn_id`)
                 VALUES ('$stockReceivedQuantity', '$stockReceivedQuantity', '$stockCostPerUnit','$stockDiscount','$stockMnfData','$stockExpDate','$stockTableNetCost','$value', '$addGrn')";
-        $addStock =$conn->query($sql) or die($conn->error);
+        $addStock = $conn->query($sql) or die($conn->error);
         return $addStock;
     }
     
-    public function addGrn($stockSupplierName,$stockReferenceNo,$stockCreateDate,$stockNetTotal, $stockTotalDiscount)
+    public function addGrn($stockSupplierId,$stockReferenceNumber,$stockCreateDate,$stockNetTotal, $stockTotalDiscount)
     {
         $conn = $this->db->connection();
-        $sql ="INSERT INTO `grn`(`grn_ref_id`,`grn_date`,`grn_price`,`grn_total_discount`,`supplier_supplier_id`) VALUES ('$stockReferenceNo','$stockCreateDate','$stockNetTotal','$stockTotalDiscount''$stockSupplierName')";
+        $sql ="INSERT INTO `grn` (`grn_ref_id`,`grn_date`,`grn_price`,`grn_total_discount`,`supplier_supplier_id`) VALUES ('$stockReferenceNumber','$stockCreateDate','$stockNetTotal','$stockTotalDiscount','$stockSupplierId')";
         $conn->query($sql) or die($conn->error);
         return $conn->insert_id;
     }
@@ -40,5 +40,13 @@ class Stock
         $sql =  "SELECT * FROM `stock`";
         $getStockData = $conn->query($sql) or die($conn->error);
         return $getStockData;
+    }
+
+    public function getGrnNumber()
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT COUNT(`grn_id`) as `count` FROM `grn`";
+        $getGrnCount = $conn->query($sql);
+        return $getGrnCount;
     }
  }

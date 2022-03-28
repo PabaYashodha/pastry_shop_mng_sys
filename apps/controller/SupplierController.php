@@ -128,4 +128,19 @@ switch ($status) {
         $row = $getGrnSupplierName->fetch_assoc();
         echo json_encode($row);
         break;
+
+    case 'getSupplierBySupplierName':
+        $searchKey = $_REQUEST['supplier'];
+        $getSupplierBySupplierName = $supplierObj->getSupplierBySupplierName($searchKey);
+        $searchResult[] = "";
+        while ($row = $getSupplierBySupplierName->fetch_assoc()) {
+           $searchResult[] = array(
+               "id"=>$row['supplier_id'],
+               "value" => $row['supplier_contact_name']
+            );
+        }
+       echo json_encode($searchResult);
+        break;
+    
+    
 }

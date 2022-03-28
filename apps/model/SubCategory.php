@@ -18,10 +18,10 @@ class subCategory
         return $existSubCategoryName;
     }
 
-    public function addSubCategory($subCategoryName, $subCategoryCategoryItem)
+    public function addSubCategory($subCategoryName, $subCategoryCategoryItem,$subCategoryImage)
     {
         $conn = $this->db->connection();
-        $sql = "INSERT INTO `sub_category` (`sub_category_name`,`category_category_id`) VALUES ('$subCategoryName' ,'$subCategoryCategoryItem')";
+        $sql = "INSERT INTO `sub_category` (`sub_category_name`,`sub_category_image`,`category_category_id`) VALUES ('$subCategoryName','$subCategoryImage' ,'$subCategoryCategoryItem')";
         $addSubCategory = $conn->query($sql) or die($conn->error);
         return $addSubCategory;
     }
@@ -42,10 +42,14 @@ class subCategory
         return $viewSubCategory;
     }
 
-    public function editSubCategory($subCategoryId, $subCategoryName, $subCategoryCategoryItem)
+    public function editSubCategory($subCategoryId, $subCategoryName, $subCategoryCategoryItem,$subCategoryImage)
     {
         $conn = $this->db->connection();
-        $sql = "UPDATE `sub_category` SET `sub_category_name`='$subCategoryName' , `category_category_id` ='$subCategoryCategoryItem' WHERE `sub_category_id`= '$subCategoryId'";
+        if ($subCategoryImage=="") {
+            $sql = "UPDATE `sub_category` SET `sub_category_name`='$subCategoryName' , `category_category_id` ='$subCategoryCategoryItem' WHERE `sub_category_id`= '$subCategoryId'";
+        }else{
+            $sql = "UPDATE `sub_category` SET `sub_category_name`='$subCategoryName', `sub_category_image`='$subCategoryImage' , `category_category_id` ='$subCategoryCategoryItem' WHERE `sub_category_id`= '$subCategoryId'";
+        }
         $editSubCategory = $conn->query($sql) or die($conn->error);
         return $editSubCategory;
     }
@@ -71,5 +75,16 @@ class subCategory
         $sql = "SELECT `sub_category_name` FROM `sub_category` WHERE `sub_category_id`= '$subCategoryId'";
         $getSubCategoryName = $conn->query($sql) or die($conn->error);
         return $getSubCategoryName;
+    }
+    public function existEditSubCategory($subCategoryName)
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT 1 FROM `sub_category` WHERE `sub_category_name`='$subCategoryName'";
+        $existEditSubCategoryName = $conn->query($sql) or die($conn->error);
+        if ($existEditSubCategoryName->num_rows > 1) {
+            return false;
+        }else{
+            return true;
+        };
     }
 }

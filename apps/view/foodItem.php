@@ -421,9 +421,18 @@ require_once "sidebar.php";
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="row mb-3">
-                                <label for="subCategoryFoodItemImage" class="col-sm-3 col-form-label">Image</label>
+                                <label for="subCategoryImage" class="col-sm-3 col-form-label">Image</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="file" id="subCategoryFoodItemImage" name="subCategoryFoodItemImage" accept="image/png, image/jpg, image/jpeg" onchange="preview(this)">
+                                    <input class="form-control" type="file" id="subCategoryImage" name="subCategoryImage" accept="image/png, image/jpg, image/jpeg" onchange="preview(this)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="row mb-3">
+                                <div class="col-3 float-end">&nbsp;
+                                </div>
+                                <div class="col-9 float-end">
+                                    <img id="sub_category_pre_image">
                                 </div>
                             </div>
                         </div>
@@ -473,6 +482,23 @@ require_once "sidebar.php";
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="row mb-3">
+                                <label for="editSubCategoryImage" class="col-sm-3 col-form-label">Image</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="file" id="editSubCategoryImage" name="editSubCategoryImage" accept="image/png, image/jpg, image/jpeg" onchange="preview(this)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="row mb-3">
+                                <div class="col-3 float-end">&nbsp;
+                                </div>
+                                <div class="col-9 float-end">
+                                    <img id="edit_sub_category_pre_image">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="float-end d-inline-flex">
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Reset</button>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -490,7 +516,7 @@ require_once "sidebar.php";
 
 <?php require_once "scriptInclude.php" ?>
 <script>
-    $(window).load(getFoodItemData(), getCategoryData(), getSubCategoryData());
+    $(window).load(getFoodItemData(), categoryTableBody(), subCategoryTableBody());
     // $(window).load();
 </script>
 <?php require_once "footer.php" ?>

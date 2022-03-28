@@ -57,4 +57,12 @@ class RowItem
         $viewRowItem =$conn->query($sql) or die($conn->error);
         return $viewRowItem;
     }
+
+    public function getRowItemByRowItemName($searchKey)
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT `row_item_id`, `row_item_name` FROM `row_item` WHERE `row_item_name` LIKE '%$searchKey%'";
+        $getRowItemByRowItemName = $conn->query($sql) or die($conn->error);
+        return $getRowItemByRowItemName;
+    }
 }

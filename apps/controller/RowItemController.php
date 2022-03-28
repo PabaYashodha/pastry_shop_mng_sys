@@ -100,4 +100,17 @@ switch ($status) {
         $data[1] = $msg;
         echo json_encode($data);
         break;
+
+    case 'getRowItemByRowItemName':
+        $searchKey = $_REQUEST['rowItem'];
+        $getRowItemByRowItemName = $rowItemObj->getRowItemByRowItemName($searchKey);
+        $searchResult[] = "";
+        while ($row = $getRowItemByRowItemName->fetch_assoc()) {
+            $searchResult[] = array(
+                "id"=>$row['row_item_id'],
+                "value"=>$row['row_item_name']
+            );
+        }
+        echo json_encode($searchResult);
+        break;
 }

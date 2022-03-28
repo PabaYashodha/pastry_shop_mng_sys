@@ -44,7 +44,11 @@ class FoodItem
     public function editFoodItem($foodItemId, $foodItemName, $unitPrice, $foodItemCategory, $foodItemSubCategory, $foodItemImage)
     {
         $conn = $this->db->connection();
-        $sql = "UPDATE `food_item` SET `food_item_name` = '$foodItemName', `food_item_unit_price` = '$unitPrice', `food_item_image`='$foodItemImage', `food_item_category_food_item_category_id`= '$foodItemCategory', `sub_category_sub_category_id` = '$foodItemSubCategory' WHERE `food_item_id` = '$foodItemId' ";
+        if ($foodItemImage=="") {
+            $sql = "UPDATE `food_item` SET `food_item_name` = '$foodItemName', `food_item_unit_price` = '$unitPrice', `food_item_category_food_item_category_id`= '$foodItemCategory', `sub_category_sub_category_id` = '$foodItemSubCategory' WHERE `food_item_id` = '$foodItemId' ";
+        }else{
+            $sql = "UPDATE `food_item` SET `food_item_name` = '$foodItemName', `food_item_unit_price` = '$unitPrice', `food_item_image`='$foodItemImage', `food_item_category_food_item_category_id`= '$foodItemCategory', `sub_category_sub_category_id` = '$foodItemSubCategory' WHERE `food_item_id` = '$foodItemId' ";
+        }     
         $result = $conn->query($sql) or die ($conn->error);
         return $result;
     }

@@ -1175,6 +1175,8 @@ $(document).ready(()=>{
                             foodItemTableBody(result[1]);
                             $("#foodItemForm").trigger('reset');
                             $(".is-valid").removeClass('is-valid');
+                            $('#addFoodItem').modal('hide');
+                            
                         }
                         if (result[0] == 2) {
                             swal({
@@ -1289,6 +1291,9 @@ $(document).ready(()=>{
                                 timer: 1000,
                             });
                             foodItemTableBody(result[1]);
+                            $("#editFoodItemForm").trigger('reset');
+                            $(".is-valid").removeClass('is-valid');
+                            $('#editFoodItem').modal('hide')
                         }
                         if (result[0] == 2) {
                             swal({
@@ -1484,13 +1489,15 @@ $(document).ready(()=>{
 
     const subCategoryName = $('#subCategoryName');
     const subCategoryCategoryItem = $('#subCategoryCategoryItem');
+    const subCategoryImage = $('#subCategoryImage');
     $("#subCategoryFormSubmit").click(() => {
         let subCategoryNameVal = subCategoryName.val();
         let subCategoryCategoryItemVal = subCategoryCategoryItem.val();
+        let subCategoryImageVal = subCategoryImage.val();
 
-        if (subCategoryNameVal == "" && subCategoryCategoryItemVal == "") {
+        if (subCategoryNameVal == "" && subCategoryCategoryItemVal == "" && subCategoryImageVal=="") {
             toastr.error("Please fill the form");
-            $([subCategoryName, subCategoryCategoryItem]).each(function () {
+            $([subCategoryName, subCategoryCategoryItem, subCategoryImage]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid")
             })
             subCategoryName.focus();
@@ -1502,6 +1509,10 @@ $(document).ready(()=>{
         }
         if (subCategoryCategoryItem == "") {
             addInvalidClass(subCategoryCategoryItem, "Please enter category name");
+            return false;
+        }
+        if (subCategoryImage=="") {
+            addInvalidClass(subCategoryImage,"Please add an image");
             return false;
         }
         swal({
@@ -1945,7 +1956,7 @@ $(document).ready(()=>{
         $('#stockNetCost').val(stockNetCostVal.toFixed(2)); //net cost value for one item
     });
    
-    //after add received quantity an cost per unit, insert discount nd get value
+    //after add received quantity an cost per unit, insert discount and get value
     $('#stockDiscount').keyup(()=>{
         let stockReceivedQuantityVal = +stockReceivedQuantity.val();//change the string value to integer by +
         let stockCostPerUnitVal = parseFloat(stockCostPerUnit.val()); // change the value string to float  
@@ -1962,7 +1973,7 @@ $(document).ready(()=>{
         let stockNetCostVal = +stockNetCost.val();
         let stockCostVal = stockReceivedQuantityVal * stockCostPerUnitVal;
         let stockDiscountVal = ((stockCostVal - stockNetCostVal)*100)/stockCostVal;
-        $('#stockDiscount').val(stockDiscountVal.toFixed(0)); //net cost value for one item
+        $('#stockDiscount').val(stockDiscountVal.toFixed(0)); //net cost value for one item //get the value for the html ield
     });
 
     //remove row in add stock table
@@ -1983,14 +1994,18 @@ $(document).ready(()=>{
     });
 
 
-  const stockSupplierName = $('#stockSupplierName');
+    const stockSupplierName = $('#stockSupplierName');
+    const stockSupplierId = $('#stockSupplierId');
     const stockCreteDate = $('#stockCreteDate');
     const stockReferenceNumber = $('#stockReferenceNumber');
+    //const stockGrnNumber = $('#stockGrnNumber');
     $("#stockFormSubmit").click(()=>{
         let stockSupplierNameVal = stockSupplierName.val();
+        let stockSupplierIdVal = stockSupplierId.val();
         let stockCreteDateVal = stockCreteDate.val();
         let stockReferenceNumberVal =stockReferenceNumber.val();
-
+        //let stockGrnNumberVal = stockG
+       
         if (stockSupplierNameVal=="" || stockCreteDateVal=="" || stockReferenceNumberVal=="" ) {
             toastr.error("Please fll ");
             $([stockSupplierName, stockCreteDate, stockReferenceNumber]).each(function() {
@@ -1999,8 +2014,8 @@ $(document).ready(()=>{
             stockSupplierName.focus();
             return false;
         }
-        if (stockSupplierNameVal == "") {
-            addInvalidClass(stockSupplierName, "Add supplier name");
+        if (stockSupplierNameVal== "" && stockSupplierIdVal== "") {
+            addInvalidClass(stockSupplierName, "Entered supplier not exist");
             return false;
         }
         if (stockCreteDateVal=="") {
@@ -2167,6 +2182,7 @@ $(document).ready(()=>{
     editFoodItemImage.change(() => {removeInvalidClass(editFoodItemImage)});
 
     categoryName.change(() => {removeInvalidClass(categoryName)});
+    categoryImage.change(()=>{removeInvalidClass(categoryImage)});
 
     editCategoryName.change(() => {removeInvalidClass(editCategoryName)});
 
@@ -2186,7 +2202,10 @@ $(document).ready(()=>{
     stockReceivedQuantity.change(()=>{removeInvalidClass(stockReceivedQuantity)});
     stockCostPerUnit.change(()=>{removeInvalidClass(stockCostPerUnit)});
 
-    
+    stockSupplierName.change(()=>{removeInvalidClass(stockSupplierName)});
+    stockCreteDate.change(()=>{removeInvalidClass(stockCreteDate)});
+    stockReferenceNumber.change(()=>{removeInvalidClass(stockReferenceNumber)});
+
 
     // grnDate.change(()=>{removeInvalidClass(grnDate)});
     // grnPrice.change(()=>{removeInvalidClass(grnPrice)});

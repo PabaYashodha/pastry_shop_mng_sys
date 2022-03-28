@@ -28,8 +28,8 @@ require_once "sidebar.php";
                         <div class="row mb-3">
                             <label for="stockSupplierName" class="col-sm-3 col-form-label">Supplier Name</label>
                             <div class="col-sm-9">
-                                <input list="stockSupplierNames" class="form-control" id="stockSupplierName" name="stockSupplierName">
-                                <datalist id="stockSupplierNames" class="datalist"></datalist>
+                                <input type="text" class="form-control" id="stockSupplierName" name="stockSupplierName">
+                                <input type="hidden" class="form-control" id="stockSupplierId" name="stockSupplierId">
                             </div>
                         </div>
                     </div>
@@ -49,6 +49,14 @@ require_once "sidebar.php";
                             </div>
                         </div>
                     </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <div class="row mb-3">
+                            <label for="stockGrnNumber" class="col-sm-3 col-form-label">Grn No</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="stockGrnNumber" name="stockGrnNumber" readonly>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <hr>
                 <div class="row">
@@ -56,8 +64,9 @@ require_once "sidebar.php";
                         <div class="row mb-3">
                             <label for="stockRoItemNames" class="col-sm-3 col-form-label">Row Item Name</label>
                             <div class="col-sm-9">
-                                <input list="stockRowItemNames" class="form-control" id="stockRowItemName" name="stockRowItemName">
-                                <datalist class="datalist" id="stockRowItemNames"></datalist>
+                                <input type="text" class="form-control" id="stockRowItemName">
+                                <input type="hidden"  class="form-control" id="stockRowItemId">
+                                
                             </div>
                         </div>
                     </div>
@@ -65,7 +74,7 @@ require_once "sidebar.php";
                         <div class="row mb-3">
                             <label for="stockMnfDate" class="col-sm-3 col-form-label">Mnf Date</label>
                             <div class="col-sm-9">
-                                <input type="date" class="form-control" id="stockMnfDate" name="stockMnfDate">
+                                <input type="date" class="form-control" id="stockMnfDate">
                             </div>
                         </div>
                     </div>
@@ -73,7 +82,7 @@ require_once "sidebar.php";
                         <div class="row mb-3">
                             <label for="stockExpDate" class="col-sm-3 col-form-label">Exp Date</label>
                             <div class="col-sm-9">
-                                <input type="date" class="form-control" id="stockExpDate" name="stockExpDate">
+                                <input type="date" class="form-control" id="stockExpDate">
                             </div>
                         </div>
                     </div>
@@ -81,7 +90,7 @@ require_once "sidebar.php";
                         <div class="row mb-3">
                             <label for="stockReceivedQuantity" class="col-sm-3 col-form-label">Received Quantity</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" id="stockReceivedQuantity" name="stockReceivedQuantity">
+                                <input type="number" class="form-control" id="stockReceivedQuantity">
                             </div>
                         </div>
                     </div>
@@ -89,7 +98,7 @@ require_once "sidebar.php";
                         <div class="row mb-3">
                             <label for="stockCostPerUnit" class="col-sm-3 col-form-label">Cost Per Unit</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" id="stockCostPerUnit" name="stockCostPerUnit">
+                                <input type="number" class="form-control" id="stockCostPerUnit">
                             </div>
                         </div>
                     </div>
@@ -97,7 +106,7 @@ require_once "sidebar.php";
                         <div class="row mb-3">
                             <label for="stockDiscount" class="col-sm-3 col-form-label">Discount (%)</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" value="0" id="stockDiscount"  name="stockDiscount">
+                                <input type="number" class="form-control" value="0" id="stockDiscount">
                             </div>
                         </div>
                     </div>
@@ -105,7 +114,7 @@ require_once "sidebar.php";
                         <div class="row mb-3">
                             <label for="stockNetCost" class="col-sm-3 col-form-label">Net Cost</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" id="stockNetCost" name="stockNetCost">
+                                <input type="number" class="form-control" id="stockNetCost">
                             </div>
                         </div>
                     </div>
@@ -115,6 +124,7 @@ require_once "sidebar.php";
                         <button id="addRow" type="button" class="btn btn-dark float-end" style="background-color: #2f2e41;"><i class="far fa-plus"></i> ADD</button>
                     </div>
                 </div>
+                <hr>
                 <table class="table" id="table-stock">
                     <thead>
                         <tr>
@@ -170,6 +180,6 @@ require_once "sidebar.php";
 </div>
 <?php require_once "scriptInclude.php" ?>
 <script>
-    $(window).load(getSupplierData(), getRowItemData());
+    $(window).load(getRowItemData(), getGrnNumber());
 </script>
 <?php require_once "footer.php" ?>

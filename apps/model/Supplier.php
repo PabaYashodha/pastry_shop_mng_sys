@@ -52,5 +52,12 @@ class Supplier
         return $getGrnSupplierName;
     }
     
+    public function getSupplierBySupplierName($searchKey)
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT `supplier_id` , `supplier_contact_name` FROM `supplier` WHERE `supplier_name` LIKE '%$searchKey%'";
+        $getSupplierBySupplierName = $conn->query($sql) or die($conn->error);
+        return $getSupplierBySupplierName;
+    }
 }
 ?>

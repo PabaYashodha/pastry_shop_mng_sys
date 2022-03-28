@@ -45,15 +45,86 @@ $(document).ready(function () {
         $(this).addClass('sidebarActive').children().removeClass('text-light').addClass('text-dark')
     })
 
-     //add row in to the add stock table
-     //button click event to add a row
-     $('#addRow').click(function (){
-     
-     })
+  $("#stockSupplierName").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "../controller/SupplierController.php?status=getSupplierBySupplierName",
+              dataType: "json",
+              data:{
+                supplier : request.term
+              },
+              success: function(data) {
+                //   console.log(data)
+                  response($.map(data, function(supplier){
+                      return{
+                          id: supplier.id,
+                          value: supplier.value,
+                      }
+                  }))
+              }
+          });
+      },
+      minLength:2,
+      select: function (event, ui) {
+          console.log(ui)
+        $("#stockSupplierId").val(ui.item.id)
+         $("#stockSupplierName").val(ui.item.value)
+    },
+    // close: function () {
+    //     / $("#stockSupplierName").val("");
+    // }
+  })
 
+  $("#stockRowItemName").autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: "../controller/RowItemController.php?status=getRowItemByRowItemName",
+            dataType: "json",
+            data:{
+              rowItem : request.term
+            },
+            success: function(data) {
+              //   console.log(data)
+                response($.map(data, function(rowItem){
+                    return{
+                        id: rowItem.id,
+                        value: rowItem.value,
+                    }
+                }))
+            }
+        });
+    },
+    minLength:2,
+    select: function (event, ui) {
+        console.log(ui)
+      $("#stockRowItemId").val(ui.item.id)
+       $("#stockRowItemName").val(ui.item.value)
+  },
+  // close: function () {
+  //     / $("#stockSupplierName").val("");
+  // }
+})
 });
 
+//dashboard
+$.get("../controller/DashboardController.php?status=getModule", (result) => {
+    // console.log(result);
+    let li = '';
+    let path = window.location.pathname;
+    let page = path.split("/").pop();
+    for (let index = 0; index < result.length; index++) {
+        li += '<li class="sideBTN p-0 "><a href="'+result[index].module_url+'" class="nav-link text-light flex-column';
+        if (result[index].module_url == page) {
+            li += ' active';
+        }
+        li += '" style="padding:0.73rem; padding-left:1.7rem;" ><i class="'+result[index].module_logo+'"></i><span class="moduleName"> &nbsp;'+ result[index].module_name +'</span></a></li>';  
+    }
+    $('#getModule').html(li).show();
+}, 'json')
 
+// var path = window.location.pathname;
+// var page = path.split("/").pop();
+// console.log( page );
 
 let preview = (input) => {
     if (input.files && input.files[0]) {
@@ -64,6 +135,8 @@ let preview = (input) => {
             $('#edit_food_pre_image').attr('src', e.target.result).height(150).width(150);
             $('#category_pre_image').attr('src', e.target.result).height(150).width(150);
             $('#edit_category_pre_image').attr('src', e.target.result).height(150).width(150);
+            $('#sub_category_pre_image').attr('src', e.target.result).height(150).width(150);
+            $('#edit_sub_category_pre_image').attr('src', e.target.result).height(150).width(150);
             // console.log(e);
         };
         reader.readAsDataURL(input.files[0]);
@@ -72,33 +145,35 @@ let preview = (input) => {
 
 
 //user
-let userTableBody = (result) => {
-    let row = '';
-    for (let index = 0; index < result.length; index++) {
-        // console.log( result[index].user_id);
-        row += '<tr>' +
-            '<th scope="row">' + result[index].user_id + '</th>' +
-            '<td><img src="../../images/user-images/' + result[index].user_image + '" width="40" height="40"></td>' +
-            '<td>' + result[index].user_fname + ' ' + result[index].user_lname + '</td>' +
-            '<td>' + result[index].user_email + '</td>' +
-            '<td>' + result[index].user_contact + '</td><td>';
-        if ((result[index].user_status) == 1) {
-            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateUser(\'' + btoa(result[index].user_id) + '\')">Active</button>';
-        } else {
-            row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateUser(\'' + btoa(result[index].user_id) + '\')">Deactivate</button>';
+let getUserData = () =>{
+    $.get("../controller/UserController.php?status=getUserData", (result) => {
+        // userTableBody(result);      //call userTableBody function  
+        let row = '';
+        for (let index = 0; index < result.length; index++) {
+            // console.log( result[index].user_id);
+            row += '<tr>' +
+                '<th scope="row">' + result[index].user_id + '</th>' +
+                '<td><img src="../../images/user-images/' + result[index].user_image + '" width="40" height="40"></td>' +
+                '<td>' + result[index].user_fname + ' ' + result[index].user_lname + '</td>' +
+                '<td>' + result[index].user_email + '</td>' +
+                '<td>' + result[index].user_contact + '</td><td>';
+            if ((result[index].user_status) == 1) {
+                row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateUser(\'' + btoa(result[index].user_id) + '\')">Active</button>';
+            } else {
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateUser(\'' + btoa(result[index].user_id) + '\')">Deactivate</button>';
+            }
+            row += '</td>' +
+                '<td>' +
+                '<div class="d-inline-flex justify-content-start">' +
+                '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewUser" onclick="viewUserDetails(\'' + btoa(result[index].user_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editUser" onclick="editUserDetails(\'' + btoa(result[index].user_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '</td>' +
+                '</tr>';
         }
-        row += '</td>' +
-            '<td>' +
-            '<div class="d-inline-flex justify-content-start">' +
-            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewUser" onclick="viewUserDetails(\'' + btoa(result[index].user_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
-            '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editUser" onclick="editUserDetails(\'' + btoa(result[index].user_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-            '</td>' +
-            '</tr>';
-    }
-    // console.log(row)
-    $('#userTable').html(row).show()
+        // console.log(row)
+        $('#userTable').html(row).show()
+    }, 'json')
 }
-
 // let viewUserDetails = (Id) =>{
 //     $.post("../controller/UserController.php?status=viewUserDetails", {userId:Id}, (result) => {  
 //         $('#viewUserContent').html(result).show();
@@ -254,8 +329,9 @@ let activateUser = (Id) => {
 }
 
 //supplier 
-let supplierTableBody = (result) => {
-    let row = '';
+let getSupplierData = () =>{
+    $.get("../controller/SupplierController.php?status=getSupplierData", (result) => {
+        let row = '';
     for (let index = 0; index < result.length; index++) {
         row += '<tr>' +
             '<th scope="row">' + result[index].supplier_id + '</th>' +
@@ -277,6 +353,9 @@ let supplierTableBody = (result) => {
         //console.log(row)
     }
     $('#supplierTable').html(row).show()
+        // supplierTableBody(result);
+        // supplierNameOption(result); //get supplier names to the grn form by dropdown
+    }, 'json')
 }
 
 let viewSupplierDetails = (Id) => {
@@ -323,24 +402,27 @@ let editSupplierDetails = (Id) => {
 }
 
 //customer
-let customerTableBody = (result) => {
-    let row = '';
-    for (let index = 0; index < result.length; index++) {
-        row += '<tr>' +
-            '<th scope="row">' + result[index].customer_id + '</th>' +
-            '<td>' + result[index].customer_fname + ' ' + result[index].customer_lname + '</td>' +
-            '<td>' + result[index].customer_contact + '</td>' +
-            '<td>' + result[index].customer_email + '</td>' +
-            '<td>' + result[index].customer_add1 + ', ' + result[index].customer_add2 + ', ' + result[index].customer_add3 + '</td>' +
-
-            '<td>' +
-            '<div class="d-inline-flex justify-content-start">' +
-            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewCustomer" onclick="viewCustomerDetails(\'' + btoa(result[index].customer_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
-            '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editCustomer" onclick="editCustomerDetails(\'' + btoa(result[index].customer_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-            '</td>'
-        '</tr>';
-    }
-    $('#customerTable').html(row).show()
+let getCustomerData = () =>{
+    $.get("../controller/CustomerController.php?status=getCustomerData", (result) => {
+        // customerTableBody(result);
+        let row = '';
+        for (let index = 0; index < result.length; index++) {
+            row += '<tr>' +
+                '<th scope="row">' + result[index].customer_id + '</th>' +
+                '<td>' + result[index].customer_fname + ' ' + result[index].customer_lname + '</td>' +
+                '<td>' + result[index].customer_contact + '</td>' +
+                '<td>' + result[index].customer_email + '</td>' +
+                '<td>' + result[index].customer_add1 + ', ' + result[index].customer_add2 + ', ' + result[index].customer_add3 + '</td>' +
+    
+                '<td>' +
+                '<div class="d-inline-flex justify-content-start">' +
+                '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewCustomer" onclick="viewCustomerDetails(\'' + btoa(result[index].customer_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editCustomer" onclick="editCustomerDetails(\'' + btoa(result[index].customer_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '</td>'
+            '</tr>';
+        }
+        $('#customerTable').html(row).show()
+    },'json')
 }
 
 let viewCustomerDetails = (Id) => {
@@ -402,27 +484,32 @@ let editCustomerDetails = (Id) => {
 }
 
 //dining table
-let diningTableBody = (result) => {
-    let row = '';
-    for (let index = 0; index < result.length; index++) {
-        row += '<tr>' +
-            '<th scope="row">' + result[index].dining_table_id + '</th>' +
-            '<td>' + result[index].dining_table_name + '</td>' +
-            '<td>' + result[index].dining_table_psn_cnt + '</td><td>';
-        if ((result[index].dining_table_status) == 1) {
-            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Available</button>';
-        } else {
-            row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Booked</button>';
+let getDiningTableData = () =>{
+    $.get("../controller/DiningTableController.php?status=getDiningTableData", (result) =>{
+        // diningTableBody(result);
+        let row = '';
+        let count=1;
+        for (let index = 0; index < result.length; index++) {
+            row += '<tr>' +
+                '<th scope="row">' + count+ '</th>' +
+                '<td>' + result[index].dining_table_name + '</td>' +
+                '<td>' + result[index].dining_table_psn_cnt + '</td><td>';
+            if ((result[index].dining_table_status) == 1) {
+                row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Available</button>';
+            } else {
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateDiningTable(\'' + btoa(result[index].dining_table_id) + '\')">Booked</button>';
+            }
+            row += '</td>' +
+                '<td>' +
+                '<div class="d-inline-flex justify-content-start">' +
+                '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDiningTable" onclick="viewDiningTableDetails(\'' + btoa(result[index].dining_table_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editDiningTable" onclick="editDiningTable(\'' + btoa(result[index].dining_table_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '</td>' +
+                '</tr>';
+                count++
         }
-        row += '</td>' +
-            '<td>' +
-            '<div class="d-inline-flex justify-content-start">' +
-            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDiningTable" onclick="viewDiningTableDetails(\'' + btoa(result[index].dining_table_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
-            '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editDiningTable" onclick="editDiningTable(\'' + btoa(result[index].dining_table_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-            '</td>' +
-            '</tr>';
-    }
-    $('#diningTable').html(row).show()
+        $('#diningTable').html(row).show()
+    },'json')
 }
 
 let viewDiningTableDetails = (Id) => {
@@ -511,11 +598,14 @@ let activateDiningTable = (Id) => {
 }
 
 //food items
-let foodItemTableBody = (result) => {
-    let row = '';
+let getFoodItemData = ()=>{
+    $.get("../controller/FoodItemController.php?status=getFoodItemData", (result) =>{
+        //foodItemTableBody(result);
+        let row = '';
+    let count =1;
     for (let index = 0; index < result.length; index++) {
         row += '<tr>' +
-            '<th scope="row">' + result[index].food_item_id + '</th>' +
+            '<th scope="row">' + count + '</th>' +
             '<td><img src="../../images/foodItem-images/' + result[index].food_item_image + '" width="40" height="40"></td>' +
             '<td>' + result[index].food_item_name + '</td>' +
             '<td>' + result[index].food_item_unit_price + '</td><td>';
@@ -532,8 +622,10 @@ let foodItemTableBody = (result) => {
             '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editFoodItem" onclick="editFoodItemDetails(\'' + btoa(result[index].food_item_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
             '</td>' +
             '</tr>';
+            count++
     }
     $('#foodItemTable').html(row).show()
+    },'json')
 }
 
 let viewFoodItemDetails = (Id) => {
@@ -700,51 +792,63 @@ let activateFoodItem = (Id) => {
 }
 
 //Category table 
-let categoryTableBody = (result) => {
-    let row = '';
-    let count = 1;
-    for (let index = 0; index < result.length; index++) {
-        row += '<tr>' +
-            '<th scope="row">' + count + '</th>' +
-            '<td><img src="../../images/foodItem-images/' + result[index].category_image + '" width="40" height="40"></td>' +
-            '<td>' + result[index].category_name + '</td><td>';
-        if ((result[index].category_status) == 1) {
-            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateCategory(\'' + btoa(result[index].category_id) + '\')">Available</button>';
-        } else {
-            row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateCategory(\'' + btoa(result[index].category_id) + '\')">Out of Stock</button>';
+let categoryTableBody = () => {
+    $.get("../controller/CategoryController.php?status=getCategoryData", (result)=>{
+        //  categoryTableBody(result);
+        //  categoryOption(result);
+        let row = '';
+        let count = 1;
+        for (let index = 0; index < result.length; index++) {
+            row += '<tr>' +
+                '<th scope="row">' + count + '</th>' +
+                '<td><img src="../../images/foodItem-images/' + result[index].category_image + '" width="40" height="40"></td>' +
+                '<td>' + result[index].category_name + '</td><td>';
+            if ((result[index].category_status) == 1) {
+                row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateCategory(\'' + btoa(result[index].category_id) + '\')">Available</button>';
+            } else {
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateCategory(\'' + btoa(result[index].category_id) + '\')">Out of Stock</button>';
+            }
+            row += '</td>' +
+                '<td>' +
+                '<div class="d-inline-flex justify-content-start">' +
+                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategory" onclick="deleteCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '</td>' +
+                '</tr>';       
+            count++;
         }
-        row += '</td>' +
-            '<td>' +
-            '<div class="d-inline-flex justify-content-start">' +
-            '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-            '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategory" onclick="deleteCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
-            '</td>' +
-            '</tr>';       
-        count++;
-    }
-    $('#categoryTable').html(row).show()
+        $('#categoryTable').html(row).show()
+    },'json')
 }
 
 //get category data for food item or and sub category form dropdown list
-let categoryOption = (result) => {
-    let row = '';
-    for (let index = 0; index < result.length; index++) {
-        row += '<option value="' + result[index].category_id + '">' + result[index].category_name + '</option>';
-    }
-    $('#subCategoryCategoryItem').html(row).show()
-    $('#foodItemCategory').html(row).show()
+let categoryOption = () => {
+    $.get("../controller/CategoryController.php?status=getCategoryData", (result)=>{
+        //  categoryTableBody(result);
+        //  categoryOption(result);
+        let row = '';
+        for (let index = 0; index < result.length; index++) {
+            row += '<option value="' + result[index].category_id + '">' + result[index].category_name + '</option>';
+        }
+        $('#subCategoryCategoryItem').html(row).show()
+        $('#foodItemCategory').html(row).show()
+    },'json')
 }
 
 //get sub category name to food item form sub category drop down list
 let subCategoryOption = (result) => {
-    let row = '';
-    for (let index = 0; index < result.length; index++) {
-        row += '<option value="' + result[index].sub_category_id + '">' + result[index].sub_category_name + '</option>';
-    }
-    $('#foodItemSubCategory').html(row).show()
+    $.get("../controller/SubCategoryController.php?status=getSubCategoryData",(result)=>{
+        // subCategoryTableBody(result);
+        // subCategoryOption(result);
+        let row = '';
+        for (let index = 0; index < result.length; index++) {
+            row += '<option value="' + result[index].sub_category_id + '">' + result[index].sub_category_name + '</option>';
+        }
+        $('#foodItemSubCategory').html(row).show()
+    },'json')
 }
 
-//view category details
+//view category details for edit category
 let editCategoryDetails = (Id) => {
     $.post("../controller/CategoryController.php?status=viewCategoryDetails", {
         categoryId: Id
@@ -842,13 +946,15 @@ let deleteCategoryDetails = (Id) => {
 
 //sub category
 let subCategoryTableBody = (result) => {
-    let row = '';
+    $.get("../controller/SubCategoryController.php?status=getSubCategoryData",(result)=>{
+        let row = '';
     let count = 1;
     for (let index = 0; index < result.length; index++) {
         // let a = subCategoryCategoryName(result[index].category_category_id)
         // console.log(a)
         row += '<tr>' +
             '<th scope="row">' + count + '</th>' +
+            '<td><img src="../../images/foodItem-images/' + result[index].sub_category_image + '" width="40" height="40"></td>' +
             '<td>' + result[index].sub_category_name + '</td>' +
             '<td>' + subCategoryCategoryName(result[index].category_category_id).category_name + '</td><td>';
 
@@ -867,6 +973,7 @@ let subCategoryTableBody = (result) => {
         count++;
     }
     $('#subCategoryTable').html(row).show()
+    },'json')
 }
 
 let subCategoryCategoryName = (Id) => {
@@ -894,6 +1001,7 @@ let editSubCategoryDetails = (Id) => {
     }, (result) => {
         $('#editSubCategoryId').val(btoa(result.sub_category_id));
         $('#editSubCategoryName').val(result.sub_category_name); //assign edit sub category name's value
+        $('#edit_sub_category_pre_image').val(result.sub_category_image);
         $.post("../controller/CategoryController.php?status=getCategoryData", (data) => {
             // console.log(data.length);
             let row = '';
@@ -906,6 +1014,8 @@ let editSubCategoryDetails = (Id) => {
             }
             $('#editSubCategoryCategoryItem').html(row).show()
         }, 'json')
+        let url = "../../images/foodItem-images/" + result.sub_category_image;
+        $('#edit_sub_category_pre_image').attr('src', url).height(150).width(150);
     }, 'json')
 }
 
@@ -989,28 +1099,31 @@ let deleteSubCategoryDetails = (Id) => {
     })
 }
 
-let rowItemTableBody = (result) => {
-    let row = '';
-    let count = 1;
-    for (let index = 0; index < result.length; index++) {
-        row += '<tr>' +
-            '<th>'+count+'</th>'+
-            '<td>'+result[index].row_item_name+'</td><td>';
-        if ((result[index].row_item_status) == 1) {
-            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateRowItem(\'' + btoa(result[index].row_item_id) + '\')">Available</button>';
-        } else {
-            row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateRowItem(\'' + btoa(result[index].row_item_id) + '\')">Out of Stock</button>';
+let getRowItemData =()=>{
+    $.get("../controller/RowItemController.php?status=getRowItemData",(result)=>{
+        //rowItemTableBody(result);
+        let row = '';
+        let count = 1;
+        for (let index = 0; index < result.length; index++) {
+            row += '<tr>' +
+                '<th>'+count+'</th>'+
+                '<td>'+result[index].row_item_name+'</td><td>';
+            if ((result[index].row_item_status) == 1) {
+                row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateRowItem(\'' + btoa(result[index].row_item_id) + '\')">Available</button>';
+            } else {
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateRowItem(\'' + btoa(result[index].row_item_id) + '\')">Out of Stock</button>';
+            }
+            row += '</td>' +
+                '<td>' +
+                '<div class="d-inline-flex justify-content-start">' +
+                '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editRowItem" onclick="editRowItemDetails(\'' + btoa(result[index].row_item_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRowItem" onclick="deleteRowItemDetails(\'' + btoa(result[index].row_item_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '</td>'+
+            '</tr>';
+            count++;
         }
-        row += '</td>' +
-            '<td>' +
-            '<div class="d-inline-flex justify-content-start">' +
-            '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editRowItem" onclick="editRowItemDetails(\'' + btoa(result[index].row_item_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-            '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRowItem" onclick="deleteRowItemDetails(\'' + btoa(result[index].row_item_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
-            '</td>'+
-        '</tr>';
-        count++;
-    }
-    $('#rowItemTable').html(row).show()
+        $('#rowItemTable').html(row).show()
+    },'json')
 }
 
 //change the row item status to out of stock status
@@ -1079,27 +1192,40 @@ let editRowItemDetails = (Id) =>{
 }
 
 //get row item names from row item table to add stock drop down list of row items
- let rowItemOption = (result) =>{
-     let row = '';
-     for (let index = 0; index < result.length; index++) {
-        row += '<option value="'+result[index].row_item_id+'">' + result[index].row_item_name + '</option>';
-     }
-     $('#stockRowItemNames').html(row).show()
- }
+//  let rowItemOption = (result) =>{
+//      let row = '';
+//      for (let index = 0; index < result.length; index++) {
+//         row += '<option value="'+result[index].row_item_id+'">' + result[index].row_item_name + '</option>';
+//      }
+//      $('#stockRowItemNames').html(row).show()
+//  }
 
 
  //get supplier name to the add stock form dropdown list
- let supplierNameOption = (result) =>{
-     let row ='';
-     for (let index = 0; index < result.length; index++) {
-        row += '<option>' + result[index].supplier_contact_name + '</option>';
-     }
-     $('#stockSupplierNames').html(row).show()
- }
+//  let supplierNameOption = (result) =>{
+//      let row ='';
+//      for (let index = 0; index < result.length; index++) {
+//         row += '<option>' + result[index].supplier_contact_name + '</option>';
+//      }
+//      $('#stockSupplierNames').html(row).show()
+//  }
 
- let stockTableBody=(result)=>{
+// let getGrnData= ()=>{
+//     $.get("../controller/GrnController.php?status=getGrnData",(result)=>{
+//         //grnTableBody(result);
+//     },'json')
+// }
+ let stockTableBody=()=>{
      
  }
+
+ 
+let getGrnNumber = ()=>{
+    $.get("../controller/StockController.php?status=getGrnNumber",(result)=>{
+        $('#stockGrnNumber').val(result);
+    },'json')
+}
+
  //get supplier name from supplier table by giving id in grn
 //  let grnSupplierName = (Id)=>{
 //     var result ='';
