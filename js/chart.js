@@ -1,140 +1,18 @@
 $(document).ready(function () {
-//   FusionCharts.ready(function () {
-//     var myChart = new FusionCharts({
-//       type: "msline",
-//       renderAt: "chart-container",
-//       width: "100%",
-//       height: "75%",
-//       dataFormat: "json",
-//       dataSource: {
-//         chart: {
-//           caption: "Reach of Social Media Platforms amoung youth",
-//           yaxisname: "% of youth on this platform",
-//           subcaption: "2012-2016",
-//           showhovereffect: "1",
-//           numbersuffix: "%",
-//           drawcrossline: "1",
-//           plottooltext: "<b>$dataValue</b> of youth were on $seriesName",
-//           theme: "fusion",
-//         },
-//         categories: [
-//           {
-//             category: [
-//               {
-//                 label: "2012",
-//               },
-//               {
-//                 label: "2013",
-//               },
-//               {
-//                 label: "2014",
-//               },
-//               {
-//                 label: "2015",
-//               },
-//               {
-//                 label: "2016",
-//               },
-//             ],
-//           },
-//         ],
-//         dataset: [
-//           {
-//             seriesname: "Facebook",
-//             data: [
-//               {
-//                 value: "62",
-//               },
-//               {
-//                 value: "64",
-//               },
-//               {
-//                 value: "64",
-//               },
-//               {
-//                 value: "66",
-//               },
-//               {
-//                 value: "78",
-//               },
-//             ],
-//           },
-//           {
-//             seriesname: "Instagram",
-//             data: [
-//               {
-//                 value: "16",
-//               },
-//               {
-//                 value: "28",
-//               },
-//               {
-//                 value: "34",
-//               },
-//               {
-//                 value: "42",
-//               },
-//               {
-//                 value: "54",
-//               },
-//             ],
-//           },
-//           {
-//             seriesname: "LinkedIn",
-//             data: [
-//               {
-//                 value: "20",
-//               },
-//               {
-//                 value: "22",
-//               },
-//               {
-//                 value: "27",
-//               },
-//               {
-//                 value: "22",
-//               },
-//               {
-//                 value: "29",
-//               },
-//             ],
-//           },
-//           {
-//             seriesname: "Twitter",
-//             data: [
-//               {
-//                 value: "18",
-//               },
-//               {
-//                 value: "19",
-//               },
-//               {
-//                 value: "21",
-//               },
-//               {
-//                 value: "21",
-//               },
-//               {
-//                 value: "24",
-//               },
-//             ],
-//           },
-//         ],
-//       },
-//     }).render();
-//   });
 
 var options = { //bar chart
     series: [{
-    name: 'Net Profit',
+    name: 'Monthly Profit',
     data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-  }, {
-    name: 'Revenue',
-    data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-  }, {
-    name: 'Free Cash Flow',
-    data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-  }],
+  }
+//   , {
+//     name: 'Revenue',
+//     data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+//   }, {
+//     name: 'Free Cash Flow',
+//     data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
+//   }
+],
     chart: {
     type: 'bar',
     height: 350
@@ -142,7 +20,7 @@ var options = { //bar chart
   plotOptions: {
     bar: {
       horizontal: false,
-      columnWidth: '55%',
+      columnWidth: '25%',
       endingShape: 'rounded'
     },
   },
@@ -159,7 +37,7 @@ var options = { //bar chart
   },
   yaxis: {
     title: {
-      text: '$ (thousands)'
+      text: 'Rs (thousands)'
     }
   },
   fill: {
@@ -168,7 +46,7 @@ var options = { //bar chart
   tooltip: {
     y: {
       formatter: function (val) {
-        return "$ " + val + " thousands"
+        return "Rs " + val + " thousands"
       }
     }
   }
@@ -178,11 +56,12 @@ var options = { //bar chart
   chart.render();
 
 var options = { //pie chart
-    series: [44, 55, 41, 17, 15],
+    series: [44, 55, 41, 17, 15,50,65],
     chart: {
     width: 380,
     type: 'pie',
   },
+  labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday','Saturday','Sunday'],
   plotOptions: {
     pie: {
       startAngle: -90,
@@ -201,7 +80,7 @@ var options = { //pie chart
     }
   },
   title: {
-    text: 'Gradient Donut with custom Start-angle'
+    text: 'Weekly Income'
   },
   responsive: [{
     breakpoint: 480,

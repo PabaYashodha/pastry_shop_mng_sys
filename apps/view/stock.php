@@ -16,7 +16,15 @@ require_once '../view/sidebar.php';
 </style>
 
 <div id="content" class="content-expanded">
-    <div class="card" style="border-radius: 20px;">
+<div class="card shadow-lg " style="border-radius: 10px; padding:0.4rem">
+            <nav aria-label="breadcrumb" class="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none; color:#2f2e41 !important"> HOME</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">STOCK MANAGEMENT</li>
+                </ol>
+            </nav>
+    </div>
+    <div class="card shadow-lg mt-3" style="border-radius: 20px;">
         <div class="card-body">
             <div class="row mb-3">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -36,7 +44,7 @@ require_once '../view/sidebar.php';
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
-                                    <a href="../view/addStock.php" class="btn btn-dark float-end" role="button"><i class="far fa-plus"></i>ADD STOCK</a>
+                                    <a href="../view/addStock.php" class="btn btn-dark float-end" role="button" style="background-color: #2f2e41;"><i class="far fa-plus"></i>ADD STOCK</a>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -44,11 +52,14 @@ require_once '../view/sidebar.php';
                                             <thead>
                                                 <tr>
                                                     <th scope="col">#</th>
-                                                    <th scope="col"></th>
-                                                    <th scope="col"></th>
-                                                    <th scope="col"></th>
-                                                    <th scope="col"></th>
-                                                    <th scope="col"></th>
+                                                    <th scope="col">Count(kg,l)</th>
+                                                    <th scope="col">Current Count(kg,l)</th>
+                                                    <th scope="col">Cost per unit(Rs)</th>
+                                                    <th scope="col">Discount</th>
+                                                    <th scope="col">MNF Date</th>
+                                                    <th scope="col">EXP Date</th>
+                                                    <th scope="col">Net cost(Rs)</th>
+                                                    <th scope="col">Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="stockTable"></tbody>
@@ -375,6 +386,6 @@ require_once '../view/sidebar.php';
 <!-- modal end -->
 <?php require_once '../view/scriptInclude.php'; ?>
 <script>
-    $(window).load(getRowItemData(),getSupplierData(), getGrnData());
+    $(window).load(getRowItemData(),getSupplierData(), getGrnData(), getStockData());
 </script>
 <?php require_once '../view/footer.php'; ?>

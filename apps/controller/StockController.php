@@ -71,32 +71,20 @@ switch ($status) {
                 throw new Exception("Net total is required");
             }
             $addGrn = $stockObj->addGrn($stockSupplierId, $stockCreateDate, $stockReferenceNumber,$stockTotalDiscount, $stockNetTotal);
-            // if ($addGrn>0) {
-                
-            // }
-            
-        //     //insert id return to the $addGrn
-        //     $addGrn = $stockObj->addGrn($stockSupplierName,$stockReferenceNo,$stockCreateDate,$stockNetTotal, $stockTotalDiscount);
-        //     if ($addGrn > 0) {
-        //         foreach ($stockRowItemId as $key => $value) {
-        //             $addStock = $stockObj->addStock($stockReceivedQuantity[$key],$stockCostPerUnit[$key],$stockDiscount[$key],$stockMnfData[$key],$stockExpDate[$key],$stockTableNetCost[$key],$value, $addGrn);
-        //         }
-        //     }
-
-        //     // $existReferenceId = $stockObj->existReferenceId($stockReferenceNo);
-        //     // if ($existReferenceId->num_rows ==0) {
-        //     //     throw new Exception("Reference Id isn't correct ");
-        //     // }
-        //    // $addStock = $stockObj->addStock($stockRowItemName,$stockReferenceNo,$stockAddingCount,$stockCurrentCount,$stockCostPerUnit,$stockMnfData,$stockExpDate);
-        //     if ($addStock==1) {
-        //         $res=1;
-        //         $getStockData = $stockObj->getStockData();
-        //         $stockArray = array();
-        //         while ($row = $getStockData->fetch_assoc()) {
-        //             array_push($stockArray, $row);
-        //         }
-        //         $msg = $stockArray;
-        //     }
+            if ($addGrn>0) {
+                foreach ($stockRowItemId as $key => $value) {
+                   $addStock = $stockObj->addStock($stockReceivedQuantity[$key],$stockCostPerUnit[$key], $stockDiscount[$key], $stockMnfData[$key], $stockExpDate[$key], $stockNetCost[$key],$value,$addGrn);
+                   if ($addStock == 1) {
+                       $res = 1;
+                       $getStockData = $stockObj->getStockData();
+                       $stockArray = array();
+                         while ($row = $getStockData->fetch_assoc()) {
+                         array_push($stockArray, $row);
+                        }
+                   $msg = $stockArray;
+                }
+            }
+        }
         } catch (Throwable $th) {
             $res = 2;
             $msg = $th->getMessage();
@@ -105,6 +93,13 @@ switch ($status) {
         $data[1]=$msg;
         echo json_encode($data);
         break;
-    
+    case 'getStockData':
+        $getStockData = $stockObj->getStockData();
+        $stockArray= array();
+        while ($row = $getStockData->fetch_assoc()) {
+            array_push($stockArray,$row);
+        }
+        echo json_encode($stockArray);
+        break;
   
 }

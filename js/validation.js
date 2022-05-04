@@ -340,6 +340,9 @@ $(document).ready(()=>{
                                 timer: 1000,
                             });
                             userTableBody(result[1]);
+                            $("#userForm").trigger('reset');
+                            $(".is-valid").removeClass('is-valid');
+                            $("#addUser").modal('hide')
                         }
                         if (result[0] == 2) {
                             swal({
@@ -353,6 +356,14 @@ $(document).ready(()=>{
                         console.log(error)
                     }
                 });
+            }else{
+                swal({
+                    title: "Warning !",
+                    text: 'User not added',
+                    icon: "warning",
+                    buttons: false,
+                    timer: 1000,
+                })
             }
         })
     });
@@ -726,7 +737,7 @@ $(document).ready(()=>{
                         if (result[0] == 1) {
                             swal({
                                 title: "Good Job !",
-                                text: "User Successfully Added",
+                                text: "Customer Successfully Added",
                                 icon: "success",
                                 buttons: false,
                                 timer: 1000,
@@ -1094,8 +1105,22 @@ $(document).ready(()=>{
     const foodItemName = $('#foodItemName');
     const unitPrice = $('#unitPrice');
     const foodItemCategory = $('#foodItemCategory');
-    const foodItemSubCategory = $('foodItemSubCategory');
-    const foodItemImage = $('foodItemImage');
+    const foodItemSubCategory = $('#foodItemSubCategory');
+    const foodItemImage = $('#foodItemImage');
+
+    foodItemName.blur(()=>{
+        const url = "../controller/FoodItemController.php?status=checkFoodItemIsExist";
+        let foodItemNameVal = foodItemName.val();
+        $.post(url, {
+            foodItemName : foodItemNameVal
+        },(result)=>{
+            if (result == 1 ) {
+                addInvalidClass(foodItemName, "Food Item name is already exist");
+                return false;
+            }
+        })
+    })
+
     $("#foodItemFormSubmit").click(() => {
         let foodItemNameVal = foodItemName.val()
         let unitPriceVal = unitPrice.val()
@@ -1116,7 +1141,7 @@ $(document).ready(()=>{
             return false;
         }
         if (unitPriceVal == "") {
-            addInvalidClass(unitPrice, "Please add unit price");
+            addInvalidClass(unitPrice, "Food item is already exists");
             return false;
         }
         if (foodItemCategoryVal == "") {
@@ -1175,8 +1200,10 @@ $(document).ready(()=>{
                             foodItemTableBody(result[1]);
                             $("#foodItemForm").trigger('reset');
                             $(".is-valid").removeClass('is-valid');
-                            $('#addFoodItem').modal('hide');
-                            
+                             $("#addFoodItem").modal('hide')
+                             $('#food_pre_image').removeAttr('src style');       
+                             $("#category_pre_image").removeAttr('src style')
+                            $("#sub_category_pre_image").removeAttr('src style')                     
                         }
                         if (result[0] == 2) {
                             swal({
@@ -1311,26 +1338,42 @@ $(document).ready(()=>{
         })
     });
 
+    
     const categoryName = $('#categoryName');
     const categoryImage = $('#categoryImage');
-    $("#categoryFormSubmit").click(() => {
-        let categoryNameVal = categoryName.val();
-        let categoryImageVal = categoryImage.val();
 
-        if (categoryNameVal == "" && categoryImageVal=="") {
+    categoryName.blur(()=>{
+        const url = "../controller/CategoryController.php?status=checkCategoryNameIsExist";
+        let categoryNameVal = categoryName.val();
+        $.post(url, {
+            categoryName : categoryNameVal
+        },(result)=>{
+            if (result==1) {
+                addInvalidClass(categoryName, "Category name is already exist");
+                return false;
+            }
+        })
+    })
+
+    $("#categoryFormSubmit").click(() => {
+        let categoryNameVal = categoryName.val()
+        let categoryImageVal = categoryImage.val()
+
+        if (categoryNameVal == "" && categoryImageVal == "") {
             toastr.error("Please fill the form");
             $([categoryName, categoryImage]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid")
-            })
+            });
             categoryName.focus();
             return false;
         }
-        if (categoryName == "") {
+        if (categoryNameVal == "") {
             addInvalidClass(categoryName, "Please enter category name");
             return false;
         }
-        if (categoryImage) {
-            
+        if (categoryImageVal == "") {
+            addInvalidClass(categoryImage, "Please add a category image");
+            return false;
         }
         swal({
             title: 'Are you sure',
@@ -1376,7 +1419,10 @@ $(document).ready(()=>{
                             categoryTableBody(result[1]);
                             $("#categoryForm").trigger('reset');
                             $(".is-valid").removeClass('is-valid');
-                            $("#addCategory").modal('hide')
+                            $("#addCategory").modal('hide');
+                            $('#food_pre_image').removeAttr('src style');       
+                             $("#category_pre_image").removeAttr('src style')
+                            $("#sub_category_pre_image").removeAttr('src style')  
                         }
                         if (result[0] == 2) {
                             swal({
@@ -1413,7 +1459,7 @@ $(document).ready(()=>{
             editCategoryName.focus();
             return false;
         }
-        if (editCategoryName == "") {
+        if (editCategoryImageVal == "") {
             addInvalidClass(editCategoryName, "Please enter category name");
             return false;
         }
@@ -1462,7 +1508,8 @@ $(document).ready(()=>{
                             categoryTableBody(result[1]);
                             $("#editCategoryForm").trigger('reset');
                             $(".is-valid").removeClass('is-valid');
-                            $('#editCategory').modal('hide')
+                            $('#editCategory').modal('hide');
+                           
                         }
                         if (result[0] == 2) {
                             swal({
@@ -1490,6 +1537,8 @@ $(document).ready(()=>{
     const subCategoryName = $('#subCategoryName');
     const subCategoryCategoryItem = $('#subCategoryCategoryItem');
     const subCategoryImage = $('#subCategoryImage');
+
+
     $("#subCategoryFormSubmit").click(() => {
         let subCategoryNameVal = subCategoryName.val();
         let subCategoryCategoryItemVal = subCategoryCategoryItem.val();
@@ -1503,15 +1552,15 @@ $(document).ready(()=>{
             subCategoryName.focus();
             return false;
         }
-        if (subCategoryName == "") {
+        if (subCategoryNameVal == "") {
             addInvalidClass(subCategoryName, "Please enter sub category name");
             return false;
         }
-        if (subCategoryCategoryItem == "") {
+        if (subCategoryCategoryItemVal == "") {
             addInvalidClass(subCategoryCategoryItem, "Please enter category name");
             return false;
         }
-        if (subCategoryImage=="") {
+        if (subCategoryImageVal=="") {
             addInvalidClass(subCategoryImage,"Please add an image");
             return false;
         }
@@ -1551,7 +1600,7 @@ $(document).ready(()=>{
                         if (result[0] == 1) {
                             swal({
                                 title: "Good Job!",
-                                text: "Category name Successfully Added",
+                                text: " Sub Category name Successfully Added",
                                 icon: "success",
                                 buttons: false,
                                 timer: 1000,
@@ -1559,7 +1608,10 @@ $(document).ready(()=>{
                             subCategoryTableBody(result[1]);
                             $("#subCategoryForm").trigger('reset');
                             $(".is-valid").removeClass('is-valid');
-                            $('#addSubCategory').modal('hide')
+                            $('#addSubCategory').modal('hide');
+                            $('#food_pre_image').removeAttr('src style');       
+                             $("#category_pre_image").removeAttr('src style')
+                            $("#sub_category_pre_image").removeAttr('src style')  
                         }
                         if (result[0] == 2) {
                             swal({
@@ -1598,11 +1650,11 @@ $(document).ready(()=>{
             editSubCategoryName.focus();
             return false;
         }
-        if (editSubCategoryName == "") {
+        if (editSubCategoryNameVal == "") {
             addInvalidClass(editSubCategoryName, "Please enter sub category name");
             return false;
         }
-        if (editSubCategoryCategoryItem == "") {
+        if (editSubCategoryCategoryItemVal == "") {
             addInvalidClass(editSubCategoryCategoryItems, "Please enter category name");
             return false;
         }
@@ -1687,7 +1739,7 @@ $(document).ready(()=>{
             rowItemName.focus();
             return false;
         }
-        if (rowItemName == "") {
+        if (rowItemNameVal == "") {
             addInvalidClass(rowItemName, "Please enter row item");
             return false;
         }
@@ -1849,6 +1901,7 @@ $(document).ready(()=>{
 
      // add stock page
      const stockRowItemName = $('#stockRowItemName');
+     const stockRowItemId = $('#stockRowItemId');
      const stockMnfDate = $('#stockMnfDate');
      const stockExpDate = $('#stockExpDate');
      const stockReceivedQuantity = $('#stockReceivedQuantity');
@@ -1857,8 +1910,10 @@ $(document).ready(()=>{
      const stockDiscount = $('#stockDiscount');
      const stockTotalCost = $('#stockTotalCost');
      const stockTotalDiscount = $('#stockTotalDiscount');
+   
     $("#addRow").click(() => {
         let stockRowItemNameVal = stockRowItemName.val();
+        let stockRowItemIdVal= stockRowItemId.val();
         let stockMnfDateVal = stockMnfDate.val();
         let stockExpDateVal = stockExpDate.val();
         let stockReceivedQuantityVal = stockReceivedQuantity.val();
@@ -1867,9 +1922,9 @@ $(document).ready(()=>{
         let stockDiscountVal = +stockDiscount.val();
         let stockTotalCostVal = parseFloat(stockTotalCost.val());
         let stockTotalDiscountVal = +(stockTotalDiscount.val());
-       
+               
         if (stockRowItemNameVal == "" || stockMnfDateVal == "" || stockExpDateVal == "" || stockReceivedQuantityVal == "" || stockCostPerUnitVal == "" || stockNetCostVal<0 || stockDiscountVal<0) {
-            toastr.error("Fill the fields");
+            toastr.error("Please fll the fields");
             $([stockRowItemName, stockMnfDate, stockExpDate, stockReceivedQuantity, stockCostPerUnit, stockNetCost, stockDiscount]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid")
             })
@@ -1877,38 +1932,38 @@ $(document).ready(()=>{
             return false;
         }
         if (stockRowItemNameVal == "") {
-            addInvalidClass(stockRowItemName,"Add row item name");
+            addInvalidClass(stockRowItemName,"Please enter row item name");
             return false;
         }
         if (stockMnfDateVal == "") {
-            addInvalidClass(stockMnfDate, "Add manufacture date");
+            addInvalidClass(stockMnfDate, "Please enter manufacture date");
             return false;
         }
         if (stockExpDateVal == "") {
-            addInvalidClass(stockExpDate, "Add expire date");
+            addInvalidClass(stockExpDate, "Please enter expire date");
             return false;
         }
         if (stockReceivedQuantityVal=="") {
-            addInvalidClass(stockReceivedQuantity, "Add received quantity");
+            addInvalidClass(stockReceivedQuantity, "Please enter received quantity");
             return false;
         }
         if (stockCostPerUnitVal=="") {
-            addInvalidClass(stockCostPerUnit, "Add cost per unit");
+            addInvalidClass(stockCostPerUnit, "Please enter cost per unit");
             return false;
         } 
         if (stockDiscountVal<0) {
-            addInvalidClass(stockDiscount, "Add discount");
+            addInvalidClass(stockDiscount, "Please enter discount");
             return false;
         }
         if (stockNetCostVal<0) {
-            addInvalidClass(stockNetCost, "Add net cost");
+            addInvalidClass(stockNetCost, "Please enter net cost");
             return false;
         }else {
             markup = '<tr>' +
                 '<td scope="row"><button type="button" class="btn btn-outline-danger btnDelete ">&cross;</button></i></td>' +
                 '<td>' +
                 '<input list="stockRowItemNames" class="form-control" type="text"  readonly value="'+stockRowItemNameVal+'">' +
-                '<input type="hidden" list="stockRowItemId" class="form-control"  name="stockTableRowItemId[]" readonly value="'+stockRowItemNameVal+'">' +
+                '<input type="hidden" list="stockRowItemId" class="form-control"  name="stockTableRowItemId[]" readonly value="'+stockRowItemIdVal+'">' +
                 '</td>' +
                 '<td><input name="stockTableMnfDate[]" type="text" class="form-control" readonly value="'+stockMnfDateVal+'"></td>' +
                 '<td><input name="stockTableExpDate[]" type="text" class="form-control" readonly value="'+stockExpDateVal+'"></td>' +
@@ -2019,11 +2074,11 @@ $(document).ready(()=>{
             return false;
         }
         if (stockCreteDateVal=="") {
-            addInvalidClass(stockCreteDate, "Add date");
+            addInvalidClass(stockCreteDate, "Please enter date");
             return false;
         }
         if (stockReferenceNumberVal=="") {
-            addInvalidClass(stockReferenceNumber, "add reference number");
+            addInvalidClass(stockReferenceNumber, "Please enter reference number");
             return false;
         }swal({
             title: 'Are you sure',
@@ -2179,11 +2234,11 @@ $(document).ready(()=>{
     editUnitPrice.change(() => {removeInvalidClass(editUnitPrice)});
     editFoodItemCategory.change(() => {removeInvalidClass(editFoodItemCategory)});
     editFoodItemSubCategory.change(() => {removeInvalidClass(editFoodItemSubCategory)});
-    editFoodItemImage.change(() => {removeInvalidClass(editFoodItemImage)});
+    // editFoodItemImage.change(() => {removeInvalidClass(editFoodItemImage)});
 
     categoryName.change(() => {removeInvalidClass(categoryName)});
-    categoryImage.change(()=>{removeInvalidClass(categoryImage)});
-
+    categoryImage.change(() => {removeInvalidClass(categoryImage)});
+    
     editCategoryName.change(() => {removeInvalidClass(editCategoryName)});
 
     subCategoryName.change(() => {removeInvalidClass(subCategoryName)});

@@ -16,7 +16,15 @@ require_once "sidebar.php";
 </style>
 
 <div id="content" class="content-expanded">
-    <div class="card" style="border-radius: 20px;">
+    <div class="card shadow-lg " style="border-radius: 10px; padding:0.4rem">
+        <nav aria-label="breadcrumb" class="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none; color:#2f2e41 !important"> HOME</a></li>
+                <li class="breadcrumb-item active" aria-current="page">DINING TABLE MANAGEMENT</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="card shadow-lg mt-3" style="border-radius: 20px;">
         <div class="card-body">
             <div class="row mb-3">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -49,9 +57,9 @@ require_once "sidebar.php";
 <div class="modal fade" tabindex="-1" aria-labelledby="addDiningTable" id="addDiningTable" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header text-light" style="background-color: #2f2e41;">
                 <h5 class="modal-title">Add DiningTable</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="" method="post" role="form" id="diningTableForm">
@@ -116,7 +124,7 @@ require_once "sidebar.php";
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            <form action="" method="post" role="form" id="editDiningTableForm">
+                <form action="" method="post" role="form" id="editDiningTableForm">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="row mb-3">

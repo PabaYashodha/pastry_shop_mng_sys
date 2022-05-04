@@ -52,11 +52,12 @@ class FoodItem
         $result = $conn->query($sql) or die ($conn->error);
         return $result;
     }
-    public function existFoodItem($foodItemName)
+    public function checkFoodItemIsExist($foodItemName)
     {
         $conn = $this->db->connection();
-        $sql = "SELECT `food_item_name` FROM `food_item` WHERE `food_item_name` LIKE '%$foodItemName%'";
+        // $sql = "SELECT `food_item_name` FROM `food_item` WHERE `food_item_name` LIKE '%$foodItemName%'";
+        $sql = "SELECT `food_item_name` FROM `food_item` WHERE `food_item_name`='$foodItemName'";
         $result = $conn->query($sql) or die($conn->error);
-        return $result;
+        return ($result->num_rows>0)? false : true;
     }
 }

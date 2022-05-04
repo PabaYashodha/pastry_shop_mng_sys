@@ -7,8 +7,8 @@ require_once "sidebar.php";
     <div class="card shadow-lg " style="border-radius: 10px; padding:0.4rem">
             <nav aria-label="breadcrumb" class="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none;"> HOME</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">USER</li>
+                    <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none; color:#2f2e41 !important"> HOME</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">USER MANAGEMENT</li>
                 </ol>
             </nav>
     </div>
@@ -42,9 +42,9 @@ require_once "sidebar.php";
 <div class="modal fade" tabindex="-1" aria-labelledby="addUser" id="addUser" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header text-light" style="background-color: #2f2e41;">
                 <h5 class="modal-title">Add User</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="" method="post" role="form" id="userForm">
@@ -179,9 +179,9 @@ require_once "sidebar.php";
 <div class="modal fade" tabindex="-1" aria-labelledby="viewUser" id="viewUser" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header text-light" style="background-color: #2f2e41;">
                 <h5 class="modal-title">VIEW USER</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button btn-close btn-close-white" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div id="viewUserContent"></div>

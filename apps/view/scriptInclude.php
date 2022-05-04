@@ -7,7 +7,6 @@
 <script type="text/javascript" src="../../resources/DataTables/datatables.min.js"></script>
 <script type="text/javascript" src="../../js/script.js"></script>
 <script type="text/javascript" src="../../js/chart.js"></script>
-<script type="text/javascript" src="../../js/route.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">

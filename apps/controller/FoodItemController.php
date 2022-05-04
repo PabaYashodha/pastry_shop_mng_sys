@@ -4,6 +4,12 @@ $foodItemObj = new FoodItem();
 $status = $_REQUEST['status'];
 
 switch ($status) {
+    case 'checkFoodItemIsExist':
+        $foodItemName = $_POST['foodItemName'];
+        $result = $foodItemObj->checkFoodItemIsExist($foodItemName);
+        echo ($result == false) ? 1 : '';
+        break;
+
     case 'addFoodItem':
         try {
             $foodItemName = $_POST['foodItemName'];
@@ -23,10 +29,10 @@ switch ($status) {
             if ($foodItemSubCategory == "") {
                 throw new Exception("Sub category is required");
             }
-            $result = $foodItemObj->existFoodItem($foodItemName);
-            if ($result->num_rows != 0) {
-                throw new Exception("Food Item name is already exist");
-            }
+            // $result = $foodItemObj->existFoodItem($foodItemName);
+            // if ($result->num_rows != 0) {
+            //     throw new Exception("Food Item name is already exist");
+            // }
             if ($_FILES["foodItemImage"]["name"] != "") {
                 $foodItemImage = $_FILES["foodItemImage"]["name"];
                 $foodItemImageExt = substr($foodItemImage, strrpos($foodItemImage, '.'));

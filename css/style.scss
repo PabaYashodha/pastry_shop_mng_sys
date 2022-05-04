@@ -13,6 +13,14 @@ thead{
   -ms-border-radius: 25px;
   -o-border-radius: 25px;
 }
+.btn-group>.btn-group:not(:last-child)>.btn, .btn-group>.btn:not(:last-child):not(.dropdown-toggle) {
+    margin: 2px ;
+    background-color: #2f2e41;
+}
+.btn-group>.btn-group:not(:first-child)>.btn, .btn-group>.btn:nth-child(n+3), .btn-group>:not(.btn-check)+.btn {
+    margin: 2px;
+    background-color: #2f2e41;
+}
 //navigation bar
 nav {
   background-color: #2f2e41;
@@ -20,6 +28,7 @@ nav {
 
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
     background-color: #cccccc !important;
+    color: black !important;
     
 }
 //food item nav

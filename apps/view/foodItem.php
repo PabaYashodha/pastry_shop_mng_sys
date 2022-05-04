@@ -16,7 +16,15 @@ require_once "sidebar.php";
 </style>
 
 <div id="content" class="content-expanded">
-    <div class="card" style="border-radius: 20px;">
+    <div class="card shadow-lg " style="border-radius: 10px; padding:0.4rem">
+        <nav aria-label="breadcrumb" class="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none; color:#2f2e41 !important"> HOME</a></li>
+                <li class="breadcrumb-item active" aria-current="page">FOOD ITEM MANAGEMENT </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="card shadow-lg mt-3" style="border-radius: 20px;">
         <div class="card-body">
             <div class="row mb-3">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -61,21 +69,23 @@ require_once "sidebar.php";
                         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
-                                    <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addCategory"><i class="far fa-plus"></i> ADD CATEGORY</button>
+                                    <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addCategory" style="background-color: #2f2e41;"><i class="far fa-plus"></i> ADD CATEGORY</button>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <table class="table  table-hover table-responsive-*" id="dataTable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Image</th>
-                                                <th scope="col">Category Name</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Option</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="categoryTable"></tbody>
-                                    </table>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <table class="table tableCat table-hover table-responsive-*" id="dataTable">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Image</th>
+                                                    <th scope="col">Category Name</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Option</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="categoryTable"></tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -83,10 +93,10 @@ require_once "sidebar.php";
                         <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
-                                    <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addSubCategory"><i class="far fa-plus"></i> ADD SUB CATEGORY</button>
+                                    <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addSubCategory" style="background-color: #2f2e41;"><i class="far fa-plus"></i> ADD SUB CATEGORY</button>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <table class="table  table-hover table-responsive-*" id="dataTable">
+                                    <table class="table tableCat table-hover table-responsive-*" id="dataTable">
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
@@ -142,6 +152,8 @@ require_once "sidebar.php";
                             <div class="row mb-3">
                                 <label for="foodItemCategory" class="col-sm-3 col-form-label">Category</label>
                                 <div class="col-sm-9">
+                                    <!-- <input type="text" class="form-control" id="foodItemCategory" name="foodItemCategory">
+                                <input type="hidden" class="form-control" id="foodItemCategoryId" name="foodItemCategoryId"> -->
                                     <select class="form-select" aria-label="Default select example" id="foodItemCategory" name="foodItemCategory">
                                     </select>
                                 </div>
@@ -312,12 +324,8 @@ require_once "sidebar.php";
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="row mb-3">
-                                <div class="col-3 float-end">&nbsp;
-                                </div>
-                                <div class="col-9 float-end">
-                                    <img id="category_pre_image">
-                                </div>
+                            <div class="col-9 float-end">
+                                <img id="category_pre_image">
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
@@ -516,7 +524,7 @@ require_once "sidebar.php";
 
 <?php require_once "scriptInclude.php" ?>
 <script>
-    $(window).load(getFoodItemData(), categoryTableBody(), subCategoryTableBody());
+    $(window).load(foodItemTableBody(), categoryOption(), subCategoryOption(), subCategoryTableBody(), categoryTableBody());
     // $(window).load();
 </script>
 <?php require_once "footer.php" ?>

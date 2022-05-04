@@ -4,6 +4,12 @@ $categoryObj = new category;
 $status = $_REQUEST['status'];
 
 switch ($status) {
+    case 'checkCategoryNameIsExist':
+        $categoryName=$_POST['categoryName'];
+        $checkCategoryNameIsExist =  $categoryObj->checkCategoryNameIsExist($categoryName);
+        echo ($checkCategoryNameIsExist == false) ? 1 : '';
+        break;
+
     case 'addCategory':
         try {
             $categoryName = $_POST['categoryName'];
@@ -11,10 +17,10 @@ switch ($status) {
             if ($categoryName == "") {
                 throw new Exception("Category Name is required");
             }
-            $existCategory = $categoryObj->existCategory($categoryName);
-            if ($existCategory->num_rows != 0) {
-                throw new Exception("Category name is already exist");
-            }
+            // $existCategory = $categoryObj->existCategory($categoryName);
+            // if ($existCategory->num_rows != 0) {
+            //     throw new Exception("Category name is already exist");
+            // }
             if ($_FILES["categoryImage"]["name"] != "") {
                 $categoryImage = $_FILES["categoryImage"]["name"];
                 $foodItemImageExt = substr($categoryImage, strrpos($categoryImage, '.'));

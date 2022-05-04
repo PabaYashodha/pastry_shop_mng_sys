@@ -18,7 +18,7 @@ $(document).ready(function () {
         "hideMethod": "fadeOut"
     }
 
-    $('.dataTable').DataTable({
+    $('#dataTable').DataTable({
         dom: "<'row'<'col-sm-3'l><'col-sm-6'B><'col-sm-3'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -29,6 +29,16 @@ $(document).ready(function () {
         pagingType: "full_numbers"
     });
 
+    $('.tableCat').DataTable({
+        dom: "<'row'<'col-sm-3'l><'col-sm-6'B><'col-sm-3'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        // dom:'Bfrtip',
+        buttons: ['copy', 'excel', 'print', 'pdf', 'csv'],
+        bSort: false,
+        pageLength: 10,
+        pagingType: "full_numbers"
+    });
 
 
     $('#navBTN').click(function () {
@@ -100,10 +110,35 @@ $(document).ready(function () {
       $("#stockRowItemId").val(ui.item.id)
        $("#stockRowItemName").val(ui.item.value)
   },
-  // close: function () {
-  //     / $("#stockSupplierName").val("");
-  // }
 })
+
+// $("#foodItemCategory").autocomplete({
+//     source: function(request, response) {
+//         $.ajax({
+//             url: "../controller/RowItemController.php?status=getCategoryName",
+//             dataType: "json",
+//             data:{
+//               category : request.term
+//             },
+//             success: function(data) {
+//               //   console.log(data)
+//                 response($.map(data, function(category){
+//                     return{
+//                         id: category.id,
+//                         value: category.value,
+//                     }
+//                 }))
+//             }
+//         });
+//     },
+//     minLength:2,
+//     select: function (event, ui) {
+//         console.log(ui)
+//       $("#stockRowItemId").val(ui.item.id)
+//        $("#stockRowItemName").val(ui.item.value)
+//   },
+// })
+
 });
 
 //dashboard
@@ -598,7 +633,7 @@ let activateDiningTable = (Id) => {
 }
 
 //food items
-let getFoodItemData = ()=>{
+let foodItemTableBody = ()=>{
     $.get("../controller/FoodItemController.php?status=getFoodItemData", (result) =>{
         //foodItemTableBody(result);
         let row = '';
@@ -836,7 +871,7 @@ let categoryOption = () => {
 }
 
 //get sub category name to food item form sub category drop down list
-let subCategoryOption = (result) => {
+let subCategoryOption = () => {
     $.get("../controller/SubCategoryController.php?status=getSubCategoryData",(result)=>{
         // subCategoryTableBody(result);
         // subCategoryOption(result);
@@ -945,7 +980,7 @@ let deleteCategoryDetails = (Id) => {
 }
 
 //sub category
-let subCategoryTableBody = (result) => {
+let subCategoryTableBody = () => {
     $.get("../controller/SubCategoryController.php?status=getSubCategoryData",(result)=>{
         let row = '';
     let count = 1;
@@ -1190,35 +1225,6 @@ let editRowItemDetails = (Id) =>{
         $('#editRowItemName').val(result.row_item_name);
     },'json')
 }
-
-//get row item names from row item table to add stock drop down list of row items
-//  let rowItemOption = (result) =>{
-//      let row = '';
-//      for (let index = 0; index < result.length; index++) {
-//         row += '<option value="'+result[index].row_item_id+'">' + result[index].row_item_name + '</option>';
-//      }
-//      $('#stockRowItemNames').html(row).show()
-//  }
-
-
- //get supplier name to the add stock form dropdown list
-//  let supplierNameOption = (result) =>{
-//      let row ='';
-//      for (let index = 0; index < result.length; index++) {
-//         row += '<option>' + result[index].supplier_contact_name + '</option>';
-//      }
-//      $('#stockSupplierNames').html(row).show()
-//  }
-
-// let getGrnData= ()=>{
-//     $.get("../controller/GrnController.php?status=getGrnData",(result)=>{
-//         //grnTableBody(result);
-//     },'json')
-// }
- let stockTableBody=()=>{
-     
- }
-
  
 let getGrnNumber = ()=>{
     $.get("../controller/StockController.php?status=getGrnNumber",(result)=>{
@@ -1226,6 +1232,50 @@ let getGrnNumber = ()=>{
     },'json')
 }
 
+let getGrnData = ()=>{
+    $.get("../controller/GrnController.php?status=getGrnData",(result)=>{
+            let row ='';
+            let count = 1;
+            for (let index = 0; index < result.length; index++) {
+                row += '<tr>'+
+                '<th>'+count+'</th>'+
+                '<td>'+ result[index].grn_ref_id+'</td>'+
+                '<td>'+result[index].grn_date+'</td>'+
+                '<td>'+result[index].grn_price+'</td>'+
+                '<td>'+result[index].grn_total_discount+'</td>'
+                '</tr>'
+                count++
+            }
+            $('#grnTable').html(row).show();
+    },'json')
+}
+
+let getStockData = ()=>{
+    $.get("../controller/StockController.php?status=getStockData",(result)=>{
+        let row ='';
+        let count = 1;
+        for (let index = 0; index < result.length; index++) {
+            row += '<tr>'+
+            '<th>'+ count +'</th>'+
+            '<td>'+result[index].stock_count+'</td>'+
+            '<td>'+result[index].stock_current_count+'</td>'+
+            '<td>'+result[index].stock_cost_per_unit+'</td>'+
+            '<td>'+result[index].stock_discount+'</td>'+
+            '<td>'+result[index].stock_mnf_date+'</td>'+
+            '<td>'+result[index].stock_exp_date+'</td>'+
+            '<td>'+result[index].stock_net_cost+'</td><td>';
+            if ((result[index].stock_status) == 1) {
+                row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateRowItem(\'' + btoa(result[index].row_item_id) + '\')">Available</button>';
+            } else {
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateRowItem(\'' + btoa(result[index].row_item_id) + '\')">Out of Stock</button>';
+            }
+            row+= '</td>'+
+            '</tr>'
+            count++
+        }
+        $('#stockTable').html(row).show();
+    },'json')
+}
  //get supplier name from supplier table by giving id in grn
 //  let grnSupplierName = (Id)=>{
 //     var result ='';

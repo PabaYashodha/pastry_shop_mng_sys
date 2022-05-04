@@ -9,12 +9,13 @@ class category{
         $this->db =new dbConnection();
     }
 
-    public function existCategory($categoryName)
+    public function checkCategoryNameIsExist($categoryName)
     {
         $conn =$this->db->connection();
-        $sql = "SELECT `category_name` FROM `category` WHERE `category_name` LIKE '%$categoryName%'";
-        $existCategory = $conn->query($sql) or die($conn->error);
-        return $existCategory;
+        // $sql = "SELECT `category_name` FROM `category` WHERE `category_name` LIKE '%$categoryName%'";
+        $sql = "SELECT `category_name` FROM `category` WHERE `category_name`='$categoryName'";
+        $checkCategoryNameIsExist = $conn->query($sql) or die($conn->error);
+        return ($checkCategoryNameIsExist->num_rows>0)? false : true;
     }
 
     public function addCategory($categoryName,$categoryImage)

@@ -16,7 +16,15 @@ require_once "sidebar.php";
 </style>
 
 <div id="content" class="content-expanded">
-    <div class="card" style="border-radius: 20px;">
+<div class="card shadow-lg " style="border-radius: 10px; padding:0.4rem">
+        <nav aria-label="breadcrumb" class="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none; color:#2f2e41 !important"> HOME</a></li>
+                <li class="breadcrumb-item active" aria-current="page">DELIVERY MANAGEMENT</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="card shadow-lg mt-3" style="border-radius: 20px;">
         <div class="card-body">
             <div class="row mb-3">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

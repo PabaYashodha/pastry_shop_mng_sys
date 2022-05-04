@@ -9,28 +9,32 @@ require_once "sidebar.php";
                 <div class="col ps-0">
                     <div id="colorCard" class="cardBlue mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <h5 class="card-title">4</h5>
+                            <i class="far fa-utensils fa-lg"></i>
+                            <h6 class="card-text text-end">Orders</h6>
                         </div>
                     </div>
                     <div id="colorCard" class="cardYellow">
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <h5 class="card-title">2</h5>
+                            <i class="fad fa-motorcycle fa-lg"></i> 
+                            <h6 class="card-text text-end">Pending Delivery</h6>
                         </div>
                     </div>
                 </div>
                 <div class="col">
                     <div id="colorCard" class="cardPurple mb-4 ">
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <h5 class="card-title">Rs.10,000.00</h5>
+                            <i class="far fa-file-invoice-dollar fa-lg"></i>
+                            <h6 class="card-text text-end">Today Revenue</h6>
                         </div>
                     </div>
                     <div id="colorCard" class="cardGreen">
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <h5 class="card-title">1</h5>
+                            <i class="fal fa-container-storage fa-lg"></i>
+                            <h6 class="card-text text-end">Low Row Item Stock</h6>
                         </div>
                     </div>
                 </div>
