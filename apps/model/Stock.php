@@ -49,4 +49,12 @@ class Stock
         $getGrnCount = $conn->query($sql);
         return $getGrnCount;
     }
+
+    public function changeStockStatus($stockId, $stockStatus)
+    {
+        $conn= $this->db->connection();
+        $sql = "UPDATE `stock` SET `stock_status`= '$stockStatus' WHERE `stock_id`='$stockId'";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
  }

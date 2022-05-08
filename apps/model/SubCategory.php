@@ -87,4 +87,12 @@ class subCategory
             return true;
         };
     }
+
+    public function getSubCategoryName($searchKey)
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT `sub_category_id`, `sub_category_name` FROM `sub_category` WHERE `sub_category_name` LIKE '%$searchKey%'";
+        $getSubCategoryName = $conn->query($sql) or die($conn->error);
+        return $getSubCategoryName;
+    }
 }

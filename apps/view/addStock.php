@@ -24,13 +24,13 @@ require_once "sidebar.php";
         <nav aria-label="breadcrumb" class="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none; color:#2f2e41 !important"> HOME</a></li>
-                <li class="breadcrumb-item"><a href="../view/addStock.php"  style="text-decoration: none; color:#2f2e41 !important">STOCK MANAGEMENT</a></li>
+                <li class="breadcrumb-item"><a href="../view/stock.php"  style="text-decoration: none; color:#2f2e41 !important">STOCK MANAGEMENT</a></li>
                 <li class="breadcrumb-item active" aria-current="page">ADD STOCK</li>
 
             </ol>
         </nav>
     </div>
-    <div class="card shadow-lg mt-3" style="border-radius: 20px;">
+    <div class="card shadow-lg mt-3" style="border-radius: 20px;" id="addStock">
         <div class="card-body">
             <form action="" method="post" role="form" id="addStockForm">
                 <div class="row">
@@ -76,7 +76,6 @@ require_once "sidebar.php";
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="stockRowItemName">
                                 <input type="hidden"  class="form-control" id="stockRowItemId">
-                                
                             </div>
                         </div>
                     </div>
@@ -190,6 +189,6 @@ require_once "sidebar.php";
 </div>
 <?php require_once "scriptInclude.php" ?>
 <script>
-    $(window).load(getRowItemData(), getGrnNumber());
+    $(window).load(getRowItemData(), getGrnNumber(),);
 </script>
 <?php require_once "footer.php" ?>

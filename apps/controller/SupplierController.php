@@ -142,5 +142,4 @@ switch ($status) {
        echo json_encode($searchResult);
         break;
     
-    
 }

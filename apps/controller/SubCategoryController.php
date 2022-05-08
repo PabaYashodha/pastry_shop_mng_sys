@@ -29,7 +29,7 @@ switch ($status) {
             } else {
                 throw new Exception("image is required");
             }
-            $addSubCategory = $subCategoryObj->addSubCategory($subCategoryName, $subCategoryCategoryItem,$subCategoryImage);
+            $addSubCategory = $subCategoryObj->addSubCategory($subCategoryName, $subCategoryCategoryItem, $subCategoryImage);
             if ($addSubCategory == 1) {
                 $res = 1;
                 $getSubCategoryData = $subCategoryObj->getSubCategoryData();
@@ -75,21 +75,21 @@ switch ($status) {
                 throw new Exception("Sub category name is required");
             }
             $existEditSubCategoryName = $subCategoryObj->existEditSubCategory($subCategoryName);
-            if ($existEditSubCategoryName ==false ) {
+            if ($existEditSubCategoryName == false) {
                 throw new Exception("Sub category name is already existed");
             }
             if ($subCategoryCategoryItem == "") {
                 throw new Exception("Category name is required");
             }
-            if ($_FILES["editSubCategoryImage"]["name"]!= "") {
+            if ($_FILES["editSubCategoryImage"]["name"] != "") {
                 $subCategoryImage = $_FILES["editSubCategoryImage"]["name"];
                 $foodItemImageExt = substr($subCategoryImage, strrpos($subCategoryImage, '.'));
-                $subCategoryImage = time(). $foodItemImageExt;
-                $temp_loc =$_FILES["editSubCategoryImage"]["tmp_name"];
+                $subCategoryImage = time() . $foodItemImageExt;
+                $temp_loc = $_FILES["editSubCategoryImage"]["tmp_name"];
                 $new_loc = "../../images/foodItem-images/$subCategoryImage";
                 move_uploaded_file($temp_loc, $new_loc);
             }
-            $editSubCategory = $subCategoryObj->editSubCategory($subCategoryId, $subCategoryName, $subCategoryCategoryItem,$subCategoryImage);
+            $editSubCategory = $subCategoryObj->editSubCategory($subCategoryId, $subCategoryName, $subCategoryCategoryItem, $subCategoryImage);
             if ($editSubCategory == 1) {
                 $res = 1;
                 $getSubCategoryData = $subCategoryObj->getSubCategoryData();
@@ -150,9 +150,22 @@ switch ($status) {
         break;
 
     case 'getSubCategoryById':
-        $subCategoryId= base64_decode($_GET['subCategoryId']);
+        $subCategoryId = base64_decode($_GET['subCategoryId']);
         $getSubCategoryName = $subCategoryObj->getSubCategoryById($subCategoryId);
         $row = $getSubCategoryName->fetch_assoc();
         echo json_encode($row);
+        break;
+
+    case 'getSubCategoryName':
+        $searchKey = $_REQUEST['subCategory'];
+        $getSubCategoryName = $subCategoryObj->getSubCategoryName($searchKey);
+        $searchResult[] = "";
+        while ($row = $getSubCategoryName->fetch_assoc()) {
+            $searchResult[] = array(
+                "id" => $row['sub_category_id'],
+                "value" => $row['sub_category_name']
+            );
+        }
+        echo json_encode($searchResult);
         break;
 }

@@ -154,4 +154,17 @@ switch ($status) {
         $data[1] = $msg;
         echo json_encode($data);
         break;
+
+    case 'getCategoryName':
+        $searchKey = $_REQUEST['category'];
+        $getCategoryName = $categoryObj->getCategoryName($searchKey);
+        $searchResult[]="";
+        while ($row = $getCategoryName->fetch_assoc()) {
+            $searchResult[]=array(
+                "id"=>$row['category_id'],
+                "value"=>$row['category_name']
+            );
+        }
+        echo json_encode($searchResult);
+        break;
 }

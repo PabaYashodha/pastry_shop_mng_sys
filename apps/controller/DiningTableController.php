@@ -4,6 +4,11 @@ $DiningTableObj =  new DiningTable();
 $status = $_REQUEST['status'];
 
 switch ($status) {
+    case 'checkTableIsExist':
+        $tableName=$_POST['tableName'];
+        $result = $DiningTableObj->checkTableIsExist($tableName);
+        echo ($result == false) ? 1 : '';
+        break;
     case 'addDiningTable':
         try {
             $tableName = $_POST['tableName'];
@@ -16,11 +21,11 @@ switch ($status) {
                 throw new Exception("Table capacity is required");
             }
             
-            $duplicate = $DiningTableObj->existDiningTable($tableName);
+            // $duplicate = $DiningTableObj->existDiningTable($tableName);
 
-            if ($duplicate == true) {
-                throw new Exception("Table name already exist");
-            }else{
+            // if ($duplicate == true) {
+            //     throw new Exception("Table name already exist");
+            // }else{
                 $result = $DiningTableObj->addDiningTable($tableName, $tableCapacity);
                 if ($result == 1) {
                     $res = 1; 
@@ -32,7 +37,7 @@ switch ($status) {
                     $msg =serialize($diningTableArray) ;
                 }else{
                     throw new Exception("Table name already exist");
-                }
+                //}
             }          
         } catch (Throwable $th) {
             $res = 2;

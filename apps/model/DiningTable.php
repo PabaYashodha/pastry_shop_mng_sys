@@ -62,4 +62,12 @@ class DiningTable
         $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
+
+    public function checkTableIsExist($tableName)
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT `dining_table_name` FROM `dining_table` WHERE `dining_table_name`='$tableName'";
+        $result = $conn->query($sql) or die($conn->error);
+        return ($result->num_rows>0) ? false : true;
+    }
 }

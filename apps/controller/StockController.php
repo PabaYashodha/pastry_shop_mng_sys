@@ -101,5 +101,27 @@ switch ($status) {
         }
         echo json_encode($stockArray);
         break;
+
+    case 'changeStockStatus':
+        $stockId = base64_decode(($_POST['stockId']));
+        $stockStatus = $_POST['stockStatus'];
+        $result = $stockObj->changeStockStatus($stockId, $stockStatus);
+        if ($result==1) {
+            $res  =1;
+            $getStockData=$stockObj->getStockData();
+            $stockArray= array();
+            while ($ro= $getStockTbl->fetch_assoc()) {
+                array_push($stockArray, $row);
+            }
+            $msg= $stockArray;
+        }else{
+            $res = 2;
+            $msg = "Oops stock can't deactivate";
+        }
+        $data[0] =$res;
+        $data[1] =$msg;
+        echo json_encode($data);
+        break;    
+    
   
 }

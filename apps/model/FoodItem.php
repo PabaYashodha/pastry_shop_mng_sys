@@ -9,12 +9,12 @@ class FoodItem
         $this->db= new dbConnection();
     }
     
-    public function addFoodItem( $foodItemName, $unitPrice, $foodItemCategory, $foodItemSubCategory, $foodItemImage)
+    public function addFoodItem( $foodItemName, $unitPrice, $foodItemCategoryId, $foodItemSubCategoryId, $foodItemImage)
     {
         //    $today = date("Y-m-d");
         $conn= $this->db->connection();
         $sql = "INSERT INTO `food_item` (`food_item_name`, `food_item_unit_price`, `food_item_image`, `food_item_category_food_item_category_id`, `sub_category_sub_category_id`)
-                VALUES ('$foodItemName', '$unitPrice', '$foodItemImage', '$foodItemCategory', '$foodItemSubCategory')";
+                VALUES ('$foodItemName', '$unitPrice', '$foodItemImage', '$foodItemCategoryId', '$foodItemSubCategoryId')";
         $result = $conn->query($sql) or die($conn->error);
         return $result;
     }

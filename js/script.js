@@ -29,7 +29,7 @@ $(document).ready(function () {
         pagingType: "full_numbers"
     });
 
-    $('.tableCat').DataTable({
+    $('.tablePills').DataTable({
         dom: "<'row'<'col-sm-3'l><'col-sm-6'B><'col-sm-3'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -64,7 +64,7 @@ $(document).ready(function () {
                 supplier : request.term
               },
               success: function(data) {
-                //   console.log(data)
+                   console.log(data)
                   response($.map(data, function(supplier){
                       return{
                           id: supplier.id,
@@ -74,11 +74,9 @@ $(document).ready(function () {
               }
           });
       },
-      minLength:2,
       select: function (event, ui) {
-          console.log(ui)
         $("#stockSupplierId").val(ui.item.id)
-         $("#stockSupplierName").val(ui.item.value)
+        $("#stockSupplierName").val(ui.item.value)
     },
     // close: function () {
     //     / $("#stockSupplierName").val("");
@@ -94,7 +92,7 @@ $(document).ready(function () {
               rowItem : request.term
             },
             success: function(data) {
-              //   console.log(data)
+              //  console.log(data)
                 response($.map(data, function(rowItem){
                     return{
                         id: rowItem.id,
@@ -112,33 +110,57 @@ $(document).ready(function () {
   },
 })
 
-// $("#foodItemCategory").autocomplete({
-//     source: function(request, response) {
-//         $.ajax({
-//             url: "../controller/RowItemController.php?status=getCategoryName",
-//             dataType: "json",
-//             data:{
-//               category : request.term
-//             },
-//             success: function(data) {
-//               //   console.log(data)
-//                 response($.map(data, function(category){
-//                     return{
-//                         id: category.id,
-//                         value: category.value,
-//                     }
-//                 }))
-//             }
-//         });
-//     },
-//     minLength:2,
-//     select: function (event, ui) {
-//         console.log(ui)
-//       $("#stockRowItemId").val(ui.item.id)
-//        $("#stockRowItemName").val(ui.item.value)
-//   },
-// })
+$("#foodItemCategoryName").autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: "../controller/CategoryController.php?status=getCategoryName",
+            dataType: "json",
+            data:{
+              category : request.term
+            },
+            success: function(data) {
+               //console.log(data)
+                response($.map(data, function(category){
+                    return{
+                        id: category.id,
+                        value: category.value,
+                    }
+                }))
+            }
+        });
+    },
+    select: function (event, ui) {
+        console.log(ui)
+      $("#foodItemCategoryId").val(ui.item.id)
+      $("#foodItemCategoryName").val(ui.item.value)
+  },
+})
 
+$("#foodItemSubCategoryName").autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: "../controller/SubCategoryController.php?status=getSubCategoryName",
+            dataType: "json",
+            data:{
+              subCategory : request.term
+            },
+            success: function(data) {
+               console.log(data)
+                response($.map(data, function(subCategory){
+                    return{
+                        id: subCategory.id,
+                        value: subCategory.value,
+                    }
+                }))
+            }
+        });
+    },
+    select: function (event, ui) {
+        console.log(ui)
+      $("#foodItemSubCategoryId").val(ui.item.id)
+      $("#foodItemSubCategoryName").val(ui.item.value)
+  },
+})
 });
 
 //dashboard
@@ -165,8 +187,8 @@ let preview = (input) => {
     if (input.files && input.files[0]) {
         let reader = new FileReader();
         reader.onload = function (e) {
-            $('#pre_image').attr('src', e.target.result).height(200).width(200);
-            $('#food_pre_image').attr('src', e.target.result).height(150).width(150);
+            $('#food_pre_image').attr('src', e.target.result).height(200).width(200);
+            $('#edit_pre_image').attr('src', e.target.result).height(150).width(150);
             $('#edit_food_pre_image').attr('src', e.target.result).height(150).width(150);
             $('#category_pre_image').attr('src', e.target.result).height(150).width(150);
             $('#edit_category_pre_image').attr('src', e.target.result).height(150).width(150);
@@ -275,8 +297,8 @@ let editUserDetails = (Id) => {
         $('#editAdd2').val(result.user_add2);
         $('#editAdd3').val(result.user_add3);
         let url = "../../images/user-images/" + result.user_image;
-        $('#pre_image').attr('src', url).height(200).width(200);
-        // $('#editImage').val(result.user_image);
+        $('#edit_pre_image').attr('src', url).height(200).width(200);
+        //$('#editImage').val(result.user_image);
 
     }, 'json')
 }
@@ -985,12 +1007,10 @@ let subCategoryTableBody = () => {
         let row = '';
     let count = 1;
     for (let index = 0; index < result.length; index++) {
-        // let a = subCategoryCategoryName(result[index].category_category_id)
-        // console.log(a)
         row += '<tr>' +
             '<th scope="row">' + count + '</th>' +
             '<td><img src="../../images/foodItem-images/' + result[index].sub_category_image + '" width="40" height="40"></td>' +
-            '<td>' + result[index].sub_category_name + '</td>' +
+             '<td>' + result[index].sub_category_name + '</td>' +
             '<td>' + subCategoryCategoryName(result[index].category_category_id).category_name + '</td><td>';
 
         if ((result[index].sub_category_status) == 1) {
@@ -1099,7 +1119,6 @@ let activateSubCategory = (Id) => {
             }, (result) => {
                 if ([result[0] == 1]) {
                     toastr.success("Sub Category is now available");
-                    subCategoryTableBody(result[1])
                 } else {
                     toastr.success(result[1]);
                 }
@@ -1133,6 +1152,8 @@ let deleteSubCategoryDetails = (Id) => {
         }
     })
 }
+
+
 
 let getRowItemData =()=>{
     $.get("../controller/RowItemController.php?status=getRowItemData",(result)=>{
@@ -1180,7 +1201,7 @@ let  deactivateRowItem =(Id)=>{
             },(result)=>{
                 if ([result[0]==1]) {
                     toastr.success("Row item is out of stock");
-                    rowItemTableBody(result[1])
+                    getRowItemData(result[1])
                 }else{
                     toastr.success(result[1]);
                 }
@@ -1208,7 +1229,7 @@ let activateRowItem = (Id) =>{
             },(result)=>{
                 if ([result[0]==1]) {
                     toastr.success("Row Item is now available");
-                    rowItemTableBody(result[1])
+                    getRowItemData(result[1])
                 }else{
                     toastr.success(result[1]);
                 }
@@ -1232,6 +1253,23 @@ let getGrnNumber = ()=>{
     },'json')
 }
 
+
+let grnSupplierName = (Id) =>{
+    var result = '';
+    $.ajax({
+        url : '../controller/SupplierController.php?status=getSupplierNameById',
+        type : 'GET',
+        dataType : 'JSON',
+        data : {
+            supplierId : btoa(Id)
+        },
+        async : false,
+        success : function(data) {
+            result = data
+        }
+    })
+    return result;
+}
 let getGrnData = ()=>{
     $.get("../controller/GrnController.php?status=getGrnData",(result)=>{
             let row ='';
@@ -1242,15 +1280,84 @@ let getGrnData = ()=>{
                 '<td>'+ result[index].grn_ref_id+'</td>'+
                 '<td>'+result[index].grn_date+'</td>'+
                 '<td>'+result[index].grn_price+'</td>'+
-                '<td>'+result[index].grn_total_discount+'</td>'
-                '</tr>'
-                count++
+                '<td>'+ grnSupplierName(result[index].supplier_supplier_id).supplier_contact_name+'</td><td>';
+                if((result[index].grn_status)==1){
+                    row+= '<button class="btn btn-outline-success rounded shadow" onclick="deactivateGrn(\'' + btoa(result[index].grn_id) + '\')">Available</button>';
+                }else{
+                    row+= '<button class="btn btn-outline-danger rounded shadow" onclick="activateGrn(\'' + btoa(result[index].grn_id) + '\')">Out</button>';
+                }
+                row += '</td>'+
+                '<td>'+
+                '<div class="d-inline-flex justify-content-start">' +
+                // '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editRowItem" onclick="editDetails(\'' + btoa(result[index].grn_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteGrn" onclick="deleteGrnDetails(\'' + btoa(result[index].grn_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
+                '</td>'+
+
+                '</tr>';
+                count++;
             }
             $('#grnTable').html(row).show();
     },'json')
 }
 
-let getStockData = ()=>{
+
+//deactivate grn
+let deactivateGrn =(Id)=>{
+         swal({
+             title : 'Are you sure',
+             text : 'Do you want to change the status',
+             icon : 'warning',
+             buttons : true,
+             dangerMode : true,
+            allowOutsideClick : false,
+            closeOnEsc : false,
+            closeOnClickOutside : false,
+         }).then(willOUT=>{
+             if (willOUT) {
+                 $.post('../controller/GrnController.php?status=changeGrnStatus',{
+                     grnId : Id,
+                     grnStatus : "0"
+                 },(result)=>{
+                     if (result[0]==1) {
+                         toastr.success("Grn is hand over");
+                         getGrnData(result[1])
+                     }else{
+                         toastr.success(result[1]);
+                     }
+                 },'json')
+             }
+         })
+}
+
+ //change the grn status to not and over status
+ let activateGrn =(Id)=>{
+    swal({
+        title : 'Are you sure',
+        text : 'Do you want to change the status',
+        icon : 'warning',
+        buttons : true,
+        dangerMode : true,
+       allowOutsideClick : false,
+       closeOnEsc : false,
+       closeOnClickOutside : false,
+    }).then(willOUT=>{
+        if (willOUT) {
+            $.post('../controller/GrnController.php?status=changeGrnStatus',{
+                grnId : Id,
+                grnStatus : "1"
+            },(result)=>{
+                if (result[0]==1) {
+                    toastr.success("Grn is not hand over");
+                    getGrnData(result[1])
+                }else{
+                    toastr.success(result[1]);
+                }
+            },'json')
+        }
+    })
+}
+
+let viewStockData = ()=>{
     $.get("../controller/StockController.php?status=getStockData",(result)=>{
         let row ='';
         let count = 1;
@@ -1265,9 +1372,9 @@ let getStockData = ()=>{
             '<td>'+result[index].stock_exp_date+'</td>'+
             '<td>'+result[index].stock_net_cost+'</td><td>';
             if ((result[index].stock_status) == 1) {
-                row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateRowItem(\'' + btoa(result[index].row_item_id) + '\')">Available</button>';
+                row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateStock(\'' + btoa(result[index].stock_id) + '\')">In Stock</button>';
             } else {
-                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateRowItem(\'' + btoa(result[index].row_item_id) + '\')">Out of Stock</button>';
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateStock(\'' + btoa(result[index].stock_id) + '\')">Out of Stock</button>';
             }
             row+= '</td>'+
             '</tr>'
@@ -1276,105 +1383,63 @@ let getStockData = ()=>{
         $('#stockTable').html(row).show();
     },'json')
 }
- //get supplier name from supplier table by giving id in grn
-//  let grnSupplierName = (Id)=>{
-//     var result ='';
-//     $.ajax({
-//         url : '../controller/SupplierController.php?status=getSupplierNameById',
-//         type : 'GET',
-//         dataType : 'JSON',
-//         data:{
-//             supplierId :btoa(Id)
-//         },
-//         async : false,
-//         success: function(data) {
-//             result = data
-//         }
-//     })
-//     return result;
-// }
-//  let grnTableBody = (result)=>{
-//      let row ='';
-//      let count = 1;
-//      for (let index = 0; index < result.length; index++) {
-//          row += '<tr>'+
-//          '<th scope="row">'+ count +'</th>'+
-//          '<td>'+ result[index].grn_ref_id+'</td>'+
-//          '<td>'+ result[index].grn_date +'</td>'+
-//          '<td>'+ result[index].grn_price +'</td>'+
-//           '<td>'+ grnSupplierName(result[index].supplier_supplier_id).supplier_contact_name +'</td><td>';
-//           if ((result[index].grn_status)==1) {
-//               row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateGrn(\'' + btoa(result[index].grn_id) + '\')">Not Hand Over</button>';
-//           }else{
-//             row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateGrn(\'' + btoa(result[index].grn_id) + '\')">Hand Over</button>';
-//           }
-//           row += '</td>'+
-//           '<td>'+
-//           '<div class="d-inline-flex justify-content-start">' +
-//             '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editGrn" onclick="editGrnDetails(\'' + btoa(result[index].grn_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-//             '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteGrn" onclick="deleteGrnDetails(\'' + btoa(result[index].grn_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
-//           '</td>'+
-//          '</tr>';
-//          count ++;
-//      }
-//      $('#grnTable').html(row).show()
-//  }
 
-//  //change the row item status to hand over status
-//  let deactivateGrn =(Id)=>{
-//      swal({
-//          title : 'Are you sure',
-//          text : 'Do you want to change the status',
-//          icon : 'warning',
-//          buttons : true,
-//          dangerMode : true,
-//         allowOutsideClick : false,
-//         closeOnEsc : false,
-//         closeOnClickOutside : false,
-//      }).then(willOUT=>{
-//          if (willOUT) {
-//              $.post('../controller/GrnController.php?status=changeGrnStatus',{
-//                  grnId : Id,
-//                  grnStatus : "0"
-//              },(result)=>{
-//                  if (result[0]==1) {
-//                      toastr.success("Grn is hand over");
-//                      grnTableBody(result[1])
-//                  }else{
-//                      toastr.success(result[1]);
-//                  }
-//              },'json')
-//          }
-//      })
-//  }
+//deactivate stock 
+let deactivateStock =(Id)=>{
+    swal({
+        title : 'Are you sure',
+        text : 'Do you want to change the status',
+        icon : 'warning',
+        buttons : true,
+        dangerMode : true,
+       allowOutsideClick : false,
+       closeOnEsc : false,
+       closeOnClickOutside : false,
+    }).then(willOUT=>{
+        if (willOUT) {
+            $.post('../controller/StockController.php?status=changeStockStatus',{
+                stockId : Id,
+                stockStatus : "0"
+            },(result)=>{
+                if (result[0]==1) {
+                    toastr.success("Stock is out of stock");
+                    viewStockData(result[1])
+                }else{
+                    toastr.success(result[1]);
+                }
+            },'json')
+        }
+    })
+}
 
-//  //change the row item status to not and over status
-//  let activateGrn =(Id)=>{
-//     swal({
-//         title : 'Are you sure',
-//         text : 'Do you want to change the status',
-//         icon : 'warning',
-//         buttons : true,
-//         dangerMode : true,
-//        allowOutsideClick : false,
-//        closeOnEsc : false,
-//        closeOnClickOutside : false,
-//     }).then(willOUT=>{
-//         if (willOUT) {
-//             $.post('../controller/GrnController.php?status=changeGrnStatus',{
-//                 grnId : Id,
-//                 grnStatus : "1"
-//             },(result)=>{
-//                 if (result[0]==1) {
-//                     toastr.success("Grn is not hand over");
-//                     grnTableBody(result[1])
-//                 }else{
-//                     toastr.success(result[1]);
-//                 }
-//             },'json')
-//         }
-//     })
-//  }
+//change the stock status to not and over status
+let activateStock =(Id)=>{
+swal({
+   title : 'Are you sure',
+   text : 'Do you want to change the status',
+   icon : 'warning',
+   buttons : true,
+   dangerMode : true,
+  allowOutsideClick : false,
+  closeOnEsc : false,
+  closeOnClickOutside : false,
+}).then(willOUT=>{
+   if (willOUT) {
+       $.post('../controller/StockController.php?status=changeStockStatus',{
+          stockId : Id,
+          stockStatus : "1"
+       },(result)=>{
+           if (result[0]==1) {
+               toastr.success("Stock is out of stock");
+               viewStockData(result[1])
+           }else{
+               toastr.success(result[1]);
+           }
+       },'json')
+   }
+})
+}
+
 
 //  let editGrnDetails = (Id)=>{
 //      $.post("../controller/GrnController.php?status=viewGrnDetails",{

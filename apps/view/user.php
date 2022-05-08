@@ -179,14 +179,13 @@ require_once "sidebar.php";
 <div class="modal fade" tabindex="-1" aria-labelledby="viewUser" id="viewUser" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <div class="modal-header text-light" style="background-color: #2f2e41;">
-                <h5 class="modal-title">VIEW USER</h5>
-                <button type="button btn-close btn-close-white" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header" style="background-color: #2f2e41;">
+                <h5 class="modal-title text-light">VIEW USER</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div id="viewUserContent"></div>
             </div>
-            <div class="modal-footer"></div>
         </div>
     </div>
 </div>
@@ -197,9 +196,9 @@ require_once "sidebar.php";
 <div class="modal fade" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="editUser" id="editUser" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">EDIT USER</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header" style="background-color: #2f2e41;">
+                <h5 class="modal-title text-light">EDIT USER</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="" method="post" role="form" id="editUserForm">
                 <div class="modal-body">
@@ -308,7 +307,7 @@ require_once "sidebar.php";
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
-                                <img id="pre_image">
+                                <img id="edit_pre_image">
                             </div>
                         </div>
                     </div>

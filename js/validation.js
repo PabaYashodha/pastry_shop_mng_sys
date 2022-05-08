@@ -919,8 +919,23 @@ $(document).ready(()=>{
         })
     });
 
+    
     const tableName = $('#tableName');
     const tableCapacity = $('#tableCapacity');
+
+    tableName.blur(() => {
+        const url = "../controller/DiningTableController.php?status=checkTableIsExist";
+        let tableNameVal = tableName.val();
+        $.post(url, {
+            tableName: tableNameVal
+        }, (result) => {
+            if (result == 1) {
+                addInvalidClass(tableName, "Table is already exist");
+                return false;
+            }
+        })
+    })
+
     //submit dining table form 
     $('#tableFormSubmit').click(() => {
         let tableNameVal = tableName.val();
@@ -1104,8 +1119,8 @@ $(document).ready(()=>{
 
     const foodItemName = $('#foodItemName');
     const unitPrice = $('#unitPrice');
-    const foodItemCategory = $('#foodItemCategory');
-    const foodItemSubCategory = $('#foodItemSubCategory');
+    const foodItemCategoryName = $('#foodItemCategoryName');
+    const foodItemSubCategoryName = $('#foodItemSubCategoryName');
     const foodItemImage = $('#foodItemImage');
 
     foodItemName.blur(()=>{
@@ -1124,11 +1139,11 @@ $(document).ready(()=>{
     $("#foodItemFormSubmit").click(() => {
         let foodItemNameVal = foodItemName.val()
         let unitPriceVal = unitPrice.val()
-        let foodItemCategoryVal = foodItemCategory.val()
-        let foodItemSubCategoryVal = foodItemSubCategory.val()
+        let foodItemCategoryNameVal = foodItemCategoryName.val()
+        let foodItemSubCategoryNameVal = foodItemSubCategoryName.val()
         let foodItemImageVal = foodItemImage.val()
 
-        if (foodItemNameVal == "" && unitPriceVal == "" && foodItemCategoryVal == "" && foodItemSubCategoryVal == "" && foodItemImageVal == "") {
+        if (foodItemNameVal == "" && unitPriceVal == "" && foodItemCategoryNameVal == "" && foodItemSubCategoryNameVal == "" && foodItemImageVal == "") {
             toastr.error("Please fill the form");
             $([foodItemName, unitPrice, category, subCategory, foodItemImage]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid")
@@ -1144,16 +1159,20 @@ $(document).ready(()=>{
             addInvalidClass(unitPrice, "Food item is already exists");
             return false;
         }
-        if (foodItemCategoryVal == "") {
-            addInvalidClass(foodItemCategory, "Please enter category");
+        if (foodItemCategoryNameVal == "") {
+            addInvalidClass(foodItemCategoryName, "Please enter category");
             return false;
         }
-        if (foodItemSubCategoryVal == "") {
-            addInvalidClass(foodItemSubCategory, "Please enter subcategory");
+        if (foodItemSubCategoryNameVal == "") {
+            addInvalidClass(foodItemSubCategoryName, "Please enter subcategory");
             return false;
         }
         if (foodItemImageVal == "") {
             addInvalidClass(foodItemImage, "Please add an image");
+            return false;
+        }
+        if (!allowImagePattern.exec(foodItemImageVal)) {
+            addInvalidClass(foodItemImage, "Please add an image with valid extensions");
             return false;
         }
         swal({
@@ -1202,7 +1221,7 @@ $(document).ready(()=>{
                             $(".is-valid").removeClass('is-valid');
                              $("#addFoodItem").modal('hide')
                              $('#food_pre_image').removeAttr('src style');       
-                             $("#category_pre_image").removeAttr('src style')
+                             $("#category_pre_image").removeAttr('src style');
                             $("#sub_category_pre_image").removeAttr('src style')                     
                         }
                         if (result[0] == 2) {
@@ -1233,18 +1252,18 @@ $(document).ready(()=>{
     const editUnitPrice = $('#editUnitPrice');
     const editFoodItemCategory = $('#editFoodItemCategory');
     const editFoodItemSubCategory = $('#editFoodItemSubCategory');
-    // const editFoodItemImage = $('#editFoodItemImage');
+    const editFoodItemImage = $('#editFoodItemImage');
 
     $("#editFoodItemFormSubmit").click(() => {
         let editFoodItemNameVal = editFoodItemName.val()
         let editUnitPriceVal = editUnitPrice.val()
         let editFoodItemCategoryVal = editFoodItemCategory.val()
         let editFoodItemSubCategoryVal = editFoodItemSubCategory.val()
-        // let editFoodItemImageVal = editFoodItemImage.val()
+        let editFoodItemImageVal = editFoodItemImage.val()
 
-        if (editFoodItemNameVal == "" && editUnitPriceVal == "" && editFoodItemCategoryVal == "" && editFoodItemSubCategoryVal == "") {
+        if (editFoodItemNameVal == "" && editUnitPriceVal == "" && editFoodItemCategoryVal == "" && editFoodItemSubCategoryVal == "" && editFoodItemImageVal) {
             toastr.error("Please fill the form");
-            $([editFoodItemName, editUnitPrice, editCategory, editCategory]).each(function () {
+            $([editFoodItemName, editUnitPrice, editCategory, editCategory, editFoodItemImage]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid")
             });
             editFoodItemName.focus();
@@ -1266,14 +1285,14 @@ $(document).ready(()=>{
             addInvalidClass(editCategoryVal, "Please add sub category name");
             return false;
         }
-        // if (editFoodItemImageVal == "") {
-        //     addInvalidClass(editFoodItemImage, "Please add image");
-        //     return false;
-        // }
-        // if (!allowImagePattern.exec(editFoodItemImageVal)) {
-        //     addInvalidClass(editFoodItemImage, "Please select an image");
-        //     return false;
-        // }
+        if (editFoodItemImageVal == "") {
+            addInvalidClass(editFoodItemImage, "Please add image");
+            return false;
+        }
+        if (!allowImagePattern.exec(editFoodItemImageVal)) {
+            addInvalidClass(editFoodItemImage, "Please add an image with valid extensions");
+            return false;
+        }
         swal({
             title: 'Are you sure',
             text: 'Do you want to submit this form',
@@ -1320,7 +1339,10 @@ $(document).ready(()=>{
                             foodItemTableBody(result[1]);
                             $("#editFoodItemForm").trigger('reset');
                             $(".is-valid").removeClass('is-valid');
-                            $('#editFoodItem').modal('hide')
+                            $('#editFoodItem').modal('hide');
+                            $('#food_pre_image').removeAttr('src style');  
+                            $("#category_pre_image").removeAttr('src style');
+                            $('#sub_category_pre_image').removeAttr('src style')
                         }
                         if (result[0] == 2) {
                             swal({
@@ -1373,6 +1395,10 @@ $(document).ready(()=>{
         }
         if (categoryImageVal == "") {
             addInvalidClass(categoryImage, "Please add a category image");
+            return false;
+        }
+        if (!allowImagePattern.exec(categoryImageVal)) {
+            addInvalidClass(categoryImage, "Please add an image with valid extensions");
             return false;
         }
         swal({
@@ -1448,12 +1474,14 @@ $(document).ready(()=>{
     });
 
     const editCategoryName = $('#editCategoryName');
+    const editCategoryImage = $('#editCategoryImage');
     $("#editCategoryFormSubmit").click(() => {
         let editCategoryNameVal = editCategoryName.val();
+        let editCategoryImageVal = editCategoryImage.val();
 
-        if (editCategoryNameVal == "") {
+        if (editCategoryNameVal == "" && editCategoryImageVal=="") {
             toastr.error("Please fill the form");
-            $([editCategoryName]).each(function () {
+            $([editCategoryName,editCategoryImage]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid");
             })
             editCategoryName.focus();
@@ -1461,6 +1489,14 @@ $(document).ready(()=>{
         }
         if (editCategoryImageVal == "") {
             addInvalidClass(editCategoryName, "Please enter category name");
+            return false;
+        }
+        if (editCategoryImageVal=="") {
+            addInvalidClass(editCategoryImage,"Please add an image");
+            return false;
+        }
+        if (!allowImagePattern.exec(editCategoryImageVal)) {
+            addInvalidClass(editCategoryImage, "Please add an image with valid extensions");
             return false;
         }
         swal({
@@ -1509,6 +1545,8 @@ $(document).ready(()=>{
                             $("#editCategoryForm").trigger('reset');
                             $(".is-valid").removeClass('is-valid');
                             $('#editCategory').modal('hide');
+                            $("#category_pre_image").removeAttr('src style')
+                            $('#sub_category_pre_image').removeAttr('src style')
                            
                         }
                         if (result[0] == 2) {
@@ -1564,6 +1602,10 @@ $(document).ready(()=>{
             addInvalidClass(subCategoryImage,"Please add an image");
             return false;
         }
+        if (!allowImagePattern.exec(subCategoryImageVal)) {
+            addInvalidClass(subCategoryImage, "Please add an image with valid extensions");
+            return false;
+        }
         swal({
             title: 'Are you sure',
             text: 'Do you want to submit this form',
@@ -1610,8 +1652,9 @@ $(document).ready(()=>{
                             $(".is-valid").removeClass('is-valid');
                             $('#addSubCategory').modal('hide');
                             $('#food_pre_image').removeAttr('src style');       
-                             $("#category_pre_image").removeAttr('src style')
-                            $("#sub_category_pre_image").removeAttr('src style')  
+                            $("#category_pre_image").removeAttr('src style');
+                            $("#sub_category_pre_image").removeAttr('src style');
+                            
                         }
                         if (result[0] == 2) {
                             swal({
@@ -1638,13 +1681,15 @@ $(document).ready(()=>{
 
     const editSubCategoryName = $('#editSubCategoryName');
     const editSubCategoryCategoryItem = $('#editSubCategoryCategoryItem');
+    const editSubCategoryImage = $('#editSubCategoryImage');
     $('#editSubCategoryFormSubmit').click(() => {
         let editSubCategoryNameVal = editSubCategoryName.val();
         let editSubCategoryCategoryItemVal = editSubCategoryCategoryItem.val();
+        let editSubCategoryImageVal =editSubCategoryImage.val();
 
-        if (editSubCategoryNameVal == "" && editSubCategoryCategoryItemVal == "") {
+        if (editSubCategoryNameVal == "" && editSubCategoryCategoryItemVal == "" && editSubCategoryImageVal=="") {
             toastr.error("Please fill the form");
-            $([editSubCategoryName, editSubCategoryCategoryItem]).each(function () {
+            $([editSubCategoryName, editSubCategoryCategoryItem, editSubCategoryImage]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid")
             })
             editSubCategoryName.focus();
@@ -1656,6 +1701,14 @@ $(document).ready(()=>{
         }
         if (editSubCategoryCategoryItemVal == "") {
             addInvalidClass(editSubCategoryCategoryItems, "Please enter category name");
+            return false;
+        }
+        if (editSubCategoryImageVal=="") {
+            addInvalidClass(editSubCategoryImage, "Please add an image");
+            return false;
+        }
+        if (!allowImagePattern.exec(editSubCategoryImageVal)) {
+            addInvalidClass(editSubCategoryImage, "Please add an image with valid extensions");
             return false;
         }
         swal({
@@ -1702,7 +1755,9 @@ $(document).ready(()=>{
                             subCategoryTableBody(result[1]);
                             $("#editSubCategoryForm").trigger('reset');
                             $(".is-valid").removeClass('is-valid');
-                            $('#editSubCategory').modal('hide')
+                            $('#editSubCategory').modal('hide');
+                            $("#category_pre_image").removeAttr('src style');
+                            $('#sub_category_pre_image').removeAttr('src style')
                         }
                         if (result[0] == 2) {
                             swal({
@@ -2121,7 +2176,8 @@ $(document).ready(()=>{
                                 timer: 1000,
                             });
                             stockTableBody(result[1]);
-                            $("#addStockForm").trigger('reset');
+                            $("#addStock").trigger('reset');
+                            
                         }
                         if (result[0]==2) {
                             swal({
@@ -2226,26 +2282,29 @@ $(document).ready(()=>{
 
     foodItemName.change(() => {removeInvalidClass(foodItemName)});
     unitPrice.change(() => {removeInvalidClass(unitPrice)});
-    foodItemCategory.change(() => {removeInvalidClass(foodItemCategory)});
-    foodItemSubCategory.change(() => {removeInvalidClass(foodItemSubCategory)});
+    foodItemCategoryName.change(() => {removeInvalidClass(foodItemCategoryName)});
+    foodItemSubCategoryName.change(() => {removeInvalidClass(foodItemSubCategoryName)});
     foodItemImage.change(() => {removeInvalidClass(foodItemImage)});
 
     editFoodItemName.change(() => {removeInvalidClass(editFoodItemName)});
     editUnitPrice.change(() => {removeInvalidClass(editUnitPrice)});
     editFoodItemCategory.change(() => {removeInvalidClass(editFoodItemCategory)});
     editFoodItemSubCategory.change(() => {removeInvalidClass(editFoodItemSubCategory)});
-    // editFoodItemImage.change(() => {removeInvalidClass(editFoodItemImage)});
+    editFoodItemImage.change(() => {removeInvalidClass(editFoodItemImage)});
 
     categoryName.change(() => {removeInvalidClass(categoryName)});
     categoryImage.change(() => {removeInvalidClass(categoryImage)});
     
     editCategoryName.change(() => {removeInvalidClass(editCategoryName)});
+    editCategoryImage.change(()=>{removeInvalidClass(editCategoryImage)});
 
     subCategoryName.change(() => {removeInvalidClass(subCategoryName)});
     subCategoryCategoryItem.change(() => {removeInvalidClass(subCategoryCategoryItem)});
+    subCategoryImage.change(()=>{removeInvalidClass(subCategoryImage)});
 
     editSubCategoryName.change(() => {removeInvalidClass(editSubCategoryName)});
     editSubCategoryCategoryItem.change(() => {removeInvalidClass(editSubCategoryCategoryItem)});
+    editSubCategoryImage.change(()=>{removeInvalidClass(editSubCategoryImage)});
 
     rowItemName.change(() => {removeInvalidClass(rowItemName)});
 

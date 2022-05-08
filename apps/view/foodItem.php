@@ -13,6 +13,14 @@ require_once "sidebar.php";
     input[type=number] {
         -moz-appearance: textfield;
     }
+    .form-control-plaintext:focus {
+        /* border: 0px solid #ffffff !important; */
+        outline: none;
+    }
+    
+    .ui-widget.ui-widget-content {
+    z-index: 9999;
+}
 </style>
 
 <div id="content" class="content-expanded">
@@ -73,7 +81,7 @@ require_once "sidebar.php";
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <table class="table tableCat table-hover table-responsive-*" id="dataTable">
+                                        <table class="table tablePills table-hover table-responsive-*" id="dataTable">
                                             <thead>
                                                 <tr>
                                                     <th scope="col">#</th>
@@ -96,7 +104,7 @@ require_once "sidebar.php";
                                     <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addSubCategory" style="background-color: #2f2e41;"><i class="far fa-plus"></i> ADD SUB CATEGORY</button>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <table class="table tableCat table-hover table-responsive-*" id="dataTable">
+                                    <table class="table tablePills table-hover table-responsive-*" id="dataTable">
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
@@ -144,7 +152,7 @@ require_once "sidebar.php";
                             <div class="row mb-3">
                                 <label for="unitPrice" class="col-sm-3 col-form-label">Unit Price</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="unitPrice" name="unitPrice">
+                                    <input type="number" class="form-control" id="unitPrice" name="unitPrice">
                                 </div>
                             </div>
                         </div>
@@ -152,10 +160,10 @@ require_once "sidebar.php";
                             <div class="row mb-3">
                                 <label for="foodItemCategory" class="col-sm-3 col-form-label">Category</label>
                                 <div class="col-sm-9">
-                                    <!-- <input type="text" class="form-control" id="foodItemCategory" name="foodItemCategory">
-                                <input type="hidden" class="form-control" id="foodItemCategoryId" name="foodItemCategoryId"> -->
-                                    <select class="form-select" aria-label="Default select example" id="foodItemCategory" name="foodItemCategory">
-                                    </select>
+                                    <input type="hidden" class="form-control" id="foodItemCategoryId" name="foodItemCategoryId">
+                                    <input type="text" class="form-control" id="foodItemCategoryName" name="foodItemCategoryName">
+                                    <!-- <select class="form-select" aria-label="Default select example" id="foodItemCategory" name="foodItemCategory">
+                                    </select> -->
                                 </div>
                             </div>
                         </div>
@@ -163,8 +171,10 @@ require_once "sidebar.php";
                             <div class="row mb-3">
                                 <label for="foodItemSubCategory" class="col-sm-3 col-form-label">Sub Category</label>
                                 <div class="col-sm-9">
-                                    <select class="form-select" aria-label="Default select example" id="foodItemSubCategory" name="foodItemSubCategory">
-                                    </select>
+                                <input type="hidden" class="form-control" id="foodItemSubCategoryId" name="foodItemSubCategoryId">
+                                    <input type="text" class="form-control" id="foodItemSubCategoryName" name="foodItemSubCategoryName">
+                                    <!-- <select class="form-select" aria-label="Default select example" id="foodItemSubCategory" name="foodItemSubCategory">
+                                    </select> -->
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">

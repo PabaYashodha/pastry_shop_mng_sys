@@ -76,7 +76,7 @@ require_once '../view/sidebar.php';
                                     <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addRowItems"><i class="far fa-plus"></i> ADD ROW ITEMS</button>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <table class="table  table-hover table-responsive-*" id="dataTable">
+                                    <table class="table tablePills table-hover table-responsive-*" id="dataTable">
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
@@ -97,7 +97,7 @@ require_once '../view/sidebar.php';
                                     <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addGrn"><i class="far fa-plus"></i> ADD GRN</button>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <table class="table  table-hover table-responsive-*" id="dataTable">
+                                    <table class="table tablePills table-hover table-responsive-*" id="dataTable">
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
@@ -386,6 +386,6 @@ require_once '../view/sidebar.php';
 <!-- modal end -->
 <?php require_once '../view/scriptInclude.php'; ?>
 <script>
-    $(window).load(getRowItemData(),getSupplierData(), getGrnData(), getStockData());
+    $(window).load(getRowItemData(),getSupplierData(), getGrnData(), viewStockData(), grnSupplierName());
 </script>
 <?php require_once '../view/footer.php'; ?>
