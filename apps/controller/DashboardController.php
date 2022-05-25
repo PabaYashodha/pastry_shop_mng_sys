@@ -12,4 +12,10 @@ switch ($status) {
         }
         echo json_encode($dashboardArray);
         break;
+
+    case 'getNewOrderCount':
+        $result = $moduleObj->getNewOrderCount();
+        $row = $result->fetch_assoc();
+        echo json_encode($row);
+        break;    
 }

@@ -113,4 +113,11 @@ switch ($status) {
         }
         echo json_encode($searchResult);
         break;
+    
+    case 'getRowItemById':
+        $rowItemId = $_GET['rowItemId'];
+        $getRowItemName = $rowItemObj->getRowItemById($rowItemId);
+        $row = $getRowItemName->fetch_assoc();
+        echo json_encode($row);
+        break;    
 }

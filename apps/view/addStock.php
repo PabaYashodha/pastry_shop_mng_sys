@@ -20,11 +20,11 @@ require_once "sidebar.php";
     }
 </style>
 <div id="content" class="content-expanded">
-<div class="card shadow-lg " style="border-radius: 10px; padding:0.4rem">
+    <div class="card shadow-lg " style="border-radius: 10px; padding:0.4rem">
         <nav aria-label="breadcrumb" class="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none; color:#2f2e41 !important"> HOME</a></li>
-                <li class="breadcrumb-item"><a href="../view/stock.php"  style="text-decoration: none; color:#2f2e41 !important">STOCK MANAGEMENT</a></li>
+                <li class="breadcrumb-item"><a href="../view/stock.php" style="text-decoration: none; color:#2f2e41 !important">STOCK MANAGEMENT</a></li>
                 <li class="breadcrumb-item active" aria-current="page">ADD STOCK</li>
 
             </ol>
@@ -75,7 +75,7 @@ require_once "sidebar.php";
                             <label for="stockRoItemNames" class="col-sm-3 col-form-label">Row Item Name</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="stockRowItemName">
-                                <input type="hidden"  class="form-control" id="stockRowItemId">
+                                <input type="hidden" class="form-control" id="stockRowItemId">
                             </div>
                         </div>
                     </div>
@@ -168,7 +168,7 @@ require_once "sidebar.php";
                         </tr>
                         <tr>
                             <th scope="col" colspan="7" class="text-end">Discount (%)</th>
-                            <th scope="col"><input type="text" class="form-control-plaintext text-end" value="0"  name="stockTotalDiscount" id="stockTotalDiscount"></th>
+                            <th scope="col"><input type="text" class="form-control-plaintext text-end" value="0" name="stockTotalDiscount" id="stockTotalDiscount"></th>
                         </tr>
                         <tr>
                             <th scope="col" colspan="7" class="text-end">Net Total (Rs)</th>
@@ -189,6 +189,6 @@ require_once "sidebar.php";
 </div>
 <?php require_once "scriptInclude.php" ?>
 <script>
-    $(window).load(getRowItemData(), getGrnNumber(),);
+    $(window).load(getRowItemData(), getGrnNumber(), );
 </script>
 <?php require_once "footer.php" ?>

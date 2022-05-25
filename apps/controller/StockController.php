@@ -70,7 +70,7 @@ switch ($status) {
             if ($stockNetTotal== "") {
                 throw new Exception("Net total is required");
             }
-            $addGrn = $stockObj->addGrn($stockSupplierId, $stockCreateDate, $stockReferenceNumber,$stockTotalDiscount, $stockNetTotal);
+            $addGrn = $stockObj->addGrn($stockSupplierId, $stockCreateDate, $stockReferenceNumber,$stockTotalDiscount, $stockNetTotal);//return insert id ro stock model
             if ($addGrn>0) {
                 foreach ($stockRowItemId as $key => $value) {
                    $addStock = $stockObj->addStock($stockReceivedQuantity[$key],$stockCostPerUnit[$key], $stockDiscount[$key], $stockMnfData[$key], $stockExpDate[$key], $stockNetCost[$key],$value,$addGrn);
@@ -93,6 +93,7 @@ switch ($status) {
         $data[1]=$msg;
         echo json_encode($data);
         break;
+        
     case 'getStockData':
         $getStockData = $stockObj->getStockData();
         $stockArray= array();
@@ -108,9 +109,9 @@ switch ($status) {
         $result = $stockObj->changeStockStatus($stockId, $stockStatus);
         if ($result==1) {
             $res  =1;
-            $getStockData=$stockObj->getStockData();
+            $getStockTbl=$stockObj->getStockData();
             $stockArray= array();
-            while ($ro= $getStockTbl->fetch_assoc()) {
+            while ($row= $getStockTbl->fetch_assoc()) {
                 array_push($stockArray, $row);
             }
             $msg= $stockArray;

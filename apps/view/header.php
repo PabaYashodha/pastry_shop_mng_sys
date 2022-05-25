@@ -50,32 +50,22 @@
                 <i class="far fa-bars"></i>
             </span>
             <span><i class="fal fa-bell fa-lg text-white" style="margin-left: 66rem;"></i>
-            <span class="position-absolute top-5 start-90 translate-middle badge rounded-pill bg-danger">0</span>
-        </span>
-            
+                <span class="position-absolute top-5 start-90 translate-middle badge rounded-pill bg-danger">0</span>
+            </span>
+
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" data-hover="dropdown">
                         <img src="../../images/user-images/1626898611.jpg" width="35px" height="35px" alt="profile-pic" class="rounded">
-                    </a>                  
+                    </a>
                     <ul class="dropdown-content dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <div class="card" style="height: 400px;">
-                            <img src="../../images/modern.jpg" class="card-img-top" alt="..." height="200px" width="25px">
+                        <div class="card">
                             <div class="card-body">
                                 <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><a class="dropdown-item" href="">Logout</a></li>
+                                <li><a class="dropdown-item" href="../view/passwordReset.php">Password Reset</a></li>
                             </div>
                         </div>
-                        <!-- <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li> -->
                     </ul>
                 </li>
             </ul>

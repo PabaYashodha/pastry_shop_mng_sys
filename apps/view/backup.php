@@ -14,5 +14,36 @@ require_once "sidebar.php";
         -moz-appearance: textfield;
     }
 </style>
+
+<div id="content" class="content-expanded">
+    <div class="card shadow-lg " style="border-radius: 10px; padding:0.4rem">
+        <nav aria-label="breadcrumb" class="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none; color:#2f2e41 !important"> HOME</a></li>
+                <li class="breadcrumb-item active" aria-current="page">BACKUP</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="card shadow-lg mt-3" style="border-radius: 20px;">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <table class="table  table-hover table-responsive-*" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Backup Name</th>
+                                <th scope="col">Backup Date</th>
+                                <th scope="col">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody id="diningTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 <?php require_once "scriptInclude.php" ?>
 <?php require_once "footer.php" ?>

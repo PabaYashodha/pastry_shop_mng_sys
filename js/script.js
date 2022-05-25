@@ -19,22 +19,33 @@ $(document).ready(function () {
     }
 
     $('#dataTable').DataTable({
-        dom: "<'row'<'col-sm-3'l><'col-sm-6'B><'col-sm-3'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        // dom: "<'row'<'col-sm-3'l><'col-sm-6'B><'col-sm-3'f>>" +
+        //     "<'row'<'col-sm-12'tr>>" +
+        //     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         // dom:'Bfrtip',
-        buttons: ['copy', 'excel', 'print', 'pdf', 'csv'],
+       // buttons: ['copy', 'excel', 'print', 'pdf', 'csv'],
         bSort: false,
         pageLength: 10,
         pagingType: "full_numbers"
     });
 
     $('.tablePills').DataTable({
-        dom: "<'row'<'col-sm-3'l><'col-sm-6'B><'col-sm-3'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        // dom: "<'row'<'col-sm-3'l><'col-sm-6'B><'col-sm-3'f>>" +
+        //     "<'row'<'col-sm-12'tr>>" +
+        //     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        // // dom:'Bfrtip',
+        //buttons: ['copy', 'excel', 'print', 'pdf', 'csv'],
+        bSort: false,
+        pageLength: 10,
+        pagingType: "full_numbers"
+    });
+
+    $('.tablePill').DataTable({
+        // dom: "<'row'<'col-sm-3'l><'col-sm-6'B><'col-sm-3'f>>" +
+        //     "<'row'<'col-sm-12'tr>>" +
+        //     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         // dom:'Bfrtip',
-        buttons: ['copy', 'excel', 'print', 'pdf', 'csv'],
+        //buttons: ['copy', 'excel', 'print', 'pdf', 'csv'],
         bSort: false,
         pageLength: 10,
         pagingType: "full_numbers"
@@ -55,6 +66,7 @@ $(document).ready(function () {
         $(this).addClass('sidebarActive').children().removeClass('text-light').addClass('text-dark')
     })
 
+    //auto complete the supplier name in add stock page 
   $("#stockSupplierName").autocomplete({
       source: function(request, response) {
           $.ajax({
@@ -83,7 +95,8 @@ $(document).ready(function () {
     // }
   })
 
-  $("#stockRowItemName").autocomplete({
+  //auto complete the ro item name in add stock page
+  $("#stockRowItemName, #stockReleaseRowItemNames").autocomplete({
     source: function(request, response) {
         $.ajax({
             url: "../controller/RowItemController.php?status=getRowItemByRowItemName",
@@ -104,12 +117,13 @@ $(document).ready(function () {
     },
     minLength:2,
     select: function (event, ui) {
-        console.log(ui)
-      $("#stockRowItemId").val(ui.item.id)
-       $("#stockRowItemName").val(ui.item.value)
+        //console.log(ui)
+      $("#stockRowItemId ,#stockReleaseRowItemId").val(ui.item.id)
+       $("#stockRowItemName, #stockReleaseRowItemNames").val(ui.item.value)
   },
 })
 
+//auto complete the category or add ood item modal
 $("#foodItemCategoryName").autocomplete({
     source: function(request, response) {
         $.ajax({
@@ -130,12 +144,13 @@ $("#foodItemCategoryName").autocomplete({
         });
     },
     select: function (event, ui) {
-        console.log(ui)
+        //console.log(ui)
       $("#foodItemCategoryId").val(ui.item.id)
       $("#foodItemCategoryName").val(ui.item.value)
   },
 })
 
+//auto complete the sub category or add ood item modal
 $("#foodItemSubCategoryName").autocomplete({
     source: function(request, response) {
         $.ajax({
@@ -161,6 +176,65 @@ $("#foodItemSubCategoryName").autocomplete({
       $("#foodItemSubCategoryName").val(ui.item.value)
   },
 })
+
+//auto complete the food item name for make an order page
+$("#invoiceFoodItemName").autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: "../controller/FoodItemController.php?status=getFoodItemName",
+            dataType: "json",
+            data:{
+              foodItemName : request.term
+            },
+            success: function(data) {
+            //    console.log(data)
+                response($.map(data, function(foodItemName){
+                    return{
+                        id: foodItemName.id,
+                        value: foodItemName.value,
+                        price: foodItemName.price
+                    }
+                }))
+            }
+        });
+    },
+    minLength:2,
+    select: function (event, ui) {
+        // console.log(ui)
+      $("#invoiceFoodItemId").val(btoa(ui.item.id))
+      $("#invoiceFoodItemName").val(ui.item.value)
+      $("#invoiceFoodItemUnitPrice").val(ui.item.price)
+  },
+})
+
+$("#userResetName").autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: "../controller/PasswordResetController.php?status=getUserName",
+            dataType: "json",
+            data:{
+              userResetName : request.term
+            },
+            success: function(data) {
+                //console.log(data)
+                response($.map(data, function(userResetName){
+                    return{
+                        id: userResetName.id,
+                        value: userResetName.value +' '+ userResetName.name
+                    }
+                }))
+            }
+        });
+    },
+    minLength:2,
+    select: function (event, ui) {
+        // console.log(ui)
+      $("#userResetId").val(btoa(ui.item.id))
+      $("#userResetName").val(ui.item.value)
+  },
+})
+
+
 });
 
 //dashboard
@@ -182,6 +256,16 @@ $.get("../controller/DashboardController.php?status=getModule", (result) => {
 // var path = window.location.pathname;
 // var page = path.split("/").pop();
 // console.log( page );
+
+$.get("../controller/DashboardController.php?status=getNewOrderCount",(result)=>{
+    //console.log(result)
+    let row="";
+    for (let index = 0; index < result.length; index++) {
+       row += '<h5 class="card-title">'+[result[index].ordertb_status]+'</h5>'        
+    }
+    $("#newOrderCount").html(row).show()
+})
+
 
 let preview = (input) => {
     if (input.files && input.files[0]) {
@@ -213,7 +297,8 @@ let getUserData = () =>{
                 '<td><img src="../../images/user-images/' + result[index].user_image + '" width="40" height="40"></td>' +
                 '<td>' + result[index].user_fname + ' ' + result[index].user_lname + '</td>' +
                 '<td>' + result[index].user_email + '</td>' +
-                '<td>' + result[index].user_contact + '</td><td>';
+                '<td>' + result[index].user_contact + '</td>'+
+                '<td>'+ userRoleName(result[index].role_role_id).role_name +'</td><td>';
             if ((result[index].user_status) == 1) {
                 row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateUser(\'' + btoa(result[index].user_id) + '\')">Active</button>';
             } else {
@@ -230,6 +315,23 @@ let getUserData = () =>{
         // console.log(row)
         $('#userTable').html(row).show()
     }, 'json')
+}
+
+let userRoleName = (Id)=>{
+    let result = '';
+    $.ajax({
+        url: '../controller/RoleController.php?status=getRoleNameById',
+        type : 'GET',
+        dataType :'JSON',
+        data:{
+            roleId:btoa(Id)
+        },
+        async : false,
+        success:function(data) {
+            result=data
+        }
+    })
+    return result;
 }
 // let viewUserDetails = (Id) =>{
 //     $.post("../controller/UserController.php?status=viewUserDetails", {userId:Id}, (result) => {  
@@ -696,13 +798,13 @@ let viewFoodItemDetails = (Id) => {
             '<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="padding-left: 8rem;">' +
             '<div class="row">' +
             '<label for="name" class="col-sm-12 col-form-label" ><h2>' + result.food_item_name + '</h2></label>' +
-            '<label for="email" class="col-sm-4 col-form-label text-end"> Unit Price </label>' +
-            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.food_item_unit_price + '</label>' +
-            '<label for="email" class="col-sm-4 col-form-label text-end"> Category Name </label>' +
-            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + foodItemCategoryName(result.food_item_category_food_item_category_id).category_name + '</label>' +
-            '<label for="email" class="col-sm-4 col-form-label text-end"> Sub Category Name </label>' +
-            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + foodItemSubCategoryName(result.sub_category_sub_category_id).sub_category_name + '</label>' +
-            '<label for="email" class="col-sm-4 col-form-label text-end"> Status </label>';
+            '<label for="name" class="col-sm-4 col-form-label text-end"> Unit Price </label>' +
+            '<label for="name" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.food_item_unit_price + '</label>' +
+            '<label for="name" class="col-sm-4 col-form-label text-end"> Category Name </label>' +
+            '<label for="name" class="col-sm-8 col-form-label text-start mb-2"> : ' + foodItemCategoryName(result.food_item_category_food_item_category_id).category_name + '</label>' +
+            '<label for="name" class="col-sm-4 col-form-label text-end"> Sub Category Name </label>' +
+            '<label for="name" class="col-sm-8 col-form-label text-start mb-2"> : ' + foodItemSubCategoryName(result.sub_category_sub_category_id).sub_category_name + '</label>' +
+            '<label for="name" class="col-sm-4 col-form-label text-end"> Status </label>';
         if ((result.food_item_status) == 1) {
             row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:green">Available</span></label>';
         } else {
@@ -1032,7 +1134,7 @@ let subCategoryTableBody = () => {
 }
 
 let subCategoryCategoryName = (Id) => {
-    var result = '';
+    let result = '';
     $.ajax({
         url: '../controller/CategoryController.php?status=getCategoryById',
         type: 'GET',
@@ -1440,32 +1542,558 @@ swal({
 })
 }
 
+//new order table
+let newOrderTableBody=()=>{
+    $.get("../controller/OrderController.php?status=getNewOnlineOrderData",(result)=>{
+        //console.log(result)
+        let row='';
+        let count = 1;
+        for (let index = 0; index < result.length; index++) {
+            row += '<tr>'+
+            '<th scope="row">'+count+'</th>'+
+            '<td>'+result[index].invoice_id+'</td>'+
+            '<td>'+result[index].invoice_net_total+'</td>'+
+            '<td>'+result[index].invoice_date+'</td><td>';
+            if (result[index].ordertb_status==1) {
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="orderPreparing(\'' + result[index].invoice_id + '\')">New Order</button>'; 
+            }
+            row+= '</td>'+
+            '<td>'+
+            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewOnlineOrder" onclick="viewOnlineOrderDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '</td>'+
+            '</tr>';
+            count++
+        }
+        $("#newOrderTable").html(row).show()
+    },'json')
+}
 
-//  let editGrnDetails = (Id)=>{
-//      $.post("../controller/GrnController.php?status=viewGrnDetails",{
-//          grnId : Id
-//      },(result)=>{
-//          console.log(result)
-//          $('#editGrnId').val(btoa(result.grn_id));
-//          $('#editGrnDate').val(result.grn_date);
-//          $('#editGrnPrice').val(result.grn_price);
-//          $.post("../controller/SupplierController.php?status=getSupplierData",(data)=>{
-//              let row ='<option value="" selected>Select Supplier</option>';
-//              for (let index = 0; index < data.length; index++) {
-//                  row += '<option value="' +data[index].supplier_id+'"';
-//                  if (data[index].supplier_id == result.supplier_supplier_id) {
-//                      row += 'selected';
-//                  }
-//                  row += '>'  + data[index].supplier_contact_name +'</option>';
-//              }
-//              $('#editGrnSupplierName').html(row).show()
-//          },'json')
-//      },'json')
-//  }
+let foodItemName = (Id)=>{
+    var result = '';
+    $.ajax({
+        url :'../controller/foodItemController.php?status=getFoodItemNameById',
+        type : 'GET',
+        dataType : 'JSON',
+        data:{
+            foodItemId: btoa(Id)
+        },
+        async : false,
+        success:function(data) {
+            result=data
+        }
+    })
+    return result;
+}
+let invoiceTableBody=()=>{
+    $.get('../controller/InvoiceController.php?status=getOnlineInvoiceData',(result)=>{
+        //console.log(result)
+        let row = '';
+        let count = 1;
+        for (let index = 0; index < result.length; index++) {
+         row+='<tr>'+
+          '<th>'+count+'</th>'+
+         '<td>'+result[index].invoice_id+'</td>'+
+         '<td>'+result[index].invoice_date+'</td>'+
+         '<td>'+result[index].invoice_sub_amount+'</td>'+
+         '<td>'+result[index].invoice_discount+'</td>'+
+         '<td>'+result[index].invoice_net_total+'</td>'+
+         '<td>'+result[index].invoice_recieve_amount+'</td>'+
+         '<td>'+result[index].invoice_balance_amount+'</td>'+
+         //'<td>'+result[index].invoice_type+'</td>'+
+         '<td>'+
+            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewInvoice" onclick="viewInvoiceDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+        '</td>'+
+         '</tr>';
+         count++
+        }
+        $("#onlineInvoiceTable").html(row).show();
+    },'json')
+}
 
-//  let getStockNetCost = (tblRowCnt)=>{
-//     let stockReceivedQuantity = +$('#stockReceivedQuantity' + tblRowCnt).val();//change the string value to integer by +
-//     let stockCostPerUnit = parseFloat($('#stockCostPerUnit' + tblRowCnt).val()); // change the value string to float
-//     let stockNetCost = stockReceivedQuantity * stockCostPerUnit;
-//     $('#stockNetCost' + tblRowCnt).val(stockNetCost.toFixed(2));
-// };
+let viewInvoiceDetails = (Id)=>{
+    $.post("../controller/InvoiceController.php?status=viewOnlineOrderDetails",{
+        invoiceId:Id
+    },(result)=>{ 
+        let row =  '<div class="row">'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">Invoice Id:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.invoice_id+'</label>'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">Total:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">Rs.'+result.invoice_net_total+'</label>'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">Date:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.invoice_date+'</label>'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">Customer:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.ordertb_cus_fname+' '+result.ordertb_cus_lname+'</label>'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">Customer Contact:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.ordertb_cus_contact+'</label>'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">Customer Address:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.ordertb_cus_add1+' ,'+result.ordertb_cus_add2+' ,'+result.ordertb_cus_add3+'</label>'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">Customer Email:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.ordertb_cus_email+'</label>';
+        $.post("../controller/InvoiceController.php?status=ViewFoodItem",{
+            orderId :result.ordertb_id
+        },(data)=>{
+            let tb = '';
+            let count = 1;
+            for (let index = 0; index < data.length; index++) {
+            //console.log(data);
+                tb+= '<tr>'+
+                '<td>'+count+'</td>'+
+                '<td>'+foodItemName(data[index].food_item_food_item_id).food_item_name+'</td>'+
+                '<td>'+data[index].food_item_has_ordertb_product_price+'</td>'+
+                '<td>'+data[index].food_item_has_ordertb_qty+'</td>'+
+                '</tr>';
+                count++;
+            }
+            $("#foodOnlineOrderTable").html(tb).row();
+        },'json')
+        '</div>';
+        $("#viewInvoiceDetails").html(row).show();
+    },'json')
+}
+
+
+let manualInvoiceTableBody =()=>{
+    $.get('../controller/InvoiceController.php?status=getManualInvoiceData',(result)=>{
+        let row ='';
+        let count = 1;
+        for (let index = 0; index < result.length; index++) {
+           row+= '<tr>'+
+           '<th>'+count+'</th>'+
+         '<td>'+result[index].invoice_id+'</td>'+
+         '<td>'+result[index].invoice_date+'</td>'+
+         '<td>'+result[index].invoice_sub_amount+'</td>'+
+         '<td>'+result[index].invoice_discount+'</td>'+
+         '<td>'+result[index].invoice_net_total+'</td>'+
+         '<td>'+result[index].invoice_recieve_amount+'</td>'+
+         '<td>'+result[index].invoice_balance_amount+'</td>'+
+         '<td>'+
+            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewManualInvoice" onclick="viewManualInvoiceDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
+        '</td>'+
+           '</tr>';
+           count++
+        }
+        $("#manualInvoiceTable").html(row).show()
+    },'json')
+}
+
+let viewManualInvoiceDetails = (Id)=>{
+    $.post("../controller/InvoiceController.php?status=viewManualOrderDetails",{
+        invoiceId:Id
+    },(result)=>{
+        //console.log(result)
+        let row =  '<div class="row">'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">Invoice Id:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.invoice_id+'</label>'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">Date:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.invoice_date+'</label>'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">DiscountNet Total:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.invoice_discount+'</label>'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">Net Total:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">Rs.'+result.invoice_net_total+'</label>'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">Received Amount:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.invoice_recieve_amount+'</label>'+
+        '<label for="name" class="col-sm-4 col-form-label text-end">Balance Amount:</label>'+
+        '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.invoice_balance_amount+'</label>';
+        $.post("../controller/InvoiceController.php?status=viewFoodSales",{
+            invoiceId:result.invoice_id
+        },(data)=>{
+            //console.log(data)
+            let tb = '';
+            let count = 1;
+            for (let index = 0; index < data.length; index++) {
+            //console.log(data);
+                tb+= '<tr>'+
+                '<td>'+count+'</td>'+
+                '<td>'+foodItemName(data[index].food_item_food_item_id).food_item_name+'</td>'+
+                '<td>'+data[index].sales_food_item_unit_price+'</td>'+
+                '<td>'+data[index].sales_quantity+'</td>'+
+                '</tr>';
+                count++;
+            }
+            $("#foodManualOrderTable").html(tb).show();
+        },'json')
+        '</div>';
+        $("#viewManualInvoiceDetails").html(row).show()
+    },'json')
+
+}
+
+//online order table
+let onlineOrderTableBody =()=>{
+    $.get('../controller/OrderController.php?status=getOnlineOrderData',(result)=>{
+        let row = '';
+        let count = 1;
+        for (let index = 0; index < result.length; index++) {
+            row += '<tr>'+
+            '<th scope="row">'+count+'</th>'+
+            '<td>'+result[index].invoice_id+'</td>'+
+            '<td>'+result[index].invoice_net_total+'</td>'+
+            '<td>'+result[index].invoice_date+'</td><td>';
+            if (result[index].ordertb_status==1) {
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="orderPreparing(\'' + result[index].invoice_id + '\')">New Order</button>'; 
+            }else {
+                row += '<button class="btn btn-outline-info rounded shadow" onclick="orderReadyToDelivery(\'' + result[index].invoice_id + '\')"> Preparing</button>';
+            }
+            row+='<td>'+
+            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewOnlineOrder" onclick="viewOnlineOrderDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>' ;+
+            '</td>'+
+            '</tr>';
+            count++;
+        }
+        $("#onlineOrderTable").html(row).show();
+    },'json')
+}
+
+//view online orders 
+let viewOnlineOrderDetails = (Id)=>{
+    $.post("../controller/OrderController.php?status=viewOnlineOrderDetails",{
+        invoiceId:Id
+    },(result)=>{
+        //console.log(result);
+        let row =  '<div class="row">'+
+                '<label for="name" class="col-sm-4 col-form-label text-end">Customer:</label>'+
+                '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.ordertb_cus_fname+' '+result.ordertb_cus_lname+'</label>'+
+                '<label for="name" class="col-sm-4 col-form-label text-end">Customer Contact:</label>'+
+                '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.ordertb_cus_contact+'</label>'+
+                '<label for="name" class="col-sm-4 col-form-label text-end">Customer Address:</label>'+
+                '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.ordertb_cus_add1+' ,'+result.ordertb_cus_add2+' ,'+result.ordertb_cus_add3+'</label>'+
+                '<label for="name" class="col-sm-4 col-form-label text-end">Customer Email:</label>'+
+                '<label for="name" class="col-sm-8 col-form-label text-start mb-2">'+result.ordertb_cus_email+'</label>';
+                $.post("../controller/OrderController.php?status=viewFoodDetails",{
+                    orderId:result.ordertb_id
+                },(data)=>{
+                    //console.log(data);
+                    let tb = '';
+                    let count = 1;
+                    for (let index = 0; index < data.length; index++) {
+                        //console.log(data);
+                       tb+= '<tr>'+
+                            '<td>'+count+'</td>'+
+                            '<td>'+foodItemName(data[index].food_item_food_item_id).food_item_name+'</td>'+
+                            '<td>'+data[index].food_item_has_ordertb_product_price+'</td>'+
+                            '<td>'+data[index].food_item_has_ordertb_qty+'</td>'+
+                       '</tr>';
+                       count++;
+                    }
+                    $('#foodOrderTable').html(tb).show()
+                },'json')
+            '</div>';
+        $('#viewOnlineOrderDetails').html(row).show()
+    },'json')
+}
+
+let orderPreparing=(Id)=>{
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to change the status',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    }).then(willOUT=>{
+        if (willOUT) {
+            $.post('../controller/OrderController.php?status=changeOnlineOrderStatus',{
+                invoiceId: Id,
+                onlineOrderStatus:"2"
+            },(result)=>{
+                if (result[0]==1) {
+                    toastr.success("Order is preparing");
+                    onlineOrderTableBody(result[1])
+                }else{
+                    toastr.success(result[1])
+                }
+            },'json')
+        }
+    })
+}
+let orderReadyToDelivery=(Id)=>{
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to change the status',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    }).then(willOUT=>{
+        if (willOUT) {
+            $.post('../controller/OrderController.php?status=changeOnlineOrderStatus',{
+                invoiceId: Id,
+                onlineOrderStatus:"3"
+            },(result)=>{
+                if (result[0]==1) {
+                    toastr.success("Order is ready to delivery");
+                    onlineOrderTableBody(result[1])
+                }else{
+                    toastr.success(result[1])
+                }
+            },'json')
+        }
+    })
+}
+
+let readyToDeliveryTableBody = ()=>{
+    $.get('../controller/DeliveryController.php?status=getReadyToDeliveryData',(result)=>{
+        let row = '';
+        let count = 1;
+        for (let index = 0; index <result.length; index++) {
+            row += '<tr>'+
+            '<th>'+count+'</th>'+
+            '<td>'+result[index].invoice_id+'</td>'+
+            '<td>'+result[index].invoice_date+'</td><td>';
+            if (result[index].ordertb_status==3) {
+                row += '<button class="btn btn-outline-warning rounded shadow" onclick="orderDelivered(\'' + result[index].invoice_id + '\')">Ready to Delivery</button>';
+            }
+            else{
+                row += '<button class="btn btn-outline-success rounded shadow" onclick="orderDelivered(\'' + result[index].invoice_id + '\')">Order Delivered</button>';
+            }
+            row+='</td>'+
+            '<td>'+
+            '<button class="btn  btn-dark" data-bs-toggle="modal" data-bs-target="#assignDeliveryPerson" onclick="assignDeliveryPerson(\'' + result[index].ordertb_id + '\')"><i class="fas fa-plus"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDeliveryDetails" onclick="viewDeliveryDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>' ;+
+            '</td>'+
+            '</tr>';
+            count++;
+        }
+        $("#readyToDeliveryTable").html(row).show();
+    },'json')
+}
+
+let deliveryCompletedTableBody=()=>{
+    $.get('../controller/DeliveryController.php?status=getOrderCompletedData',(result)=>{
+        let row = '';
+        let count = 1;
+        for (let index = 0; index <result.length; index++) {
+            row += '<tr>'+
+            '<th>'+count+'</th>'+
+            '<td>'+result[index].invoice_id+'</td>'+
+            '<td>'+result[index].invoice_date+'</td><td>';
+            if (result[index].ordertb_status==4) {
+                row += '<button class="btn btn-outline-success rounded shadow" onclick="orderDelivered(\'' + result[index].invoice_id + '\')">Order Delivered</button>';
+            }
+            row+='</td>'+
+            '<td>'+
+            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDeliveryDetails" onclick="viewDeliveryDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>' ;+
+            '</td>'+
+            '</tr>';
+            count++;
+        }
+        $("#orderCompletedTable").html(row).show();
+    },'json')
+}
+
+let orderDelivered=(Id)=>{
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to change the status',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    }).then(willOUT=>{
+        if (willOUT) {
+            $.post('../controller/OrderController.php?status=changeOnlineOrderStatus',{
+                invoiceId: Id,
+                onlineOrderStatus:"4"
+            },(result)=>{
+                if (result[0]==1) {
+                    toastr.success("Order is delivered");
+                    onlineOrderTableBody(result[1])
+                }else{
+                    toastr.success(result[1])
+                }
+            },'json')
+        }
+    })
+}
+
+let deliveryPerson = ()=>{
+    $.get('../controller/deliveryController.php?status=getDeliveryPersonData',(result)=>{
+        let row ='';
+        let count = 1;
+        for (let index = 0; index < result.length; index++) {
+            row+= '<tr>'+
+            '<th>'+count+'</th>'+
+            '<td>'+result[index].user_id+'</td>'+
+            '<td>'+result[index].user_fname+' '+ result[index].user_lname+'</td>'+
+            '<td>'+result[index].user_contact+'</td><td>';
+            if (result[index].user_status==1) {
+                row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivate(\'' +result[index].user_id + '\')">Activate</button>';
+            }else{
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activate(\'' + result[index].user_id + '\')">Deactivate</button>';
+            }
+            row+= '</td>'+
+            '<td>'+
+            //'<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editDeliveryPerson" onclick="editDeliveryPerson(\'' + result[index].user_id + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDeliveryPersonDetails" onclick="viewDeliveryPerson(\'' + result[index].user_id + '\')"><i class="fal fa-eye"></i></button>' ;+
+            '</td>'+
+            '</tr>';
+            count++
+        }
+        $("#deliveryPersonTable").html(row).show();
+    },'json')
+}
+
+let viewDeliveryPerson=(Id)=>{
+    $.post("../controller/DeliveryController.php?status=viewDeliveryDetails",{
+        userId :Id
+    },(result)=>{
+        let row = '<div class="row">' +
+            '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">' +
+            '<img src="../../images/user-images/' + result.user_image + '" alt="" width="350px" height="350px" class="m-auto">' +
+            '</div>' +
+            '<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">' +
+            '<div class="row">' +
+            '<label for="name" class="col-sm-12 col-form-label" style="padding-left: 8rem;"><h2>' + result.user_fname + ' ' + result.user_lname + '</h2></label>' +
+            '<label for="createDate" class="col-sm-4 col-form-label text-end">Create Date  </label>' +
+            '<label for="createDate" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.user_create_date + '</label>' +
+            '<label for="contact" class="col-sm-4 col-form-label text-end">Contact  </label>' +
+            '<label for="contact" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.user_contact + '</label>' +
+            '<label for="email" class="col-sm-4 col-form-label text-end"> Email </label>' +
+            '<label for="email" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.user_email + '</label>' +
+            '<label for="address" class="col-sm-4 col-form-label text-end"> Address </label>' +
+            '<label for="address" class="col-sm-8 col-form-label text-start mb-2"> :  ' + result.user_add1 + ' ' + result.user_add2 + ' ' + result.user_add3 + '</label>' +
+            '<label for="gender" class="col-sm-4 col-form-label text-end"> Gender </label>';
+        if ((result.user_gender) == 1) {
+            row += '<label for="gender" class="col-sm-8 col-form-label text-start mb-2"> : male</label>';
+        } else {
+            row += '<label for="gender" class="col-sm-8 col-form-label text-start mb-2"> : female</label>';
+        }
+        row += '<label for="birthday" class="col-sm-4 col-form-label text-end"> Birthday </label>' +
+            '<label for="birthday" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.user_dob + '</label>' +
+            '<label for="nic" class="col-sm-4 col-form-label text-end"> NIC </label>' +
+            '<label for="nic" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.user_nic + '</label>' +
+            '<label for="status" class="col-sm-4 col-form-label text-end"> Status </label>';
+        if ((result.user_status) == 1) {
+            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:green">Active</span></label>';
+        } else {
+            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:red">Deactivate</span></label>';
+        }
+        row += '</div>' +
+            '</div>' +
+            '</div>';
+        $("#viewDeliveryPersonContent").html(row).show()    
+    },'json')
+}
+
+let deliveryPersonName = () => {
+    $.get("../controller/DeliveryController.php?status=getActiveDeliveryPersonData", (result)=>{
+        let row = '<option>--Select Person--</option>';
+        for (let index = 0; index < result.length; index++) {
+            row += '<option value="' + result[index].user_id + '">' + result[index].user_fname+' '+result[index].user_lname + '</option>';
+        }
+        $('#deliveryPerson').html(row).show()
+    },'json')
+}
+
+let assignDeliveryPerson=(Id)=>{
+    $("#orderId").val(Id); //get the id from view modal nd assign it to hidden field order id
+}
+
+let getStockReleaseNumber = ()=>{
+    $.get("../controller/StockReleaseController.php?status=getStockReleaseNo",(result)=>{
+        $('#stockReleaseNo').val(result);
+    },'json')
+}
+
+let getRoleData = () => {
+    $.get("../controller/RoleController.php?status=getRole",(result)=>{
+        let row = '<option>--Select Person--</option>';
+        for (let index = 0; index < result.length; index++) {
+            row += '<option value="' + result[index].role_id + '">' + result[index].role_name + '</option>';
+        }
+        $('#stockReleaseMadeBy').html(row).show()
+    },'json')
+}
+
+let viewStockReleaseData = ()=>{
+    $.get('../controller/StockReleaseController.php?status=getStockReleaseData',(result)=>{
+        let row ='';
+        let count =1 ;
+        for (let index = 0; index < result.length; index++) {
+            row += '<tr>'+
+            '<th>'+count+'</th>'+
+            '<td>'+result[index].item_release_date+'</td>'+
+            '<td>'+rowItemName(result[index].item_release_item_id).row_item_name+'</td>'+
+            '</tr>'
+            count++
+        }
+        $('#stockReleaseTable').html(row).show();
+    },'json')
+}
+let rowItemName = (Id) => {
+    var result = '';
+    $.ajax({
+        url: '../controller/RowItemController.php?status=getRowItemById',
+        type: 'GET',
+        dataType: 'JSON',
+        data: {
+            rowItemId: Id
+        },
+        async: false,
+        success: function (data) {
+            result = data
+        }
+    })
+    return result;
+    // console.log(result)
+}
+
+// let itemNotCollected=(Id)=>{
+
+//     swal({
+//         title: 'Are you sure',
+//         text: 'Do you want to change the status',
+//         icon: 'warning',
+//         buttons: true,
+//         dangerMode: true,
+//         allowOutsideClick: false,
+//         closeOnClickOutside: false,
+//         closeOnEsc: false,
+//     }).then(willOUT=>{
+//         if (willOUT) {
+//             $.post('../controller/OrderController.php?status=changeManualOrderStatus',{
+//                 invoiceId : Id,
+//                 manualOrderStatus:"1"
+//             },(result)=>{
+//                 if (result[0]==1) {
+//                     toastr.success("Manual order successfully changed");
+//                     manualOrderTableBody(result[1])
+//                 }else{
+//                     toastr.success(result[1]);
+//                 }
+//             },'json')
+//         }
+//     })
+// }
+// let itemCollected=(Id)=>{
+//     swal({
+//         title: 'Are you sure',
+//         text: 'Do you want to change the status',
+//         icon: 'warning',
+//         buttons: true,
+//         dangerMode: true,
+//         allowOutsideClick: false,
+//         closeOnClickOutside: false,
+//         closeOnEsc: false,
+//     }).then(willOUT=>{
+//         if (willOUT) {
+//             $.post('../controller/OrderController.php?status=changeManualOrderStatus',{
+//                 invoiceId : Id,
+//                 manualOrderStatus:"0"
+//             },(result)=>{
+//                 if (result[0]==1) {
+//                     toastr.success("Manual order successfully changed");
+//                     manualOrderTableBody(result[1])
+//                 }else{
+//                     toastr.success(result[1]);
+//                 }
+//             },'json')
+//         }
+//     })
+// }

@@ -9,7 +9,7 @@ require_once "sidebar.php";
                 <div class="col ps-0">
                     <div id="colorCard" class="cardBlue mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">4</h5>
+                            <h5 class="card-title" id="newOrderCount"></h5>
                             <i class="far fa-utensils fa-lg"></i>
                             <h6 class="card-text text-end">Orders</h6>
                         </div>

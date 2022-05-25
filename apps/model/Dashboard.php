@@ -17,4 +17,12 @@ class Module
         $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
+
+    public function getNewOrderCount()
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT COUNT(`ordertb_status`) FROM `ordertb` WHERE `ordertb_status`='1'";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
 }

@@ -65,4 +65,12 @@ class RowItem
         $getRowItemByRowItemName = $conn->query($sql) or die($conn->error);
         return $getRowItemByRowItemName;
     }
+
+    public function getRowItemById($rowItemId)
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT `row_item_name` FROM `row_item` WHERE `row_item_id`= '$rowItemId'";
+        $getRowItemName = $conn->query($sql) or die($conn->error);
+        return $getRowItemName;
+    }
 }

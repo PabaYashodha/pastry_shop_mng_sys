@@ -16,13 +16,13 @@ require_once '../view/sidebar.php';
 </style>
 
 <div id="content" class="content-expanded">
-<div class="card shadow-lg " style="border-radius: 10px; padding:0.4rem">
-            <nav aria-label="breadcrumb" class="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none; color:#2f2e41 !important"> HOME</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">STOCK MANAGEMENT</li>
-                </ol>
-            </nav>
+    <div class="card shadow-lg " style="border-radius: 10px; padding:0.4rem">
+        <nav aria-label="breadcrumb" class="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../view/dashboard.php" style="text-decoration: none; color:#2f2e41 !important"> HOME</a></li>
+                <li class="breadcrumb-item active" aria-current="page">STOCK MANAGEMENT</li>
+            </ol>
+        </nav>
     </div>
     <div class="card shadow-lg mt-3" style="border-radius: 20px;">
         <div class="card-body">
@@ -38,13 +38,16 @@ require_once '../view/sidebar.php';
                         <li class="nav-item" role="presentation">
                             <button class="nav-link nav-link2" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">GRN</button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link nav-link2" id="pills-contact1-tab" data-bs-toggle="pill" data-bs-target="#pills-contact1" type="button" role="tab" aria-controls="pills-contact1" aria-selected="false">Stock Release</button>
+                        </li>
                     </ul>
                     <!-- stock -->
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
-                                    <a href="../view/addStock.php" class="btn btn-dark float-end" role="button" style="background-color: #2f2e41;"><i class="far fa-plus"></i>ADD STOCK</a>
+                                    <a href="../view/addStock.php" class="btn btn-dark float-end" role="button" style="background-color: #2f2e41;"><i class="far fa-plus"></i> ADD STOCK</a>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -52,13 +55,13 @@ require_once '../view/sidebar.php';
                                             <thead>
                                                 <tr>
                                                     <th scope="col">#</th>
-                                                    <th scope="col">Count(kg,l)</th>
-                                                    <th scope="col">Current Count(kg,l)</th>
-                                                    <th scope="col">Cost per unit(Rs)</th>
+                                                    <th scope="col">Count<br>(kg,l)</th>
+                                                    <th scope="col">Current Count<br>(kg,l)</th>
+                                                    <th scope="col">Cost per unit<br>(Rs)</th>
                                                     <th scope="col">Discount</th>
                                                     <th scope="col">MNF Date</th>
                                                     <th scope="col">EXP Date</th>
-                                                    <th scope="col">Net cost(Rs)</th>
+                                                    <th scope="col">Net cost<br>(Rs)</th>
                                                     <th scope="col">Status</th>
                                                 </tr>
                                             </thead>
@@ -90,7 +93,7 @@ require_once '../view/sidebar.php';
                                 </div>
                             </div>
                         </div>
-
+                    <!-- grn -->
                         <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
@@ -110,6 +113,27 @@ require_once '../view/sidebar.php';
                                             </tr>
                                         </thead>
                                         <tbody id="grnTable"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- stock release -->
+                        <div class="tab-pane fade" id="pills-contact1" role="tabpanel" aria-labelledby="pills-contact1-tab">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
+                                <a href="../view/stockRelease.php" class="btn btn-dark float-end" role="button" style="background-color: #2f2e41;"><i class="far fa-plus"></i> ADD STOCK RELEASE</a>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <table class="table tablePills table-hover table-responsive-*" id="dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Item Name</th>
+                                                <th scope="col">Options</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="stockReleaseTable"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -386,6 +410,6 @@ require_once '../view/sidebar.php';
 <!-- modal end -->
 <?php require_once '../view/scriptInclude.php'; ?>
 <script>
-    $(window).load(getRowItemData(),getSupplierData(), getGrnData(), viewStockData(), grnSupplierName());
+    $(window).load(getRowItemData(), getSupplierData(), getGrnData(), viewStockData(), grnSupplierName(),viewStockReleaseData(),rowItemName());
 </script>
 <?php require_once '../view/footer.php'; ?>

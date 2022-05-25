@@ -10,6 +10,21 @@ switch ($status) {
         echo ($result == false) ? 1 : '';
         break;
 
+    case 'getFoodItemName':
+        $searchKey = $_REQUEST['foodItemName'];
+        $getFoodItemName = $foodItemObj->getFoodItemName($searchKey);
+        $searchResult[] = "";
+        while ($row = $getFoodItemName->fetch_assoc()) {
+            $searchResult[] = array(
+                "id" => $row['food_item_id'],
+                "value" => $row['food_item_name'],
+                "price"=>$row['food_item_unit_price']
+            );
+        }
+        echo json_encode($searchResult);
+        break;
+
+
     case 'addFoodItem':
         try {
             $foodItemName = $_POST['foodItemName'];
@@ -98,54 +113,60 @@ switch ($status) {
         $data[1] = $msg;
         echo json_encode($data);
         break;
+        
+    case 'getFoodItemNameById':
+        $foodItemId = base64_decode($_GET['foodItemId']);
+        $getFoodItemName = $foodItemObj->getFoodItemNameById($foodItemId);
+        $row = $getFoodItemName->fetch_assoc();
+        echo json_encode($row);
+        break;
 
-   case 'editFoodItem':   
-    try {
-        $foodItemId= base64_decode($_POST['editFoodItemId']);
-        $foodItemName = $_POST['editFoodItemName'];
-        $unitPrice = $_POST['editUnitPrice'];
-        $foodItemCategory = $_POST['editFoodItemCategoryName'];
-        $foodItemSubCategory = $_POST['editFoodItemSubCategory'];
-        $foodItemImage= "";
 
-        if ($foodItemName == "") {
-            throw new Exception("Food item nae is required");
-        }
-        if ($unitPrice == "") {
-            throw new Exception("Unit Price is required");
-        }
-        if ($foodItemCategory == "") {
-            throw new Exception("Category is required"); 
-        }
-        if ($foodItemSubCategory == "") {
-            throw new Exception("Sub category is required");
-        }
-        if ($_FILES["editFoodItemImage"]["name"]!= "") {
-            $foodItemImage = $_FILES["editFoodItemImage"]["name"];
-            $foodItemImageExt = substr($foodItemImage, strrpos($foodItemImage, '.'));
-            $foodItemImage = time(). $foodItemImageExt;
-            $temp_loc =$_FILES["editFoodItemImage"]["tmp_name"];
-            $new_loc = "../../images/foodItem-images/$foodItemImage";
-            move_uploaded_file($temp_loc, $new_loc);
-        }
-        $result = $foodItemObj->editFoodItem($foodItemId,$foodItemName, $unitPrice, $foodItemCategory, $foodItemSubCategory, $foodItemImage);
-        if ($result ==1 ) {
-            $res = 1;
-            $result = $foodItemObj->getFoodItemData();
-            $foodItemArray = array();
-            while($row = $result->fetch_assoc()){
-                array_push($foodItemArray, $row);
+    case 'editFoodItem':
+        try {
+            $foodItemId = base64_decode($_POST['editFoodItemId']);
+            $foodItemName = $_POST['editFoodItemName'];
+            $unitPrice = $_POST['editUnitPrice'];
+            $foodItemCategory = $_POST['editFoodItemCategoryName'];
+            $foodItemSubCategory = $_POST['editFoodItemSubCategory'];
+            $foodItemImage = "";
+
+            if ($foodItemName == "") {
+                throw new Exception("Food item nae is required");
             }
-            $msg = $foodItemArray;
+            if ($unitPrice == "") {
+                throw new Exception("Unit Price is required");
+            }
+            if ($foodItemCategory == "") {
+                throw new Exception("Category is required");
+            }
+            if ($foodItemSubCategory == "") {
+                throw new Exception("Sub category is required");
+            }
+            if ($_FILES["editFoodItemImage"]["name"] != "") {
+                $foodItemImage = $_FILES["editFoodItemImage"]["name"];
+                $foodItemImageExt = substr($foodItemImage, strrpos($foodItemImage, '.'));
+                $foodItemImage = time() . $foodItemImageExt;
+                $temp_loc = $_FILES["editFoodItemImage"]["tmp_name"];
+                $new_loc = "../../images/foodItem-images/$foodItemImage";
+                move_uploaded_file($temp_loc, $new_loc);
+            }
+            $result = $foodItemObj->editFoodItem($foodItemId, $foodItemName, $unitPrice, $foodItemCategory, $foodItemSubCategory, $foodItemImage);
+            if ($result == 1) {
+                $res = 1;
+                $result = $foodItemObj->getFoodItemData();
+                $foodItemArray = array();
+                while ($row = $result->fetch_assoc()) {
+                    array_push($foodItemArray, $row);
+                }
+                $msg = $foodItemArray;
+            }
+        } catch (Throwable $th) {
+            $res = 2;
+            $msg = $th->getMessage();
         }
-    } catch (Throwable $th) {
-        $res = 2;
-        $msg = $th->getMessage();
-    }  
-    $data[0] = $res;
-    $data[1] = $msg;
-    echo json_encode($data);
-    break;
-
-
+        $data[0] = $res;
+        $data[1] = $msg;
+        echo json_encode($data);
+        break;
 }

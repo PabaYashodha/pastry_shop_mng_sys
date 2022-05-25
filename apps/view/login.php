@@ -13,33 +13,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fruktur&display=swap" rel="stylesheet">
-<style>
-    input
-{
-    outline:none;
-}
-</style>
+    <style>
+        input {
+            outline: none;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-body">
-                <img src="../../images/undraw_male_avatar_323b.svg" height="100px" width="100px" class="loginAvatar">
-                <h2 class="text-center mt-3 mb-5" style="font-family: 'Fruktur', cursive;">...WELCOME...</h2>
-                <label for="username" class="form-label" style="color: #2f2e41;">Username :</label>
-                <input type="text" class="loginContent mb-3" id="username">
-                <label for="password" class="form-label" style="color: #2f2e41;">Password :</label>
-                <input type="password" class="loginContent mb-3" id="password">
-                <!-- <div class="input-div one">
-                        <div class="i"><i class="fas fa-user"></i></div>
-                        <div class="div"><h5> Username </h5><input type="text" class="input" id="username" name="username"></div>
-                    </div>
-                    <div class="input-div pass">
-                        <div class="i"><i class="fas fa-lock"></i></div>
-                        <div class="div"><h5> Password </h5><input type="password" class="input" id="password" name="password"></div>
-                    </div> -->
-                <button type="submit" class="btn w-100 mb-3 mt-3 text-light" id="userLogin" style="background-color: #2f2e41;" onclick="login">LOGIN</button>
+                <form action="" method="post" role="form" id="loginForm">
+                    <img src="../../images/undraw_male_avatar_323b.svg" height="100px" width="100px" class="loginAvatar">
+                    <h2 class="text-center mt-3 mb-5" style="font-family: 'Fruktur', cursive;">...WELCOME...</h2>
+                    <label for="username" class="form-label" style="color: #2f2e41;">Username :</label>
+                    <input type="text" class="loginContent mb-3" id="username" name="username">
+                    <label for="password" class="form-label" style="color: #2f2e41;">Password :</label>
+                    <input type="password" class="loginContent mb-3" id="password" name="password">
+                    <button type="button" class="btn w-100 mb-3 mt-3 text-light" id="userLogin" style="background-color: #2f2e41;">LOGIN</button>
+                </form>
             </div>
         </div>
 
@@ -49,9 +42,14 @@
     <script type="text/javascript" src="../../js/validation.js"></script>
     <script type="text/javascript" src="../../resources/sweetalert.js"></script>
     <script type="text/javascript" src="../../resources/toastr/build/toastr.min.js"></script>
-    <script type="text/javascript" src="../../js/script.js"></script>
-    <script type="text/javascript" src="../../resources/DataTables/datatables.min.js"></script>
     <script type="text/javascript" src="../../resources/fontawesome/js/all.min.js"></script>
+    <script type="text/javascript" src="../../resources/DataTables/datatables.min.js"></script>
+    <script type="text/javascript" src="../../js/script.js"></script>
+    <script type="text/javascript" src="../../js/chart.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 </body>
 
 </html>

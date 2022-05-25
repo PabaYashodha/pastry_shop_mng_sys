@@ -1,43 +1,45 @@
 <?php
 session_start();
+include_once '../model/Login.php';
 $status = $_REQUEST['status'];
-include '../model/loginModel.php';
-$loginObj = new login(); //make login Object
+$loginObj = new Login(); //make login Object
 switch($status){
 
     case"login":
-        $uname = $_POST["username"];
-        $pw = $_POST["password"];
-        $pw = sha1($pw); // encrypting the pw
-        $pw = strtoupper($pw); // convert the pw to uppercase
-        $result = $loginObj->validateLogin($uname, $pw);
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+        $password = sha1($password); // encrypting the pw
+        $password = strtoupper($password); // convert the pw to uppercase
+        $result = $loginObj->validateLogin($username, $password);
+        //print_r($result);
         if ($result->num_rows==1){
             $userRow = $result->fetch_assoc();
-            $userId = $userRow["emp_id"];
+            $userId = $userRow["user_id"];
             $roleId = $userRow["role_role_id"];
-            $firstName = $userRow["emp_fname"];
-            $lastName = $userRow["emp_lname"];
-            $initials = $userRow["emp_initials"];
-            $userArray = array("firstName"=>$firstName, "lastName"=>$lastName,
-                "role_role_id"=>$roleId, "user_id"=>$userId, "initials"=>$initials);
+            $firstName = $userRow["user_fname"];
+            $lastName = $userRow["user_lname"];
+            $userArray = array("user_fname"=>$firstName, "user_lname"=>$lastName,
+                "role_role_id"=>$roleId, "user_id"=>$userId);
+           // print_r($userArray) ;   
             $_SESSION["user"] = $userArray; //add to session
-            if ($userRow["login_pwChange"]==0){
-                header("location:../view/changePw.php");
-            }elseif (isset($_SESSION["user"]) && $_SESSION["user"]["role_role_id"]==4){ // cashier login
-                header("location:../view/dashboard1.php?page=dashboardHome");
+            if ($userRow["user_login_pwd_change"]==0){
+                // header("location:../view/passwordReset.php");
+                echo 1;
             }elseif (isset($_SESSION["user"])){
-                header("location:../view/dashboard.php?page=dashboardHome"); // others login
+                // header("location:../view/dashboard.php"); // others login
+                echo 2;
             }
         }
         else{
-            $msg = "The Credentials: username and the password does not match!";
-            $msg = base64_encode($msg);
-            header("location:../view/login.php?error=$msg;");
+            $msg = "The Credentials: username and the password does not match!";                        
+            echo $msg;
+            //header("location:../view/login.php?error=$msg;");
         }
-    break;
+     break;
 
-    case "logout":
-        session_destroy();
-        header("location:../view/login.php");
-    break;
+    // case "logout":
+    //     session_destroy();
+    //     header("location:../view/login.php");
+    //break;
+
 }

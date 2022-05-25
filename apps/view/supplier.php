@@ -58,9 +58,9 @@ require_once "sidebar.php";
 <div class="modal fade" tabindex="-1" aria-labelledby="addSupplier" id="addSupplier" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header text-light" style="background-color: #2f2e41;">
                 <h5 class="modal-title">Add Supplier</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="" method="post" role="form" id="supplierForm">
@@ -123,7 +123,6 @@ require_once "sidebar.php";
                     </div>
                 </form>
             </div>
-            <div class="modal-footer"></div>
         </div>
     </div>
 </div>
@@ -134,14 +133,14 @@ require_once "sidebar.php";
 <div class="modal fade" tabindex="-1" aria-labelledby="viewSupplier" id="viewSupplier" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header text-light" style="background-color: #2f2e41;">
                 <h5 class="modal-title">VIEW SUPPLIER</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div id="viewSupplierContent"></div>
             </div>
-            <div class="modal-footer"></div>
+            
         </div>
     </div>
 </div>
@@ -152,9 +151,9 @@ require_once "sidebar.php";
 <div class="modal fade" tabindex="-1" aria-labelledby="editSupplier" id="editSupplier" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header text-light" style="background-color: #2f2e41;">
                 <h5 class="modal-title">EDIT SUPPLIER</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button"  class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="" method="post" role="form" id="editSupplierForm">
@@ -218,7 +217,7 @@ require_once "sidebar.php";
                     </div>
                 </form>
             </div>
-            <div class="modal-footer"></div>
+            
         </div>
     </div>
 </div>

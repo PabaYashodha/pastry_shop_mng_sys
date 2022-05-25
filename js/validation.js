@@ -1,17 +1,12 @@
 $(document).ready(()=>{
-    // const deliveryPersonName = $('#deliveryPersonName');
-    // const deliveryPersonAge = $('#deliveryPersonAge');
-    // const deliveryPersonContact = $('#deliveryPersonContact');
-    // const deliveryPersonEmail = $('#deliveryPersonEmail');
-    // const deliveryPersonAdd1 = $('#deliveryPersonAdd1');
-    // const deliveryPersonAdd2 = $('#deliveryPersonAdd2');
-    // const deliveryPersonAdd3 = $('#deliveryPersonAdd3');
+    
 
     const patName = /^[a-zA-Z\.\s]+$/; //validation rgx for text
     const patEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,6})+$/; //validation rgx for email
     const patCon = /^(07)([0-9]){8}$/; //validation rgx for contact
     const patNIC = /^([0-9]{9}[x|X|v|V]|[0-9]{12})+$/; //validation rgx for nic
     const allowImagePattern = /(\.jpg|\.jpeg|\.png)$/i; //image validation
+    //const patPassword = /^([a-Z]+[0-9]{8}+$)/;
 
     const firstName = $("#firstName"); //first name of user form
     const lastName = $("#lastName"); //last name of user form
@@ -366,11 +361,6 @@ $(document).ready(()=>{
                 })
             }
         })
-    });
-
-    $("#userLogin").click(() => {
-        let userName = $("#userName").val();
-        let password = $("#password").val();
     });
 
     const supplierName = $('#supplierName');
@@ -935,6 +925,7 @@ $(document).ready(()=>{
             }
         })
     })
+
 
     //submit dining table form 
     $('#tableFormSubmit').click(() => {
@@ -2114,10 +2105,10 @@ $(document).ready(()=>{
         let stockSupplierIdVal = stockSupplierId.val();
         let stockCreteDateVal = stockCreteDate.val();
         let stockReferenceNumberVal =stockReferenceNumber.val();
-        //let stockGrnNumberVal = stockG
+       
        
         if (stockSupplierNameVal=="" || stockCreteDateVal=="" || stockReferenceNumberVal=="" ) {
-            toastr.error("Please fll ");
+            toastr.error("Please fill ");
             $([stockSupplierName, stockCreteDate, stockReferenceNumber]).each(function() {
                 $(this).removeClass("is-valid").addClass("is-invalid");
             })
@@ -2201,6 +2192,668 @@ $(document).ready(()=>{
             }
         })
     });
+
+    //make an order page
+    const invoiceFoodItemId =$('#invoiceFoodItemId');
+    const invoiceFoodItemName = $('#invoiceFoodItemName');
+    const invoiceFoodItemUnitPrice =$('#invoiceFoodItemUnitPrice');
+    const invoiceFoodItemQuantity = $('#invoiceFoodItemQuantity');
+    const invoiceDiscount =$('#invoiceDiscount');
+    const invoiceTotal = $('#invoiceTotal');
+    const invoiceSubAmount = $('#invoiceSubAmount');
+    const invoiceTotalDiscount = $('#invoiceTotalDiscount');
+    const invoiceNetTotal = $('#invoiceNetTotal');
+    const invoiceReceivedAmount = $('#invoiceReceivedAmount');
+    const invoiceBalanceAmount = $('#invoiceBalanceAmount');
+
+    $("#addItem").click(()=>{
+        let invoiceFoodItemIdVal = invoiceFoodItemId.val();
+        let invoiceFoodItemNameVal = invoiceFoodItemName.val();
+        let invoiceFoodItemUnitPriceVal= invoiceFoodItemUnitPrice.val();
+        let invoiceFoodItemQuantityVal = invoiceFoodItemQuantity.val();
+        let invoiceDiscountVal =+invoiceDiscount.val();
+        let invoiceTotalVal =  parseFloat(invoiceTotal.val());
+        let invoiceSubAmountVal = parseFloat(invoiceSubAmount.val()) ;
+        let invoiceTotalDiscountVal = +invoiceTotalDiscount.val();
+        // let invoiceNetTotalVal = parseFloat(invoiceNetTotal.val());
+        // let invoiceReceivedAmountVal = parseFloat(invoiceReceivedAmount.val());
+        // let invoiceBalanceAmountVal =parseFloat(invoiceBalanceAmount.val());
+
+        if (invoiceFoodItemNameVal=="" || invoiceFoodItemUnitPriceVal==""|| invoiceFoodItemQuantityVal==""|| invoiceDiscountVal<0 || invoiceTotalVal=="") {
+            toastr.error("Please fill the fields");
+            $([invoiceFoodItemName,invoiceFoodItemUnitPrice,invoiceFoodItemQuantity,invoiceDiscount,invoiceTotal]).each(function() {
+               $(this).removeInvalidClass("is-valid").addClass("is-invalid")
+            })
+            invoiceFoodItemName.focus();
+            return false;
+        }
+        if (invoiceFoodItemNameVal=="") {
+            addInvalidClass(invoiceFoodItemName, "Please enter food item");
+            return false;
+        }
+        if(invoiceFoodItemUnitPriceVal==""){
+            addInvalidClass(invoiceFoodItemUnitPrice, "Please add unit price");
+        }
+        if (invoiceFoodItemQuantityVal=="") {
+            addInvalidClass(invoiceFoodItemQuantity, "Please add quantity");
+            return false;
+        }
+        if (invoiceDiscountVal<0) {
+            addInvalidClass(invoiceDiscount, "Please add discount if has");
+            return false;
+        }
+        if (invoiceTotalVal=="") {
+            addInvalidClass(invoiceTotal, "Pleas enter total");
+            return false;
+        }else{
+            markup = '<tr>'+
+            '<td scope="row"><button type="button" class="btn btn-outline-danger btnDelete ">&cross;</button></i></td>'+
+            '<td><input name="invoiceFoodItemName[]" type="text" class="form-control" readonly value="'+invoiceFoodItemNameVal+'"></td>'+
+            '<td><input name="invoiceFoodItemId[]" type="hidden" class="form-control" readonly value="'+invoiceFoodItemIdVal+'"></td>'+
+            '<td><input name="invoiceFoodItemUnitPrice[]" type="text" class="form-control" readonly value="'+invoiceFoodItemUnitPriceVal+'"></td>'+
+            '<td><input name="invoiceFoodItemQuantity[]" type="text" class="form-control" readonly value="'+invoiceFoodItemQuantityVal+'"></td>'+
+            '<td><input name="invoiceDiscount[]" type="text" class="form-control" readonly value="'+invoiceDiscountVal+'"></td>'+
+            '<td><input name="invoiceTotal[]" type="text" class="form-control total" readonly value="'+invoiceTotalVal+'"></td>'+
+            '</tr>';
+            tableBody=$("#manualOrderTbody");
+            tableBody.append(markup);
+
+            let newInvoiceTotal = invoiceTotalVal + invoiceSubAmountVal;
+            $("#invoiceSubAmount").val(newInvoiceTotal.toFixed(2));
+            if (invoiceTotalDiscountVal=="") {
+                $('#invoiceSubAmount').val("");//empty the current value
+                $('#invoiceSubAmount, #invoiceNetTotal').val(newInvoiceTotal.toFixed(2));
+            }else{
+                let invoiceNetTotal = newInvoiceTotal-(newInvoiceTotal*invoiceTotalDiscount)/100;
+                $('#invoiceNetTotal').val(invoiceNetTotal.toFixed(2));
+            }
+
+            invoiceFoodItemName.val("");
+            invoiceFoodItemUnitPrice.val("");
+            invoiceFoodItemQuantity.val("");
+            invoiceDiscount.val("");
+            invoiceTotal.val("");
+
+            $([invoiceFoodItemName, invoiceFoodItemUnitPrice, invoiceFoodItemQuantity,invoiceDiscount,invoiceTotal]).each(function() {
+                $(this).removeClass("is-valid");
+            });
+        }
+    });
+
+    //get the total without discount
+    $('#invoiceFoodItemQuantity,#invoiceFoodItemUnitPrice').keyup(()=>{
+        let invoiceFoodItemQuantityVal = +invoiceFoodItemQuantity.val(); //declare quantity variable
+        let invoiceFoodItemUnitPriceVal = parseFloat(invoiceFoodItemUnitPrice.val()); // declare unit price variable
+        let invoiceDiscountVal = +invoiceDiscount.val(); //declare one ite discount variable
+        let invoiceTotalWithoutDiscountVal = invoiceFoodItemQuantityVal * invoiceFoodItemUnitPriceVal; // get the total value without discount 
+        let invoiceTotalVal = invoiceTotalWithoutDiscountVal-(invoiceTotalWithoutDiscountVal*invoiceDiscountVal)/100; //calculate the value with discount
+        $('#invoiceTotal').val(invoiceTotalVal.toFixed(2));
+    });
+    
+    //insert discount and find the total value
+    $('#invoiceDiscount').keyup(()=>{
+        let invoiceFoodItemQuantityVal = +invoiceFoodItemQuantity.val(); //declare quantity variable
+        let invoiceFoodItemUnitPriceVal = parseFloat(invoiceFoodItemUnitPrice.val()); // declare unit price variable
+        let invoiceDiscountVal = +invoiceDiscount.val(); //declare one ite discount variable
+        let invoiceTotalWithoutDiscountVal = invoiceFoodItemQuantityVal * invoiceFoodItemUnitPriceVal; // get the total value without discount 
+        let invoiceTotalVal = invoiceTotalWithoutDiscountVal-(invoiceTotalWithoutDiscountVal*invoiceDiscountVal)/100; //calculate the value with discount
+        $('#invoiceTotal').val(invoiceTotalVal.toFixed(2));
+    });
+
+
+    //remove row in table
+    $("#manualOrderTbody").on("click",'.btnDelete',function() {
+        let invoiceSubAmountVal = parseFloat(invoiceSubAmount.val());
+        let deleteInvoiceRowVal = +$(this).parents("tr").find(".total").val();
+        invoiceSubAmountVal = invoiceSubAmountVal - deleteInvoiceRowVal;
+        $('#invoiceSubAmount, #invoiceNetTotal').val(invoiceSubAmountVal.toFixed(2));
+        $(this).closest('tr').remove();
+    });
+
+    //add discount to all the item or all 
+    $('#invoiceTotalDiscount').keyup(()=>{
+        let invoiceTotalDiscountVal= +(invoiceTotalDiscount.val());
+        let invoiceSubAmountVal = parseFloat(invoiceSubAmount.val());
+        let invoiceNetTotal = invoiceSubAmountVal-(invoiceSubAmountVal*invoiceTotalDiscountVal)/100;
+        $('#invoiceNetTotal').val(invoiceNetTotal.toFixed(2));
+    });
+
+    //get the balance
+    $('#invoiceReceivedAmount').keyup(()=>{
+        let invoiceReceivedAmountVal = parseFloat(invoiceReceivedAmount.val());
+        let invoiceNetTotalVal = parseFloat(invoiceNetTotal.val());
+        let invoiceBalanceAmountVal = parseFloat(invoiceBalanceAmount.val());
+        if (invoiceNetTotalVal<invoiceReceivedAmountVal) {
+             invoiceBalanceAmountVal =invoiceReceivedAmountVal- invoiceNetTotalVal;
+            $('#invoiceBalanceAmount').val(invoiceBalanceAmountVal.toFixed(2));
+        }
+    });
+
+    //add discount after received money
+    $('#invoiceReceivedAmount').keyup(()=>{
+        let invoiceTotalDiscountVal= +(invoiceTotalDiscount.val());
+        let invoiceSubAmountVal = parseFloat(invoiceSubAmount.val());
+        let invoiceReceivedAmountVal = parseFloat(invoiceReceivedAmount.val());
+        let invoiceNewNetTotalVal = invoiceSubAmountVal-(invoiceSubAmountVal*invoiceTotalDiscountVal)/100;
+        let invoiceNewBalanceAmountVal = invoiceReceivedAmountVal- invoiceNewNetTotalVal;
+        $('#invoiceBalanceAmount').val(invoiceNewBalanceAmountVal.toFixed(2));
+    });
+    
+    $("#invoiceSubmit").click(()=>{
+        swal({
+            title:'Are you sure',
+            text:'Do you wnt to make this order',
+            icon:'warning',
+            buttons:true,
+            dangerMode:true,
+            allowEscapeKey:false,
+            allowOutsideClick:false,
+            closeOnEsc:false,
+            closeOnClickOutside:false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method: "POST",
+                    url:"../controller/OrderController.php?status=addInvoice",
+                    data: new FormData($('#makeOrderForm')[0]),
+                    dataType: "json",
+                    enctype: "multipart/form-data",
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    beforeSend:function() {
+                        swal({
+                            title: "Loading...",
+                            text: " ",
+                            icon: "../../images/96x96.gif",
+                            buttons: false,
+                            allowOutsideClick: false,
+                            closeOnEsc: false,
+                            closeOnClickOutside: false,
+                        });
+                    },success:function(result) {
+                        if (result[0]==1) {
+                            swal({
+                                title: "Good Job!",
+                                text: "Order Successfully Placed",
+                                icon: "success",
+                                buttons: false,
+                                timer: 1000,
+                            })
+                            $("#makeOrderForm").trigger('reset')
+                            $("#manualOrderTbody").trigger('reset');
+                        }
+                        if (result[0]==2) {
+                            swal({
+                                title: "Warning!",
+                                text: result[1],
+                                icon: "warning",
+                            })
+                        }
+                    },
+                    error:function(error) {
+                        console.log(error);
+                    }                    
+                });
+            }else{
+                swal({
+                    title: "Warning!",
+                    text: "Order not placed",
+                    icon: "warning",
+                    timer: 1000,
+                })
+            }
+        })
+    });
+
+    //assign deliver person validation
+    const deliveryPerson= $("#deliveryPerson");
+
+    $("#assignPersonFormSubmit").click(()=>{
+        let deliveryPersonVal = deliveryPerson.val();
+
+        if (deliveryPersonVal=="") {
+            addInvalidClass(deliveryPerson ,"Please enter a delivery person");
+            return false;
+        }swal({
+            title: 'Are you sure',
+            text: 'Do you want to submit this form',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method: "POST",
+                    url: "../controller/DeliveryController.php?status=addDelivery",
+                    data: new FormData($('#assignDeliveryForm')[0]),
+                    dataType: "json",
+                    enctype: "multipart/form-data",
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    beforeSend: function() {
+                        swal({
+                            title: "Loading...",
+                            text: " ",
+                            icon: "../../images/96x96.gif",
+                            buttons: false,
+                            allowOutsideClick: false,
+                            closeOnEsc: false,
+                            closeOnClickOutside: false,
+                        });
+                    },success: function(result) {
+                        if (result[0]==1) {
+                            swal({
+                                title: "Good Job!",
+                                text: "Delivery person successfully assigned",
+                                icon: "success",
+                                buttons: false,
+                                timer: 1000,
+                            });
+                            // stockTableBody(result[1]);
+                            $("#assignDeliveryForm").trigger('reset');
+                            
+                        }
+                        if (result[0]==2) {
+                            swal({
+                                title: "Warning!",
+                                text: result[1],
+                                icon: "warning",
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }else{
+                swal({
+                    title: "Warning!",
+                    text: "Delivery not assigned",
+                    icon: "warning",
+                    timer: 1000,
+                })
+            }
+        })
+
+    })
+
+    
+    //admin user reset password
+    const userResetName= $("#userResetName");
+    const userResetId = $("#userResetId");
+    $("#adminResetPassword").click(()=>{
+        let userResetNameVal = userResetName.val();
+        let userResetIdVal = userResetId.val();
+
+        if (userResetNameVal=="") {
+            addInvalidClass(userResetName, "Please enter user name");
+            return false;
+        }swal({
+            title: 'Are you sure',
+            text: 'Do you want to reset the password',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method: "POST",
+                    url: "../controller/PasswordResetController.php?status=adminResetPassword",
+                    data: new FormData($('#adminPasswordResetForm')[0]),
+                    dataType: "json",
+                    enctype: "multipart/form-data",
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    beforeSend: function() {
+                        swal({
+                            title: "Loading...",
+                            text: " ",
+                            icon: "../../images/96x96.gif",
+                            buttons: false,
+                            allowOutsideClick: false,
+                            closeOnEsc: false,
+                            closeOnClickOutside: false,
+                        });
+                    },success: function(result) {
+                        console.log(result)
+                        if (result==1) {
+                            swal({
+                                title: "Good Job!",
+                                text: "Password successfully reset",
+                                icon: "success",
+                                buttons: false,
+                                timer: 1000,
+                            });
+                            
+                            $("#adminPasswordResetForm").trigger('reset');
+                            $(".is-valid").removeClass('is-valid');
+                            userResetId.val("");
+                            
+                        }
+                        if (result==2) {
+                            swal({
+                                title: "Warning!",
+                                text: result,
+                                icon: "warning",
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }else{
+                swal({
+                    title: "Warning!",
+                    text: "Password not reset",
+                    icon: "warning",
+                    timer: 1000,
+                })
+            }
+        })
+    })
+
+    const username = $("#username");
+    const password = $("#password");
+    $("#userLogin").click(() => {
+        let usernameVal = username.val();
+        let passwordVal = password.val();
+
+        if (usernameVal == "" && passwordVal=="") {
+            toastr.error("Please fill username and password")
+            $([username, password]).each(function() {
+                $(this).removeInvalidClass("is-valid").addClass("is-invalid");
+            })
+            username.focus();
+            return false;
+        }
+        if(usernameVal=="" || !usernameVal.match(patEmail) ){
+            addInvalidClass(username, "Please enter username");
+            return false;
+        }
+        if (passwordVal=="") {
+            addInvalidClass(password, "Please enter password");
+            return false;
+        }
+        $.ajax({
+            method : "POST",
+            url: "../controller/LoginController.php?status=login",
+            data: new FormData($('#loginForm')[0]),
+            dataType: "json",
+            enctype: "multipart/form-data",
+            processData: false,
+            contentType: false,
+            async: true,
+            success:function(result) {
+                //console.log(result);
+                if (result==1) {
+                    toastr.success("User successfully login");
+                    window.location.href="../view/passwordReset.php";
+                }else if(result==2){
+                    toastr.success("User successfully login");
+                    window.location.href="../view/dashboard.php";
+                }else{
+                    toastr.error(result);
+                }
+            },error:function(error) {
+                console.log(error);
+            }
+        })
+
+    });
+
+    const currentPassword = $("#currentPassword");
+    const newPassword = $("#newPassword");
+    const confirmPassword =$("#confirmPassword");
+
+    $("#resetPassword").click(()=>{
+        let currentPasswordVal = currentPassword.val();
+        let newPasswordVal = newPassword.val();
+        let confirmPasswordVal = confirmPassword.val();
+
+        if (currentPasswordVal=="" && newPasswordVal=="" && confirmPasswordVal=="") {
+            toastr.error("Please ill the form");
+            $([currentPassword, newPassword, confirmPassword]).each(function() {
+                $(this).removeInvalidClass("is-valid").addClass("is-invalid");
+            })
+            currentPassword.focus();
+            return false;
+        }
+        if (currentPasswordVal=="") {
+            addInvalidClass(currentPassword,"Please enter current password");
+            return false;
+        }
+        if (newPasswordVal == "") {
+            addInvalidClass(newPassword, "Please enter a new password");
+            return false;
+        }
+        if (confirmPasswordVal=="" || confirmPasswordVal!=newPasswordVal ) {
+            addInvalidClass(confirmPassword, "Confirm password not match");
+            return false;
+        }swal({
+            title: 'Are you sure',
+            text: 'Do you want to submit this form',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method: "POST",
+                    url : "../controller/passwordResetController.php?status=resetPassword",
+                    data: new FormData($('#passwordResetForm')[0]),
+                    dataType: "json",
+                    enctype: "multipart/form-data",
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    beforeSend:function() {
+                        swal({
+                            title: "Loading...",
+                            text: " ",
+                            icon: "../../images/96x96.gif",
+                            buttons: false,
+                            allowOutsideClick: false,
+                            closeOnEsc: false,
+                            closeOnClickOutside: false,
+                        });
+                    },success:function(result) {
+                        //console.log(result);
+                        if (result==1) {
+                            swal({
+                                title: "Good Job!",
+                                text: "Password successfully reset",
+                                icon: "success",
+                                buttons: false,
+                                timer: 1000,
+                            });
+                            window.location.href="../view/login.php";
+                        }
+                        if (result==2) {
+                            swal({
+                                title: "Warning!",
+                                text: result,
+                                icon: "warning",
+                            });
+                            window.location.href="../view/PasswordReset.php";
+                        }
+                    },error : function(error) {
+                        console.log(error);
+                    }
+                });
+            }else{
+                swal({
+                    title: "Warning!",
+                    text: "Password not reset",
+                    icon: "warning",
+                    timer: 1000,
+                })
+                window.location.href="../view/PasswordReset.php";
+            }
+        })
+    });
+
+    // add release stock row
+    const stockReleaseRowItemNames = $('#stockReleaseRowItemNames');
+    const stockReleaseRowItemId = $('#stockReleaseRowItemId');
+    const stockReleaseQuantity = $('#stockReleaseQuantity');
+
+    $("#addReleaseStockRow").click(()=>{
+        let stockReleaseRowItemNamesVal = stockReleaseRowItemNames.val();
+        let stockReleaseRowItemIdVal = stockReleaseRowItemId.val();
+        let stockReleaseQuantityVal = stockReleaseQuantity.val();
+
+        if (stockReleaseRowItemNamesVal=="" && stockReleaseQuantityVal=="") {
+            toastr.error("Please fill the fields");
+            $([stockReleaseRowItemNames, stockReleaseQuantity]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid")
+            })
+            stockReleaseRowItemNames.focus();
+            return false;
+        }
+        if (stockReleaseRowItemNamesVal=="") {
+            addInvalidClass(stockReleaseRowItemNames,"Please enter row item name");
+            return false;
+        }
+        if (stockReleaseQuantityVal=="") {
+            addInvalidClass(stockReleaseQuantity,"Please enter row item name");
+            return false;
+        }else{
+            markup = '<tr>'+
+            '<td scope="row"><button type="button" class="btn btn-outline-danger btnDelete ">&cross;</button></i></td>' +
+            '<td>' +
+            '<input list="stockReleaseRowItemNames" class="form-control" type="text"  readonly value="'+stockReleaseRowItemNamesVal+'">' +
+            '<input type="hidden" list="stockReleaseRowItemIdVal" class="form-control"  name="stockReleaseRowItemId[]" readonly value="'+stockReleaseRowItemIdVal+'">' +
+            '</td>' +
+            '<td><input name="stockReleaseQuantity[]" type="text" class="form-control" readonly value="'+stockReleaseQuantityVal+'"></td>' +
+            '</tr>';
+            tableBody  = $("#stockReleaseTbody");
+            tableBody.append(markup);
+
+            stockReleaseRowItemNames.val("");
+            stockReleaseQuantity.val("");
+
+            $([stockReleaseRowItemNames,stockReleaseQuantity]).each(function() {
+                $(this).removeClass("is-valid");
+            })
+        }
+    })
+
+    //delete the row
+    $('#stockReleaseTbody').on("click",'.btnDelete',function() {
+        $(this).closest('tr').remove();
+    });
+
+    const stockReleaseDate = $("#stockReleaseDate");
+    const stockReleaseNo = $("#stockReleaseNo");
+    const stockReleaseTo = $("#stockReleaseTo");
+    const stockReleaseMadeBy = $("stockReleaseMadeBy");
+
+    $("#stockReleaseFormSubmit").click(()=>{
+        let stockReleaseDateVal = stockReleaseDate.val();
+        let stockReleaseNoVal = stockReleaseNo.val();
+        let stockReleaseToVal = stockReleaseTo.val();
+        let stockReleaseMadeByVal = stockReleaseMadeBy.val();
+
+        if (stockReleaseDateVal=="" && stockReleaseNoVal=="" && stockReleaseToVal==""&& stockReleaseMadeByVal=="") {
+            toastr.error("Please fill the form");
+            $([stockReleaseDate, stockReleaseNo, stockReleaseTo, stockReleaseMadeBy]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid")
+            })
+            stockReleaseDate.focus();
+            return false;
+        }
+        if (stockReleaseDateVal=="") {
+            addInvalidClass(stockReleaseDate, "Please enter stock release date");
+            return false;
+        }
+        if (stockReleaseToVal=="") {
+            addInvalidClass(stockReleaseTo, "Please enter stock release to");
+            return false;
+        }
+        if (stockReleaseMadeByVal=="") {
+            addInvalidClass(stockReleaseMadeBy, "Please enter your role");
+            return false;
+        }swal({
+            title: 'Are you sure',
+            text: 'Do you want to submit this form',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method: "POST",
+                    url: "../controller/StockReleaseController.php?status=addStockRelease",
+                    data: new FormData($('#addStockReleaseForm')[0]),
+                    dataType: "json",
+                    enctype: "multipart/form-data",
+                    processData: false,
+                    contentType: false,
+                    async: true, 
+                    beforeSend: function () {
+                        swal({
+                            title: "Loading...",
+                            text: " ",
+                            icon: "../../images/96x96.gif",
+                            buttons: false,
+                            allowOutsideClick: false,
+                            closeOnEsc: false,
+                            closeOnClickOutside: false,
+                        });
+                    },
+                    success: function (result) {
+                        if (result[0] == 1) {
+                            swal({
+                                title: "Good Job!",
+                                text: "Stock successfully released",
+                                icon: "success",
+                                buttons: false,
+                                timer: 1000,
+                            });
+                            
+                        }
+                        if (result[0] == 2) {
+                            swal({
+                                title: "Warning!",
+                                text: result[1],
+                                icon: "warning",
+                            });
+                        }
+                    }, error: function (error) {
+                        console.log(error)
+                    }
+                });
+            }else {
+                swal({
+                    title: "Warning!",
+                    text: "Stock Release Not Added",
+                    icon: "warning",
+                    timer: 1000,
+                })
+            }
+        })
+    });
+
     let addInvalidClass = (Id, message) => {
         let id = Id
         toastr.error(message);
@@ -2320,14 +2973,29 @@ $(document).ready(()=>{
     stockCreteDate.change(()=>{removeInvalidClass(stockCreteDate)});
     stockReferenceNumber.change(()=>{removeInvalidClass(stockReferenceNumber)});
 
+    invoiceFoodItemName.change(()=>removeInvalidClass(invoiceFoodItemName));
+    invoiceFoodItemQuantity.change(()=>{removeInvalidClass(invoiceFoodItemQuantity)});
+    invoiceDiscount.change(()=>{removeInvalidClass(invoiceDiscount)});
+    invoiceTotal.change(()=>{removeInvalidClass(invoiceTotal)});
 
-    // grnDate.change(()=>{removeInvalidClass(grnDate)});
-    // grnPrice.change(()=>{removeInvalidClass(grnPrice)});
-    // grnSupplierName.change(()=>{removeInvalidClass(grnSupplierName)});
+    deliveryPerson.change(()=>{removeInvalidClass(deliveryPerson)});
 
-    // editGrnDate.change(()=>{removeInvalidClass(editGrnDate)});
-    // editGrnPrice.change(()=>{removeInvalidClass(editGrnPrice)});
-    // editGrnSupplierName.change(()=>{removeInvalidClass(editGrnSupplierName)});
+    userResetName.change(()=>{removeInvalidClass(userResetName)});
+
+    username.change(()=>{removeInvalidClass(username)});
+    password.change(()=>{removeInvalidClass(password)});
+
+    stockReleaseRowItemNames.change(()=>{removeInvalidClass(stockReleaseRowItemNames)});
+    stockReleaseQuantity.change(()=>{removeInvalidClass(stockReleaseQuantity)});
+
+    stockReleaseDate.change(()=>{removeInvalidClass(stockReleaseDate)});
+    stockReleaseTo.change(()=>{removeInvalidClass(stockReleaseTo)});
+    stockReleaseMadeBy.change(()=>{removeInvalidClass(stockReleaseMadeBy)});
+
+
+
+
+   
 
 });
 

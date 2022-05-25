@@ -60,4 +60,19 @@ class FoodItem
         $result = $conn->query($sql) or die($conn->error);
         return ($result->num_rows>0)? false : true;
     }
+    public function getFoodItemName($searchKey)
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT `food_item_id`, `food_item_name`,`food_item_unit_price` FROM `food_item` WHERE `food_item_name` LIKE '%$searchKey%'";
+        $getFoodItemName = $conn->query($sql) or die($conn->error);
+        return $getFoodItemName;
+     }
+
+    public function getFoodItemNameById($foodItemId)
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT `food_item_name` FROM `food_item` WHERE `food_item_id`='$foodItemId'";
+        $getFoodItemName = $conn->query($sql) or die($conn->error);
+        return $getFoodItemName;
+    }
 }
