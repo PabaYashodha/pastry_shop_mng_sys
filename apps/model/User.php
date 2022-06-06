@@ -111,4 +111,5 @@ class User
         $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
+    
 }

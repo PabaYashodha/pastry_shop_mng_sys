@@ -19,6 +19,8 @@ $(document).ready(()=>{
     const add2 = $("#add2"); //street of user form 
     const add3 = $("#add3"); //lane of user form
     const image = $("#image"); //image of user form
+    const male = $("#male");
+    const female = $("#female");
 
     contact.blur(() => {
         const url = "../controller/UserController.php?status=checkContactIsExist";
@@ -72,6 +74,8 @@ $(document).ready(()=>{
         let add2Val = add2.val()
         let add3Val = add3.val()
         let imageVal = image.val()
+        let maleVal = male.val()
+        let femaleVal = female.val()
 
         if (firstNameVal == "" && lastNameVal == "" && contactVal == "" && birthdayVal == "" && nicVal == "" && emailVal == "" && roleVal == "" && add1Val == "" && add2Val == "" && add3Val == "" && imageVal == "") {
             toastr.error("Please fill the form");
@@ -81,62 +85,58 @@ $(document).ready(()=>{
             firstName.focus();
             return false;
         }
-
         if (firstNameVal == "" || !firstNameVal.match(patName)) {
             addInvalidClass(firstName, "please enter first name");
             return false;
         }
-
         if (lastNameVal == "" || !lastNameVal.match(patName)) {
             addInvalidClass(lastName, "Please enter last name");
             return false;
         }
-
         if (contactVal == "" || !contactVal.match(patCon)) {
             addInvalidClass(contact, "Please enter contact");
             return false;
         }
-
         if (birthdayVal == "") {
             addInvalidClass(birthday, "Please enter birthday");
             return false;
         }
-
         if (nicVal == "" || !nicVal.match(patNIC)) {
             addInvalidClass(nic, "Please enter NIC");
             return false;
         }
-
         if (emailVal == "" || !emailVal.match(patEmail)) {
             addInvalidClass(email, "Please enter email");
             return false;
         }
-
         if (roleVal == "") {
             addInvalidClass(role, "Please enter role");
             return false;
         }
-
         if (add1Val == "") {
             addInvalidClass(add1, "Please enter address no");
             return false;
         }
-
         if (add2Val == "") {
             addInvalidClass(add2, "Please enter lane");
             return false;
         }
-
         if (add3Val == "") {
             addInvalidClass(add3, "Please enter street");
             return false;
         }
-
         if (imageVal == "") {
             addInvalidClass(image, "Please enter image");
             return false;
         }
-
+        if (!allowImagePattern.exec(imageVal)) {
+            addInvalidClass(image, "Please add an image with valid extensions");
+            return false;
+        }
+        if (maleVal =="" || femaleVal=="") {
+            addInvalidClass(male, female,"Please select your gender");
+            return false;
+        }
         swal({ //user form submit using ajax
             title: 'Are You Sure',
             text: 'Do you want to submit this form',
@@ -180,7 +180,12 @@ $(document).ready(()=>{
                                 buttons: false,
                                 timer: 1000,
                             });
-                            userTableBody(result[1]);
+                            getUserData(result[1]);
+                            $("#userForm").trigger('reset')
+                            $(".is-valid").removeClass('is-valid');
+                            $("#addUser").modal('hide');
+                            $("#pre_image").removeAttr('src style');
+
                         }
                         if (result[0] == 2) {
                             swal({
@@ -210,13 +215,14 @@ $(document).ready(()=>{
     const editLastName = $('#editLastName');
     const editContact = $('#editContact');
     const editBirthday = $('#editBirthday');
-    // const editGender =  $('#editGender');
     const editNic = $('#editNic');
     const editEmail = $('#editEmail');
     const editRole = $('#editRole');
     const editAdd1 = $('#editAdd1');
     const editAdd2 = $('#editAdd2');
     const editAdd3 = $('#editAdd3');
+    const editMale = $('#editMale');
+    const editFemale = $('#editFemale');
     $("#saveEditForm").click(() => { //user edit form submit validation
 
         let editFirstNameVal = editFirstName.val()
@@ -229,67 +235,60 @@ $(document).ready(()=>{
         let editAdd1Val = editAdd1.val()
         let editAdd2Val = editAdd2.val()
         let editAdd3Val = editAdd3.val()
+        let editMaleVal = editMale.val()
+        let editFemaleVal = editFemale.val();
 
-
-        if (editFirstNameVal == "" && editLastNameVal == "" && editContactVal == "" && editBirthdayVal == "" && editNicVal == "" && editEmailVal == "" && editRoleVal == "" && editAdd1Val == "" && editAdd2Val == "" && editAdd3Val == "") {
+        if (editFirstNameVal == "" && editLastNameVal == "" && editContactVal == "" && editBirthdayVal == "" && editNicVal == "" && editEmailVal == "" && editRoleVal == "" && editAdd1Val == "" && editAdd2Val == "" && editAdd3Val == "" && editMaleVal==""|| editFemaleVal=="") {
             toastr.error("Please fill the form");
-            $([editFirstName, editLastName, editContact, editBirthday, editNic, editEmail, editRole, editAdd1, editAdd2, editAdd3]).each(function () {
+            $([editFirstName, editLastName, editContact, editBirthday, editNic, editEmail, editRole, editAdd1, editAdd2, editAdd3, editMale, editFemale]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid");
             });
             editFirstName.focus();
             return false;
         }
-
         if (editFirstNameVal == "" || !editFirstNameVal.match(patName)) {
             addInvalidClass(editFirstName, "please enter first name");
             return false;
         }
-
         if (editLastNameVal == "" || !editLastNameVal.match(patName)) {
             addInvalidClass(editLastName, "Please enter last name");
             return false;
         }
-
         if (editContactVal == "" || !editContactVal.match(patCon)) {
             addInvalidClass(editContact, "Please enter contact");
             return false;
         }
-
         if (editBirthdayVal == "") {
             addInvalidClass(editBirthday, "Please enter birthday");
             return false;
         }
-
         if (editNicVal == "" || !editNicVal.match(patNIC)) {
             addInvalidClass(editNic, "Please enter NIC");
             return false;
         }
-
         if (editEmailVal == "" || !editEmailVal.match(patEmail)) {
             addInvalidClass(editEmail, "Please enter email");
             return false;
         }
-
         if (editRoleVal == "") {
             addInvalidClass(editRole, "Please enter role");
             return false;
         }
-
         if (editAdd1Val == "") {
             addInvalidClass(editAdd1, "Please enter address no");
             return false;
         }
-
         if (editAdd2Val == "") {
             addInvalidClass(editAdd2, "Please enter lane");
             return false;
         }
-
         if (editAdd3Val == "") {
             addInvalidClass(editAdd3, "Please enter street");
             return false;
         }
-
+        if (editMaleVal==""|| editFemaleVal=="") {
+            add
+        }
         swal({ //user edit form submit using ajax
             title: 'Are You Sure',
             text: 'Do you want to submit this form',
@@ -334,10 +333,10 @@ $(document).ready(()=>{
                                 buttons: false,
                                 timer: 1000,
                             });
-                            userTableBody(result[1]);
+                            getUserData(result[1]);
                             $("#userForm").trigger('reset');
                             $(".is-valid").removeClass('is-valid');
-                            $("#addUser").modal('hide')
+                            $("#addUser").modal('hide');
                         }
                         if (result[0] == 2) {
                             swal({
@@ -459,7 +458,7 @@ $(document).ready(()=>{
                                 buttons: false,
                                 timer: 1000,
                             });
-                            supplierTableBody(result[1]);
+                            getSupplierData(result[1]);
                             $("#supplierForm").trigger('reset');
                             $(".is-valid").removeClass('is-valid');
                         }
@@ -1252,9 +1251,9 @@ $(document).ready(()=>{
         let editFoodItemSubCategoryVal = editFoodItemSubCategory.val()
         let editFoodItemImageVal = editFoodItemImage.val()
 
-        if (editFoodItemNameVal == "" && editUnitPriceVal == "" && editFoodItemCategoryVal == "" && editFoodItemSubCategoryVal == "" && editFoodItemImageVal) {
+        if (editFoodItemNameVal == "" && editUnitPriceVal == "" && editFoodItemCategoryVal == "" && editFoodItemSubCategoryVal == "" ) {
             toastr.error("Please fill the form");
-            $([editFoodItemName, editUnitPrice, editCategory, editCategory, editFoodItemImage]).each(function () {
+            $([editFoodItemName, editUnitPrice, editCategory, editCategory]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid")
             });
             editFoodItemName.focus();
@@ -1276,14 +1275,14 @@ $(document).ready(()=>{
             addInvalidClass(editCategoryVal, "Please add sub category name");
             return false;
         }
-        if (editFoodItemImageVal == "") {
-            addInvalidClass(editFoodItemImage, "Please add image");
-            return false;
-        }
-        if (!allowImagePattern.exec(editFoodItemImageVal)) {
-            addInvalidClass(editFoodItemImage, "Please add an image with valid extensions");
-            return false;
-        }
+        // if (editFoodItemImageVal == "") {
+        //     addInvalidClass(editFoodItemImage, "Please add image");
+        //     return false;
+        // }
+        // if (!allowImagePattern.exec(editFoodItemImageVal)) {
+        //     addInvalidClass(editFoodItemImage, "Please add an image with valid extensions");
+        //     return false;
+        // }
         swal({
             title: 'Are you sure',
             text: 'Do you want to submit this form',
@@ -1774,12 +1773,14 @@ $(document).ready(()=>{
     });
 
     const rowItemName = $('#rowItemName');
+    const rowItemReorderLevel = $("#rowItemReorderLevel");
     $('#rowItemFormSubmit').click(() => {
         let rowItemNameVal = rowItemName.val();
+        let rowItemReorderLevelVal = rowItemReorderLevel.val();
 
-        if (rowItemNameVal == "") {
+        if (rowItemNameVal == "" && rowItemReorderLevelVal=="") {
             toastr.error("Please fill the form");
-            $([rowItemName]).each(function () {
+            $([rowItemName,rowItemReorderLevel]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid")
             })
             rowItemName.focus();
@@ -1787,6 +1788,10 @@ $(document).ready(()=>{
         }
         if (rowItemNameVal == "") {
             addInvalidClass(rowItemName, "Please enter row item");
+            return false;
+        }
+        if (rowItemReorderLevelVal == "") {
+            addInvalidClass(rowItemReorderLevel, "Please enter row item reorder level");
             return false;
         }
         swal({
@@ -1830,7 +1835,7 @@ $(document).ready(()=>{
                                 buttons: false,
                                 timer: 1000,
                             });
-                            rowItemTableBody(result[1]);
+                            getRowItemData(result[1]);
                             $("#rowItemForm").trigger('reset');
                             $(".is-valid").removeClass('is-valid');
                             $('#addRowItems').modal('hide')
@@ -1859,12 +1864,14 @@ $(document).ready(()=>{
     });
 
     const editRowItemName = $('#editRowItemName');
+    const editRowItemReorderLevel = $('#editRowItemReorderLevel');
     $("#editRowItemFormSubmit").click(() => {
         let editRowItemNameVal = editRowItemName.val();
+        let editRowItemReorderLevelVal = editRowItemReorderLevel.val();
 
-        if (editRowItemNameVal == "") {
+        if (editRowItemNameVal == "" && editRowItemReorderLevelVal=="") {
             toastr.error("Please fill the form");
-            $([editRowItemName]).each(function () {
+            $([editRowItemName,editRowItemReorderLevel]).each(function () {
                 $(this).removeClass("is-valid").addClass("is-invalid");
             })
             editRowItemName.focus();
@@ -1872,6 +1879,10 @@ $(document).ready(()=>{
         }
         if (editRowItemNameVal == "") {
             addInvalidClass(editRowItemName, "Please enter row item name");
+            return false;
+        }
+        if (editRowItemReorderLevelVal == "") {
+            addInvalidClass(editRowItemReorderLevel, "Please enter row item name");
             return false;
         }
         swal({
@@ -1916,7 +1927,7 @@ $(document).ready(()=>{
                                 buttons: false,
                                 timer: 1000,
                             });
-                            rowItemTableBody(result[1]);
+                            getRowItemData(result[1]);
                             $("#editRowItemForm").trigger('reset');
                             $(".is-valid").removeClass('is-valid');
                             $("#editRowItem").modal('hide')
@@ -2166,8 +2177,8 @@ $(document).ready(()=>{
                                 buttons: false,
                                 timer: 1000,
                             });
-                            stockTableBody(result[1]);
-                            $("#addStock").trigger('reset');
+                            viewStockData(result[1]);
+                            $("#addStockForm").trigger('reset');
                             
                         }
                         if (result[0]==2) {
@@ -2211,7 +2222,7 @@ $(document).ready(()=>{
         let invoiceFoodItemNameVal = invoiceFoodItemName.val();
         let invoiceFoodItemUnitPriceVal= invoiceFoodItemUnitPrice.val();
         let invoiceFoodItemQuantityVal = invoiceFoodItemQuantity.val();
-        let invoiceDiscountVal =+invoiceDiscount.val();
+        //let invoiceDiscountVal =+invoiceDiscount.val();
         let invoiceTotalVal =  parseFloat(invoiceTotal.val());
         let invoiceSubAmountVal = parseFloat(invoiceSubAmount.val()) ;
         let invoiceTotalDiscountVal = +invoiceTotalDiscount.val();
@@ -2219,9 +2230,9 @@ $(document).ready(()=>{
         // let invoiceReceivedAmountVal = parseFloat(invoiceReceivedAmount.val());
         // let invoiceBalanceAmountVal =parseFloat(invoiceBalanceAmount.val());
 
-        if (invoiceFoodItemNameVal=="" || invoiceFoodItemUnitPriceVal==""|| invoiceFoodItemQuantityVal==""|| invoiceDiscountVal<0 || invoiceTotalVal=="") {
+        if (invoiceFoodItemNameVal=="" || invoiceFoodItemUnitPriceVal==""|| invoiceFoodItemQuantityVal==""|| invoiceTotalVal=="") {
             toastr.error("Please fill the fields");
-            $([invoiceFoodItemName,invoiceFoodItemUnitPrice,invoiceFoodItemQuantity,invoiceDiscount,invoiceTotal]).each(function() {
+            $([invoiceFoodItemName,invoiceFoodItemUnitPrice,invoiceFoodItemQuantity,invoiceTotal]).each(function() {
                $(this).removeInvalidClass("is-valid").addClass("is-invalid")
             })
             invoiceFoodItemName.focus();
@@ -2238,21 +2249,23 @@ $(document).ready(()=>{
             addInvalidClass(invoiceFoodItemQuantity, "Please add quantity");
             return false;
         }
-        if (invoiceDiscountVal<0) {
-            addInvalidClass(invoiceDiscount, "Please add discount if has");
-            return false;
-        }
+        // if (invoiceDiscountVal<0) {
+        //     addInvalidClass(invoiceDiscount, "Please add discount if has");
+        //     return false;
+        // }
         if (invoiceTotalVal=="") {
             addInvalidClass(invoiceTotal, "Pleas enter total");
             return false;
         }else{
             markup = '<tr>'+
             '<td scope="row"><button type="button" class="btn btn-outline-danger btnDelete ">&cross;</button></i></td>'+
-            '<td><input name="invoiceFoodItemName[]" type="text" class="form-control" readonly value="'+invoiceFoodItemNameVal+'"></td>'+
-            '<td><input name="invoiceFoodItemId[]" type="hidden" class="form-control" readonly value="'+invoiceFoodItemIdVal+'"></td>'+
+            '<td>'+
+            '<input name="invoiceFoodItemId[]" type="hidden" class="form-control" readonly value="'+invoiceFoodItemIdVal+'">'+
+            '<input name="invoiceFoodItemName[]" type="text" class="form-control" readonly value="'+invoiceFoodItemNameVal+'">'+
+            '</td>'+
             '<td><input name="invoiceFoodItemUnitPrice[]" type="text" class="form-control" readonly value="'+invoiceFoodItemUnitPriceVal+'"></td>'+
             '<td><input name="invoiceFoodItemQuantity[]" type="text" class="form-control" readonly value="'+invoiceFoodItemQuantityVal+'"></td>'+
-            '<td><input name="invoiceDiscount[]" type="text" class="form-control" readonly value="'+invoiceDiscountVal+'"></td>'+
+            //'<td><input name="invoiceDiscount[]" type="text" class="form-control" readonly value="'+invoiceDiscountVal+'"></td>'+
             '<td><input name="invoiceTotal[]" type="text" class="form-control total" readonly value="'+invoiceTotalVal+'"></td>'+
             '</tr>';
             tableBody=$("#manualOrderTbody");
@@ -2271,10 +2284,10 @@ $(document).ready(()=>{
             invoiceFoodItemName.val("");
             invoiceFoodItemUnitPrice.val("");
             invoiceFoodItemQuantity.val("");
-            invoiceDiscount.val("");
+            //invoiceDiscount.val("");
             invoiceTotal.val("");
 
-            $([invoiceFoodItemName, invoiceFoodItemUnitPrice, invoiceFoodItemQuantity,invoiceDiscount,invoiceTotal]).each(function() {
+            $([invoiceFoodItemName, invoiceFoodItemUnitPrice, invoiceFoodItemQuantity,invoiceTotal]).each(function() {
                 $(this).removeClass("is-valid");
             });
         }
@@ -2284,9 +2297,10 @@ $(document).ready(()=>{
     $('#invoiceFoodItemQuantity,#invoiceFoodItemUnitPrice').keyup(()=>{
         let invoiceFoodItemQuantityVal = +invoiceFoodItemQuantity.val(); //declare quantity variable
         let invoiceFoodItemUnitPriceVal = parseFloat(invoiceFoodItemUnitPrice.val()); // declare unit price variable
-        let invoiceDiscountVal = +invoiceDiscount.val(); //declare one ite discount variable
-        let invoiceTotalWithoutDiscountVal = invoiceFoodItemQuantityVal * invoiceFoodItemUnitPriceVal; // get the total value without discount 
-        let invoiceTotalVal = invoiceTotalWithoutDiscountVal-(invoiceTotalWithoutDiscountVal*invoiceDiscountVal)/100; //calculate the value with discount
+       // let invoiceDiscountVal = +invoiceDiscount.val(); //declare one ite discount variable
+        //let invoiceTotalWithoutDiscountVal = invoiceFoodItemQuantityVal * invoiceFoodItemUnitPriceVal; // get the total value without discount 
+       // let invoiceTotalVal = invoiceTotalWithoutDiscountVal-(invoiceTotalWithoutDiscountVal*invoiceDiscountVal)/100; //calculate the value with discount
+       let invoiceTotalVal= invoiceFoodItemQuantityVal * invoiceFoodItemUnitPriceVal;
         $('#invoiceTotal').val(invoiceTotalVal.toFixed(2));
     });
     
@@ -2455,7 +2469,9 @@ $(document).ready(()=>{
                                 buttons: false,
                                 timer: 1000,
                             });
-                            // stockTableBody(result[1]);
+                            readyToDeliveryTableBody()
+                            orderAssignPerson()
+                            $('#assignDeliveryPerson').modal('hide');
                             $("#assignDeliveryForm").trigger('reset');
                             
                         }
@@ -2854,6 +2870,154 @@ $(document).ready(()=>{
         })
     });
 
+    //edit user profile
+    const userFirstName = $("#userFirstName");
+    const userLastName = $("#userLastName");
+    const userContact = $("#userContact");
+    const userBirthday = $("#userBirthday");
+    const userNic = $("#userNic");
+    const userEmail = $("#userEmail");
+    const userAdd1 = $("#userAdd1");
+    const userAdd2 = $("#userAdd2");
+    const userAdd3 = $("#userAdd3");
+   
+
+    $("#userLoggedFormSubmit").click(()=>{
+        let userFirstNameVal = userFirstName.val();
+        let userLastNameVal = userLastName.val();
+        let userContactVal = userContact.val();
+        let userBirthdayVal = userBirthday.val();
+        let userNicVal = userNic.val();
+        let userEmailVal = userEmail.val();
+        let userAdd1Val = userAdd1.val();
+        let userAdd2Val = userAdd2.val();
+        let userAdd3Val = userAdd3.val();
+        
+        if (userFirstNameVal == "" && userLastNameVal=="" && userContactVal=="" && userBirthdayVal=="" && userNicVal=="" && userEmailVal=="" && userAdd1Val=="" && userAdd2Val=="" && userAdd3Val) {
+            toastr.error("Please fill the form");
+            $([userFirstName, userLastName, userContact,userBirthday, userNic, userEmail, userAdd1, userAdd2, userAdd3]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid");
+            });
+            userFirstName.focus();
+            return false;
+        }
+        if (userFirstNameVal== "" || !userFirstNameVal.match(patName)) {
+            addInvalidClass(userFirstName, "Please enter first name");
+            return false;
+        }
+        if (userLastNameVal== "" || !userLastNameVal.match(patName)) {
+            addInvalidClass(userLastName, "Please enter last name");
+            return false;
+        }
+        if (userContactVal== "" || !userContactVal.match(patCon)) {
+            addInvalidClass(userContact, "Please enter contact no");
+            return false;
+        }
+        if (userBirthdayVal== "") {
+            addInvalidClass(userBirthday, "Please enter first name");
+            return false;
+        }
+        if (userNicVal == "" || !userNicVal.match(patNIC)) {
+            addInvalidClass(userNic, "Please enter NIC");
+            return false;
+        }
+        if (userEmailVal == "" || !userEmailVal.match(patEmail)) {
+            addInvalidClass(userEmail, "Please enter email");
+            return false;
+        }
+        if (userAdd1Val == "") {
+            addInvalidClass(userAdd1, "Please enter address no");
+            return false;
+        }
+        if (userAdd2Val == "") {
+            addInvalidClass(userAdd2, "Please enter address no");
+            return false;
+        }
+        if (userAdd3Val == "") {
+            addInvalidClass(userAdd3, "Please enter address no");
+            return false;
+        }
+        swal({
+            title: 'Are You Sure',
+            text: 'Do you want to submit this form',
+            icon: 'warning',
+            buttons: true, //cancel btn
+            dangerMode: true, //ok btn red color
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+                    method: "POST",
+                    url: "../controller/LoggedUserController.php?status=editLoggedUser",
+                    data: new FormData($('#myProfileForm')[0]),
+                    dataType: "json",
+                    enctype: "multipart/form-data",
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    cache: false,
+                    beforeSend: function() {
+                        swal({
+                            title: "Loading...",
+                            text: " ",
+                            icon: "../../images/96x96.gif",
+                            buttons: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        });
+                    },success: function(result) {
+                        if (result[0]==1) {
+                            swal({
+                                title: "Good Job !",
+                                text: "User Successfully Updated",
+                                icon: "success",
+                                buttons: false,
+                                timer: 1000,
+                            });
+                            viewLoggedUser(result[1]);
+                            $(".is-valid").removeClass('is-valid');
+                            $("#editMyProfile").modal('hide');
+                        }
+                        if (result[0]==2) {
+                            swal({
+                                title: "Warning !",
+                                text: result[1],
+                                icon: "warning",
+                            });
+                        }
+                    },error: function(error) {
+                        console.log(error)
+                    }
+                });
+            }else{
+                swal({
+                    title: "Warning !",
+                    text: 'User not updated',
+                    icon: "warning",
+                    buttons: false,
+                    timer: 1000,
+                })
+            }
+        })
+    });
+
+    $(".report").click(function(){
+        // let value = $(this).attr('id');
+        $(this).find(".icon").toggleClass("fad fa-folder fad fa-folder-open");
+        // $(value).toggleClass("d-none");
+        $(this).siblings('ul').toggleClass("d-none");
+        $(this).parent().siblings('ul').children('ul').addClass('d-none');
+        $(this).parent().siblings('ul').children('a').find("i.icon").removeClass("fad fa-folder-open");
+        $(this).parent().siblings('ul').children('a').find("i.icon").addClass("fad fa-folder");
+    })
+    
+    
+
     let addInvalidClass = (Id, message) => {
         let id = Id
         toastr.error(message);
@@ -2943,7 +3107,7 @@ $(document).ready(()=>{
     editUnitPrice.change(() => {removeInvalidClass(editUnitPrice)});
     editFoodItemCategory.change(() => {removeInvalidClass(editFoodItemCategory)});
     editFoodItemSubCategory.change(() => {removeInvalidClass(editFoodItemSubCategory)});
-    editFoodItemImage.change(() => {removeInvalidClass(editFoodItemImage)});
+    //editFoodItemImage.change(() => {removeInvalidClass(editFoodItemImage)});
 
     categoryName.change(() => {removeInvalidClass(categoryName)});
     categoryImage.change(() => {removeInvalidClass(categoryImage)});
@@ -2960,8 +3124,10 @@ $(document).ready(()=>{
     editSubCategoryImage.change(()=>{removeInvalidClass(editSubCategoryImage)});
 
     rowItemName.change(() => {removeInvalidClass(rowItemName)});
+    rowItemReorderLevel.change(()=>{removeInvalidClass(rowItemReorderLevel)});
 
     editRowItemName.change(() => {removeInvalidClass(editRowItemName)});
+    editRowItemReorderLevel.change(()=>{removeInvalidClass(editRowItemReorderLevel)});
 
     stockRowItemName.change(()=>{removeInvalidClass(stockRowItemName)});
     stockMnfDate.change(()=>{removeInvalidClass(stockMnfDate)});
@@ -2975,7 +3141,7 @@ $(document).ready(()=>{
 
     invoiceFoodItemName.change(()=>removeInvalidClass(invoiceFoodItemName));
     invoiceFoodItemQuantity.change(()=>{removeInvalidClass(invoiceFoodItemQuantity)});
-    invoiceDiscount.change(()=>{removeInvalidClass(invoiceDiscount)});
+    //invoiceDiscount.change(()=>{removeInvalidClass(invoiceDiscount)});
     invoiceTotal.change(()=>{removeInvalidClass(invoiceTotal)});
 
     deliveryPerson.change(()=>{removeInvalidClass(deliveryPerson)});

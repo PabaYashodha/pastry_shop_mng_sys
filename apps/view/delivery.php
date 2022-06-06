@@ -37,7 +37,10 @@ require_once "sidebar.php";
                         <button class="nav-link active nav-link2" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Ready to Delivery </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-link2" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Order Delivered</button>
+                        <button class="nav-link nav-link2" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Assigned Delivery Person</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link nav-link2" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-about" type="button" role="tab" aria-controls="pills-about" aria-selected="false">Order Delivered</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link nav-link2" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Delivery Person Details</button>
@@ -66,7 +69,7 @@ require_once "sidebar.php";
                             </div>
                         </div>
                     </div>
-                    <!-- order completed -->
+                    <!-- Assign delivery -->
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                         <div class="row">
                             <div class="row">
@@ -77,8 +80,29 @@ require_once "sidebar.php";
                                                 <th scope="col">#</th>
                                                 <th scope="col">Invoice Id</th>
                                                 <th scope="col">Delivery Date</th>
+                                                <th scope="col">Deliver Person Name</th>
                                                 <th scope="col">Delivery Status</th>
-                                                <th scope="col">Option</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="orderAssignTable"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- order completed -->
+                    <div class="tab-pane fade" id="pills-about" role="tabpanel" aria-labelledby="pills-about-tab">
+                        <div class="row">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <table class="table tablePill table-hover table-responsive-*" id="dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Invoice Id</th>
+                                                <th scope="col">Delivery Date</th>
+                                                <th scope="col">Delivery Status</th>
+                                                <!-- <th scope="col">Option</th> -->
                                             </tr>
                                         </thead>
                                         <tbody id="orderCompletedTable"></tbody>
@@ -224,6 +248,6 @@ require_once "sidebar.php";
 <!-- modal end -->
 <?php require_once "scriptInclude.php"; ?>
 <script>
-    window.load(readyToDeliveryTableBody(), deliveryCompletedTableBody(), deliveryPerson(), deliveryPersonName())
+    window.load(readyToDeliveryTableBody(), deliveryCompletedTableBody(), deliveryPerson(), deliveryPersonName(), orderAssignPerson())
 </script>
 <?php require_once "footer.php"; ?>

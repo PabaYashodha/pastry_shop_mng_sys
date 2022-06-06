@@ -190,5 +190,6 @@ require_once "sidebar.php";
 <?php require_once "scriptInclude.php" ?>
 <script>
     $(window).load(getRowItemData(), getGrnNumber(), );
+    window.lo
 </script>
 <?php require_once "footer.php" ?>

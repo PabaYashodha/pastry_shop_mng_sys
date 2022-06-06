@@ -115,11 +115,37 @@ $(document).ready(function () {
             }
         });
     },
-    minLength:2,
     select: function (event, ui) {
         //console.log(ui)
       $("#stockRowItemId ,#stockReleaseRowItemId").val(ui.item.id)
        $("#stockRowItemName, #stockReleaseRowItemNames").val(ui.item.value)
+  },
+})
+
+$("#stockReleaseRowItemNames").autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: "../controller/StockReleaseController.php?status=getAvailableRowItemName",
+            dataType: "json",
+            data:{
+              rowItem : request.term
+            },
+            success: function(data) {
+              //  console.log(data)
+                response($.map(data, function(rowItem){
+                    return{
+                        id: rowItem.id,
+                        value: rowItem.value,
+                    }
+                }))
+            }
+        });
+    },
+    //minLength:2,
+    select: function (event, ui) {
+        //console.log(ui)
+      $("#stockReleaseRowItemId").val(ui.item.id)
+       $("#stockReleaseRowItemNames").val(ui.item.value)
   },
 })
 
@@ -171,7 +197,6 @@ $("#foodItemSubCategoryName").autocomplete({
         });
     },
     select: function (event, ui) {
-        console.log(ui)
       $("#foodItemSubCategoryId").val(ui.item.id)
       $("#foodItemSubCategoryName").val(ui.item.value)
   },
@@ -198,7 +223,6 @@ $("#invoiceFoodItemName").autocomplete({
             }
         });
     },
-    minLength:2,
     select: function (event, ui) {
         // console.log(ui)
       $("#invoiceFoodItemId").val(btoa(ui.item.id))
@@ -226,16 +250,12 @@ $("#userResetName").autocomplete({
             }
         });
     },
-    minLength:2,
     select: function (event, ui) {
         // console.log(ui)
       $("#userResetId").val(btoa(ui.item.id))
       $("#userResetName").val(ui.item.value)
   },
 })
-
-
-});
 
 //dashboard
 $.get("../controller/DashboardController.php?status=getModule", (result) => {
@@ -257,20 +277,178 @@ $.get("../controller/DashboardController.php?status=getModule", (result) => {
 // var page = path.split("/").pop();
 // console.log( page );
 
-$.get("../controller/DashboardController.php?status=getNewOrderCount",(result)=>{
-    //console.log(result)
-    let row="";
-    for (let index = 0; index < result.length; index++) {
-       row += '<h5 class="card-title">'+[result[index].ordertb_status]+'</h5>'        
-    }
-    $("#newOrderCount").html(row).show()
-})
+$.get("../controller/DashboardController.php?status=getReorderCount",(result)=>{
+    //console.log(result);
+    $('#lowLevelStockCount').html(result).show();
+},'json')
 
+$.get("../controller/DashboardController.php?status=getNewOrderCount",(result)=>{
+    $("#newOrderCount").html(result).show();
+},'json')
+
+$.get("../controller/DashboardController.php?status=getPendingDeliveryCount",(result)=>{
+    $("#pendingDeliveryCount").html(result).show();
+},'json')
+
+$.get("../controller/DashboardController.php?status=getTodayRevenue",(result)=>{
+    //console.log(result);
+    $("#todaySales").html(result).show();
+},'json')
+
+$.get("../controller/LoginController.php?status=getRoleName",(result)=>{
+    //console.log(result)
+    $("#logRoleName").html(result).show();
+},'json')
+
+$('#make_backup').click(() => {
+        swal({
+            title: 'Are you sure',
+            text: 'Do you want to submit this form',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+            method:'POST',
+            url:'../controller/BackupController.php?status=makeBackup',
+            dataType:'JSON',
+            beforeSend:function(){
+                swal({
+                    title: "Loading...",
+                    text: " ",
+                    icon: "../../images/96x96.gif",
+                    buttons: false,
+                    allowOutsideClick: false,
+                    closeOnEsc: false,
+                    closeOnClickOutside: false,
+                });
+            },
+            success:function (result) {
+                if (result==1) {
+                    swal({
+                        title: "Successfully backup created and Email has been send",
+                        text: " ",
+                        icon: "success",
+                        buttons: false,
+                        timer: 2000,
+                    });
+                    setTimeout(location.reload.bind(location), 2100);
+                }
+                if (result==2) {
+                    swal({
+                        title: "Successfully backup created an Email sent has been failed",
+                        text: " ",
+                        icon: "warning",
+                        buttons: false,
+                        timer: 2000,
+                    });
+                    setTimeout(location.reload.bind(location), 2100);
+                }
+                if (result==3) {
+                    swal({
+                        title: "Backup creation failed",
+                        text: " ",
+                        icon: "warning",
+                        buttons: false,
+                        timer: 2000,
+                    });
+                    setTimeout(location.reload.bind(location), 2100);
+                }               
+            }
+        })
+            }})
+        
+    });
+
+ $("#uploadBackupSubmit").click(()=>{
+        swal({
+            title: 'Are you sure',
+            text: 'Do you want to submit this form',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+        }).then((willOUT)=>{
+            if (willOUT) {
+                $.ajax({
+            method:'POST',
+            url:'../controller/BackupController.php?status=restoreBackup',
+            dataType:'JSON',
+            beforeSend:function(){
+                swal({
+                    title: "Loading...",
+                    text: " ",
+                    icon: "../../images/96x96.gif",
+                    buttons: false,
+                    allowOutsideClick: false,
+                    closeOnEsc: false,
+                    closeOnClickOutside: false,
+                });
+            },
+            success:function (result) {
+                if (result==1) {
+                    swal({
+                        title: "Successfully restored",
+                        text: " ",
+                        icon: "success",
+                        buttons: false,
+                        timer: 2000,
+                    });
+                   // setTimeout(location.reload.bind(location), 2100);
+                }
+                if (result==2) {
+                    swal({
+                        title: "Warning",
+                        text: " ",
+                        icon: "warning",
+                        buttons: false,
+                        timer: 2000,
+                    });
+                    //setTimeout(location.reload.bind(location), 2100);
+                }             
+            },error : function(error) {
+                console.log(error)
+            }
+        });
+            }else{
+                swal({
+                    title: "Warning!",
+                    text: "Backup not restored ",
+                    icon: "warning",
+                    timer: 1000,
+                })
+            }
+        })
+    });
+        
+    const togglePassword = document.querySelector('#togglePassword');
+    const newPassword = document.querySelector('#newPassword');
+
+togglePassword.addEventListener('click', function (e) {
+    // toggle the type attribute
+    const type = newPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+    newPassword.setAttribute('type', type);
+    // toggle the eye / eye slash icon
+    this.classList.toggle('bi-eye');
+});
+//end document.ready()
+});
 
 let preview = (input) => {
     if (input.files && input.files[0]) {
         let reader = new FileReader();
         reader.onload = function (e) {
+            $('#pre_image').attr('src', e.target.result).height(200).width(200);
+            $('#edit_pre_image').attr('src', e.target.result).height(200).width(200);
+            $('#user_pre_image').attr('src', e.target.result).height(200).width(200);
             $('#food_pre_image').attr('src', e.target.result).height(200).width(200);
             $('#edit_pre_image').attr('src', e.target.result).height(150).width(150);
             $('#edit_food_pre_image').attr('src', e.target.result).height(150).width(150);
@@ -285,13 +463,11 @@ let preview = (input) => {
 }
 
 
-//user
+//user management
 let getUserData = () =>{
-    $.get("../controller/UserController.php?status=getUserData", (result) => {
-        // userTableBody(result);      //call userTableBody function  
+    $.get("../controller/UserController.php?status=getUserData", (result) => {       
         let row = '';
         for (let index = 0; index < result.length; index++) {
-            // console.log( result[index].user_id);
             row += '<tr>' +
                 '<th scope="row">' + result[index].user_id + '</th>' +
                 '<td><img src="../../images/user-images/' + result[index].user_image + '" width="40" height="40"></td>' +
@@ -391,7 +567,7 @@ let editUserDetails = (Id) => {
         $('#editLastName').val(result.user_lname);
         $('#editContact').val(result.user_contact);
         $('#editBirthday').val(result.user_dob);
-        $('#editGender').val(result.user_gender);
+       // $('#editMale, #editFemale').val(result.user_gender);
         $('#editNic').val(result.user_nic);
         $('#editEmail').val(result.user_email);
         $('#editRole').val(result.role_role_id);
@@ -426,29 +602,7 @@ let deactivateUser = (Id) => {
                 // console.log(result);
                 if ([result[0]] == 1) {
                     toastr.success("User status successfully changed");
-                    userTableBody(result[1])
-                    // let row = '';
-                    // for(let index = 0; index<result[1].length; index++){
-                    //    row += '<tr>'+
-                    //        '<th scope="row">'+result[1][index].user_id+'</th>'+
-                    //        '<td><img src="../../images/user-images/' +result[1][index].user_image+ '"width="40" height="40"></td>'+
-                    //        '<td>'+result[1][index].user_fname+''+result[1][index].user_lname+'</td>'+
-                    //        '<td>'+result[1][index].user_email+'</td>'+
-                    //        '<td>'+result[1][index].user_contact+'</td><td>';
-                    //        if ((result[1][index].user_status)==1) {
-                    //            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateUser(\'' + btoa(result[1][index].user_id) + '\')">Active</button>'
-                    //        }else{
-                    //         row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateUser(\'' + btoa(result[1][index].user_id) + '\')">Deactivate</button>';
-                    //        }
-                    //        row += '</td>' +
-                    //              '<td>' +
-                    //              '<div class="d-inline-flex justify-content-start">' +
-                    //              '<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#viewUser" onclick="viewUserDetails(\'' + btoa(result[1][index].user_id) + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
-                    //              '<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editUser" onclick="editUserDetails(\'' + btoa(result[1][index].user_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-                    //              '<button class="btn btn-danger "><i class="fal fa-trash-alt"></i></button></div></td>&nbsp;&nbsp;&nbsp;' +
-                    //              '</tr>';
-                    // }console.log(row)
-                    // $('#userTable').html(row).show()
+                    getUserData()
                 } else {
                     toastr.success(result[1]);
                 }
@@ -478,7 +632,7 @@ let activateUser = (Id) => {
                 // console.log(result);
                 if ([result[0]] == 1) {
                     toastr.success("User status successfully changed");
-                    userTableBody(result[1])
+                    getUserData()
                 } else {
                     toastr.success(result[1]);
                 }
@@ -486,8 +640,8 @@ let activateUser = (Id) => {
         }
     })
 }
-
-//supplier 
+ 
+//supplier management
 let getSupplierData = () =>{
     $.get("../controller/SupplierController.php?status=getSupplierData", (result) => {
         let row = '';
@@ -560,7 +714,7 @@ let editSupplierDetails = (Id) => {
     }, 'json')
 }
 
-//customer
+//customer management
 let getCustomerData = () =>{
     $.get("../controller/CustomerController.php?status=getCustomerData", (result) => {
         // customerTableBody(result);
@@ -642,7 +796,7 @@ let editCustomerDetails = (Id) => {
     }, 'json')
 }
 
-//dining table
+//dining table management
 let getDiningTableData = () =>{
     $.get("../controller/DiningTableController.php?status=getDiningTableData", (result) =>{
         // diningTableBody(result);
@@ -756,7 +910,8 @@ let activateDiningTable = (Id) => {
     })
 }
 
-//food items
+
+//food items management
 let foodItemTableBody = ()=>{
     $.get("../controller/FoodItemController.php?status=getFoodItemData", (result) =>{
         //foodItemTableBody(result);
@@ -961,17 +1116,11 @@ let categoryTableBody = () => {
             row += '<tr>' +
                 '<th scope="row">' + count + '</th>' +
                 '<td><img src="../../images/foodItem-images/' + result[index].category_image + '" width="40" height="40"></td>' +
-                '<td>' + result[index].category_name + '</td><td>';
-            if ((result[index].category_status) == 1) {
-                row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateCategory(\'' + btoa(result[index].category_id) + '\')">Available</button>';
-            } else {
-                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateCategory(\'' + btoa(result[index].category_id) + '\')">Out of Stock</button>';
-            }
-            row += '</td>' +
+                '<td>' + result[index].category_name + '</td>'+
                 '<td>' +
                 '<div class="d-inline-flex justify-content-start">' +
                 '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategory" onclick="deleteCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
+                //'<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategory" onclick="deleteCategoryDetails(\'' + btoa(result[index].category_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
                 '</td>' +
                 '</tr>';       
             count++;
@@ -999,7 +1148,7 @@ let subCategoryOption = () => {
     $.get("../controller/SubCategoryController.php?status=getSubCategoryData",(result)=>{
         // subCategoryTableBody(result);
         // subCategoryOption(result);
-        let row = '';
+        let row = '<option>--Select --</option>';
         for (let index = 0; index < result.length; index++) {
             row += '<option value="' + result[index].sub_category_id + '">' + result[index].sub_category_name + '</option>';
         }
@@ -1022,86 +1171,86 @@ let editCategoryDetails = (Id) => {
 
 }
 
-let deactivateCategory = (Id) => {
-    swal({
-        title: 'Are you sure',
-        text: 'Do you want to change the status',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-        allowOutsideClick: false,
-        closeOnClickOutside: false,
-        closeOnEsc: false,
-    }).then(willOUT => {
-        if (willOUT) {
-            $.post('../controller/CategoryController.php?status=changeCategoryStatus', {
-                categoryId: Id,
-                categoryStatus: "0"
-            }, (result) => {
-                if ([result[0] == 1]) {
-                    toastr.success("Category is Out of Stock");
-                    categoryTableBody(result[1])
-                } else {
-                    toastr.success(result[1]);
-                }
-            }, 'json')
+// let deactivateCategory = (Id) => {
+//     swal({
+//         title: 'Are you sure',
+//         text: 'Do you want to change the status',
+//         icon: 'warning',
+//         buttons: true,
+//         dangerMode: true,
+//         allowOutsideClick: false,
+//         closeOnClickOutside: false,
+//         closeOnEsc: false,
+//     }).then(willOUT => {
+//         if (willOUT) {
+//             $.post('../controller/CategoryController.php?status=changeCategoryStatus', {
+//                 categoryId: Id,
+//                 categoryStatus: "0"
+//             }, (result) => {
+//                 if ([result[0] == 1]) {
+//                     toastr.success("Category is Out of Stock");
+//                     categoryTableBody(result[1])
+//                 } else {
+//                     toastr.success(result[1]);
+//                 }
+//             }, 'json')
 
-        }
-    })
-}
+//         }
+//     })
+// }
 
-let activateCategory = (Id) => {
-    swal({
-        title: 'Are you sure',
-        text: 'Do you want to change the status',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-        allowOutsideClick: false,
-        closeOnClickOutside: false,
-        closeOnEsc: false,
-    }).then(willOUT => {
-        if (willOUT) {
-            $.post('../controller/CategoryController.php?status=changeCategoryStatus', {
-                categoryId: Id,
-                categoryStatus: "1"
-            }, (result) => {
-                if ([result[0] == 1]) {
-                    toastr.success("Category is now Available");
-                    categoryTableBody(result[1])
-                } else {
-                    toastr.success(result[1]);
-                }
-            }, 'json')
-        }
-    })
-}
+// let activateCategory = (Id) => {
+//     swal({
+//         title: 'Are you sure',
+//         text: 'Do you want to change the status',
+//         icon: 'warning',
+//         buttons: true,
+//         dangerMode: true,
+//         allowOutsideClick: false,
+//         closeOnClickOutside: false,
+//         closeOnEsc: false,
+//     }).then(willOUT => {
+//         if (willOUT) {
+//             $.post('../controller/CategoryController.php?status=changeCategoryStatus', {
+//                 categoryId: Id,
+//                 categoryStatus: "1"
+//             }, (result) => {
+//                 if ([result[0] == 1]) {
+//                     toastr.success("Category is now Available");
+//                     categoryTableBody(result[1])
+//                 } else {
+//                     toastr.success(result[1]);
+//                 }
+//             }, 'json')
+//         }
+//     })
+// }
 
-let deleteCategoryDetails = (Id) => {
-    swal({
-        title: 'Are you sure',
-        text: 'Do you want to delete this category',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-        allowOutsideClick: false,
-        closeOnClickOutside: false,
-        closeOnEsc: false,
-    }).then(willOUT => {
-        if (willOUT) {
-            $.post('../controller/CategoryController.php?status=deleteCategory', {
-                categoryId: Id
-            }, (result) => {
-                if ([result[0] == 1]) {
-                    toastr.success("Category successfully deleted");
-                    categoryTableBody(result[1])
-                } else {
-                    toastr.success(result[1]);
-                }
-            }, 'json')
-        }
-    })
-}
+// let deleteCategoryDetails = (Id) => {
+//     swal({
+//         title: 'Are you sure',
+//         text: 'Do you want to delete this category',
+//         icon: 'warning',
+//         buttons: true,
+//         dangerMode: true,
+//         allowOutsideClick: false,
+//         closeOnClickOutside: false,
+//         closeOnEsc: false,
+//     }).then(willOUT => {
+//         if (willOUT) {
+//             $.post('../controller/CategoryController.php?status=deleteCategory', {
+//                 categoryId: Id
+//             }, (result) => {
+//                 if ([result[0] == 1]) {
+//                     toastr.success("Category successfully deleted");
+//                     categoryTableBody(result[1])
+//                 } else {
+//                     toastr.success(result[1]);
+//                 }
+//             }, 'json')
+//         }
+//     })
+// }
 
 //sub category
 let subCategoryTableBody = () => {
@@ -1113,18 +1262,11 @@ let subCategoryTableBody = () => {
             '<th scope="row">' + count + '</th>' +
             '<td><img src="../../images/foodItem-images/' + result[index].sub_category_image + '" width="40" height="40"></td>' +
              '<td>' + result[index].sub_category_name + '</td>' +
-            '<td>' + subCategoryCategoryName(result[index].category_category_id).category_name + '</td><td>';
-
-        if ((result[index].sub_category_status) == 1) {
-            row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateSubCategory(\'' + btoa(result[index].sub_category_id) + '\')">Available</button>';
-        } else {
-            row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateSubCategory(\'' + btoa(result[index].sub_category_id) + '\')">Out of Stock</button>';
-        }
-        row += '</td>' +
+            '<td>' + subCategoryCategoryName(result[index].category_category_id).category_name + '</td>'+
             '<td>' +
             '<div class="d-inline-flex justify-content-start">' +
             '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editSubCategory" onclick="editSubCategoryDetails(\'' + btoa(result[index].sub_category_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-            '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubCategory" onclick="deleteSubCategoryDetails(\'' + btoa(result[index].sub_category_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
+            //'<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubCategory" onclick="deleteSubCategoryDetails(\'' + btoa(result[index].sub_category_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
             '</td>' +
             '</tr>';
         count++;
@@ -1176,87 +1318,87 @@ let editSubCategoryDetails = (Id) => {
     }, 'json')
 }
 
-let deactivateSubCategory = (Id) => {
-    swal({
-        title: 'Are you sure',
-        text: 'Do you want to change the status',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-        allowOutsideClick: false,
-        closeOnClickOutside: false,
-        closeOnEsc: false,
-    }).then(willOUT => {
-        if (willOUT) {
-            $.post('../controller/SubCategoryController.php?status=changeSubCategoryStatus', {
-                subCategoryId: Id,
-                subCategoryStatus: "0"
-            }, (result) => {
-                if ([result[0] == 1]) {
-                    toastr.success("Sub Category is out of stock");
-                    subCategoryTableBody(result[1])
-                } else {
-                    toastr.success(result[1]);
-                }
-            }, 'json')
-        }
-    })
-}
+// let deactivateSubCategory = (Id) => {
+//     swal({
+//         title: 'Are you sure',
+//         text: 'Do you want to change the status',
+//         icon: 'warning',
+//         buttons: true,
+//         dangerMode: true,
+//         allowOutsideClick: false,
+//         closeOnClickOutside: false,
+//         closeOnEsc: false,
+//     }).then(willOUT => {
+//         if (willOUT) {
+//             $.post('../controller/SubCategoryController.php?status=changeSubCategoryStatus', {
+//                 subCategoryId: Id,
+//                 subCategoryStatus: "0"
+//             }, (result) => {
+//                 if ([result[0] == 1]) {
+//                     toastr.success("Sub Category is out of stock");
+//                     subCategoryTableBody(result[1])
+//                 } else {
+//                     toastr.success(result[1]);
+//                 }
+//             }, 'json')
+//         }
+//     })
+// }
 
-let activateSubCategory = (Id) => {
-    swal({
-        title: 'Are you sure',
-        text: 'Do you want to change the status',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-        allowOutsideClick: false,
-        closeOnClickOutside: false,
-        closeOnEsc: false,
-    }).then(willOUT => {
-        if (willOUT) {
-            $.post("../controller/SubCategoryController.php?status=changeSubCategoryStatus", {
-                subCategoryId: Id,
-                subCategoryStatus: "1"
-            }, (result) => {
-                if ([result[0] == 1]) {
-                    toastr.success("Sub Category is now available");
-                } else {
-                    toastr.success(result[1]);
-                }
-            }, 'json')
-        }
-    })
-}
+// let activateSubCategory = (Id) => {
+//     swal({
+//         title: 'Are you sure',
+//         text: 'Do you want to change the status',
+//         icon: 'warning',
+//         buttons: true,
+//         dangerMode: true,
+//         allowOutsideClick: false,
+//         closeOnClickOutside: false,
+//         closeOnEsc: false,
+//     }).then(willOUT => {
+//         if (willOUT) {
+//             $.post("../controller/SubCategoryController.php?status=changeSubCategoryStatus", {
+//                 subCategoryId: Id,
+//                 subCategoryStatus: "1"
+//             }, (result) => {
+//                 if ([result[0] == 1]) {
+//                     toastr.success("Sub Category is now available");
+//                 } else {
+//                     toastr.success(result[1]);
+//                 }
+//             }, 'json')
+//         }
+//     })
+// }
 
-let deleteSubCategoryDetails = (Id) => {
-    swal({
-        title: 'Are you sure',
-        text: 'Do you want to delete this category',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-        allowOutsideClick: false,
-        closeOnClickOutside: false,
-        closeOnEsc: false,
-    }).then(willOUT => {
-        if (willOUT) {
-            $.post("../controller/SubCategoryController.php?status=deleteSubCategory", {
-                subCategoryId: Id
-            }, (result) => {
-                if ([result[0] == 1]) {
-                    toastr.success("Sub Category successfully deleted");
-                    subCategoryTableBody(result[1])
-                } else {
-                    toastr.success(result[1]);
-                }
-            }, 'json')
-        }
-    })
-}
+// let deleteSubCategoryDetails = (Id) => {
+//     swal({
+//         title: 'Are you sure',
+//         text: 'Do you want to delete this category',
+//         icon: 'warning',
+//         buttons: true,
+//         dangerMode: true,
+//         allowOutsideClick: false,
+//         closeOnClickOutside: false,
+//         closeOnEsc: false,
+//     }).then(willOUT => {
+//         if (willOUT) {
+//             $.post("../controller/SubCategoryController.php?status=deleteSubCategory", {
+//                 subCategoryId: Id
+//             }, (result) => {
+//                 if ([result[0] == 1]) {
+//                     toastr.success("Sub Category successfully deleted");
+//                     subCategoryTableBody(result[1])
+//                 } else {
+//                     toastr.success(result[1]);
+//                 }
+//             }, 'json')
+//         }
+//     })
+// }
 
 
-
+//row item manage
 let getRowItemData =()=>{
     $.get("../controller/RowItemController.php?status=getRowItemData",(result)=>{
         //rowItemTableBody(result);
@@ -1265,17 +1407,21 @@ let getRowItemData =()=>{
         for (let index = 0; index < result.length; index++) {
             row += '<tr>' +
                 '<th>'+count+'</th>'+
-                '<td>'+result[index].row_item_name+'</td><td>';
-            if ((result[index].row_item_status) == 1) {
+                '<td>'+result[index].row_item_name+'</td>'+
+                '<td>'+result[index].row_item_reorder_level+'</td>'+
+                '<td>'+result[index].row_item_stock_sum+'</td><td>';
+            if (parseInt(result[index].row_item_stock_sum) >= parseInt(result[index].row_item_reorder_level)) {
                 row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateRowItem(\'' + btoa(result[index].row_item_id) + '\')">Available</button>';
-            } else {
-                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateRowItem(\'' + btoa(result[index].row_item_id) + '\')">Out of Stock</button>';
+            } else if(parseInt(result[index].row_item_stock_sum) <= parseInt(result[index].row_item_reorder_level) && parseInt(result[index].row_item_stock_sum)!=0){
+                row += '<button class="btn btn-outline-warning rounded shadow" onclick="activateRowItem(\'' + btoa(result[index].row_item_id) + '\')">Low stock</button>';
+            }else if(parseInt(result[index].row_item_stock_sum) == 0){
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateRowItem(\'' + btoa(result[index].row_item_id) + '\')">Out of stock</button>';
             }
             row += '</td>' +
                 '<td>' +
                 '<div class="d-inline-flex justify-content-start">' +
                 '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editRowItem" onclick="editRowItemDetails(\'' + btoa(result[index].row_item_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRowItem" onclick="deleteRowItemDetails(\'' + btoa(result[index].row_item_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
+                //'<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRowItem" onclick="deleteRowItemDetails(\'' + btoa(result[index].row_item_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
                 '</td>'+
             '</tr>';
             count++;
@@ -1284,68 +1430,13 @@ let getRowItemData =()=>{
     },'json')
 }
 
-//change the row item status to out of stock status
-let  deactivateRowItem =(Id)=>{
-    swal({
-        title : 'Are you sure',
-        text : 'Do you want to change the status',
-        icon : 'warning',
-        buttons : true,
-        dangerMode : true,
-        allowOutsideClick : false,
-        closeOnEsc : false,
-        closeOnClickOutside : false,
-    }).then(willOUT=>{
-        if (willOUT) {
-            $.post('../controller/RowItemController.php?status=changeRowItemStatus',{
-                rowItemId : Id,
-                rowItemStatus : "0"
-            },(result)=>{
-                if ([result[0]==1]) {
-                    toastr.success("Row item is out of stock");
-                    getRowItemData(result[1])
-                }else{
-                    toastr.success(result[1]);
-                }
-            },'json')
-        }
-    })
-}
-
-//change the row item status to available status
-let activateRowItem = (Id) =>{
-    swal({
-        title : 'Are you sure',
-        text : 'Do you want to change the status',
-        icon : 'warning',
-        buttons : true,
-        dangerMode : true,
-        allowOutsideClick : false,
-        closeOnEsc : false,
-        closeOnClickOutside : false,
-    }).then(willOUT=>{
-        if (willOUT) {
-            $.post("../controller/RowItemController.php?status=changeRowItemStatus",{
-                rowItemId : Id,
-                rowItemStatus : "1"
-            },(result)=>{
-                if ([result[0]==1]) {
-                    toastr.success("Row Item is now available");
-                    getRowItemData(result[1])
-                }else{
-                    toastr.success(result[1]);
-                }
-            },'json')
-        }
-    })
-}
-
 let editRowItemDetails = (Id) =>{
     $.post("../controller/RowItemController.php?status=viewRowItemDetails",{
         rowItemId :Id
     },(result)=>{
         $('#editRowItemId').val(btoa(result.row_item_id));
         $('#editRowItemName').val(result.row_item_name);
+        $("#editRowItemReorderLevel").val(result.row_item_reorder_level);
     },'json')
 }
  
@@ -1354,6 +1445,7 @@ let getGrnNumber = ()=>{
         $('#stockGrnNumber').val(result);
     },'json')
 }
+
 
 
 let grnSupplierName = (Id) =>{
@@ -1382,18 +1474,12 @@ let getGrnData = ()=>{
                 '<td>'+ result[index].grn_ref_id+'</td>'+
                 '<td>'+result[index].grn_date+'</td>'+
                 '<td>'+result[index].grn_price+'</td>'+
-                '<td>'+ grnSupplierName(result[index].supplier_supplier_id).supplier_contact_name+'</td><td>';
-                if((result[index].grn_status)==1){
-                    row+= '<button class="btn btn-outline-success rounded shadow" onclick="deactivateGrn(\'' + btoa(result[index].grn_id) + '\')">Available</button>';
-                }else{
-                    row+= '<button class="btn btn-outline-danger rounded shadow" onclick="activateGrn(\'' + btoa(result[index].grn_id) + '\')">Out</button>';
-                }
-                row += '</td>'+
-                '<td>'+
-                '<div class="d-inline-flex justify-content-start">' +
-                // '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editRowItem" onclick="editDetails(\'' + btoa(result[index].grn_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteGrn" onclick="deleteGrnDetails(\'' + btoa(result[index].grn_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
-                '</td>'+
+                '<td>'+ grnSupplierName(result[index].supplier_supplier_id).supplier_contact_name+'</td>'+
+                // '<td>'+
+                // '<div class="d-inline-flex justify-content-start">' +
+                // // '<button class="btn  btn-warning" data-bs-toggle="modal" data-bs-target="#editRowItem" onclick="editDetails(\'' + btoa(result[index].grn_id) + '\')"><i class="fad fa-edit"></i></button>&nbsp;&nbsp;&nbsp;' +
+                // //'<button class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#deleteGrn" onclick="deleteGrnDetails(\'' + btoa(result[index].grn_id) + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
+                // '</td>'+
 
                 '</tr>';
                 count++;
@@ -1401,64 +1487,7 @@ let getGrnData = ()=>{
             $('#grnTable').html(row).show();
     },'json')
 }
-
-
-//deactivate grn
-let deactivateGrn =(Id)=>{
-         swal({
-             title : 'Are you sure',
-             text : 'Do you want to change the status',
-             icon : 'warning',
-             buttons : true,
-             dangerMode : true,
-            allowOutsideClick : false,
-            closeOnEsc : false,
-            closeOnClickOutside : false,
-         }).then(willOUT=>{
-             if (willOUT) {
-                 $.post('../controller/GrnController.php?status=changeGrnStatus',{
-                     grnId : Id,
-                     grnStatus : "0"
-                 },(result)=>{
-                     if (result[0]==1) {
-                         toastr.success("Grn is hand over");
-                         getGrnData(result[1])
-                     }else{
-                         toastr.success(result[1]);
-                     }
-                 },'json')
-             }
-         })
-}
-
- //change the grn status to not and over status
- let activateGrn =(Id)=>{
-    swal({
-        title : 'Are you sure',
-        text : 'Do you want to change the status',
-        icon : 'warning',
-        buttons : true,
-        dangerMode : true,
-       allowOutsideClick : false,
-       closeOnEsc : false,
-       closeOnClickOutside : false,
-    }).then(willOUT=>{
-        if (willOUT) {
-            $.post('../controller/GrnController.php?status=changeGrnStatus',{
-                grnId : Id,
-                grnStatus : "1"
-            },(result)=>{
-                if (result[0]==1) {
-                    toastr.success("Grn is not hand over");
-                    getGrnData(result[1])
-                }else{
-                    toastr.success(result[1]);
-                }
-            },'json')
-        }
-    })
-}
-
+//view stock
 let viewStockData = ()=>{
     $.get("../controller/StockController.php?status=getStockData",(result)=>{
         let row ='';
@@ -1466,81 +1495,126 @@ let viewStockData = ()=>{
         for (let index = 0; index < result.length; index++) {
             row += '<tr>'+
             '<th>'+ count +'</th>'+
+            '<td>'+rowItemName(result[index].row_item_row_item_id).row_item_name+'</td>'+
             '<td>'+result[index].stock_count+'</td>'+
             '<td>'+result[index].stock_current_count+'</td>'+
             '<td>'+result[index].stock_cost_per_unit+'</td>'+
-            '<td>'+result[index].stock_discount+'</td>'+
-            '<td>'+result[index].stock_mnf_date+'</td>'+
-            '<td>'+result[index].stock_exp_date+'</td>'+
-            '<td>'+result[index].stock_net_cost+'</td><td>';
-            if ((result[index].stock_status) == 1) {
-                row += '<button class="btn btn-outline-success rounded shadow" onclick="deactivateStock(\'' + btoa(result[index].stock_id) + '\')">In Stock</button>';
-            } else {
-                row += '<button class="btn btn-outline-danger rounded shadow" onclick="activateStock(\'' + btoa(result[index].stock_id) + '\')">Out of Stock</button>';
-            }
-            row+= '</td>'+
-            '</tr>'
+            '<td>'+result[index].stock_mnf_date+'<br>'+result[index].stock_exp_date+'</td>'+
+            '<td>'+result[index].stock_net_cost+'</td>'+
+            '</td>'+
+            '</tr>';
             count++
         }
         $('#stockTable').html(row).show();
     },'json')
 }
+let getStockReleaseNumber = ()=>{
+    $.get("../controller/StockReleaseController.php?status=getStockReleaseNo",(result)=>{
+        $('#stockReleaseNo').val(result);
+    },'json')
+}
 
-//deactivate stock 
-let deactivateStock =(Id)=>{
-    swal({
-        title : 'Are you sure',
-        text : 'Do you want to change the status',
-        icon : 'warning',
-        buttons : true,
-        dangerMode : true,
-       allowOutsideClick : false,
-       closeOnEsc : false,
-       closeOnClickOutside : false,
-    }).then(willOUT=>{
-        if (willOUT) {
-            $.post('../controller/StockController.php?status=changeStockStatus',{
-                stockId : Id,
-                stockStatus : "0"
-            },(result)=>{
-                if (result[0]==1) {
-                    toastr.success("Stock is out of stock");
-                    viewStockData(result[1])
-                }else{
-                    toastr.success(result[1]);
-                }
-            },'json')
+let getRoleData = () => {
+    $.get("../controller/RoleController.php?status=getRole",(result)=>{
+        let row = '<option>--Select Person--</option>';
+        for (let index = 0; index < result.length; index++) {
+            row += '<option value="' + result[index].role_id + '">' + result[index].role_name + '</option>';
+        }
+        $('#stockReleaseMadeBy').html(row).show()
+    },'json')
+}
+
+let viewStockReleaseData = ()=>{
+    $.get('../controller/StockReleaseController.php?status=getStockReleaseData',(result)=>{
+        let row ='';
+        let count =1 ;
+        for (let index = 0; index < result.length; index++) {
+            row += '<tr>'+
+            '<th>'+count+'</th>'+
+            '<td>'+result[index].item_release_date+'</td>'+
+            '<td>'+rowItemName(result[index].item_release_item_id).row_item_name+'</td>'+
+            '<td>'+result[index].item_release_to+'</td>'
+            '</tr>'
+            count++
+        }
+        $('#stockReleaseTable').html(row).show();
+    },'json')
+}
+let rowItemName = (Id) => {
+    //console.log(Id)
+    var result = '';
+    $.ajax({
+        url: '../controller/RowItemController.php?status=getRowItemById',
+        type: 'GET',
+        dataType: 'JSON',
+        data: {
+            rowItemId: Id
+        },
+        async: false,
+        success: function (data) {
+            result = data
         }
     })
+    return result;
+    // console.log(result)
 }
+//deactivate grn
+// 
+//deactivate stock 
+// let deactivateStock =(Id)=>{
+//     swal({
+//         title : 'Are you sure',
+//         text : 'Do you want to change the status',
+//         icon : 'warning',
+//         buttons : true,
+//         dangerMode : true,
+//        allowOutsideClick : false,
+//        closeOnEsc : false,
+//        closeOnClickOutside : false,
+//     }).then(willOUT=>{
+//         if (willOUT) {
+//             $.post('../controller/StockController.php?status=changeStockStatus',{
+//                 stockId : Id,
+//                 stockStatus : "0"
+//             },(result)=>{
+//                 if (result[0]==1) {
+//                     toastr.success("Stock is out of stock");
+//                     viewStockData(result[1])
+//                 }else{
+//                     toastr.success(result[1]);
+//                 }
+//             },'json')
+//         }
+//     })
+// }
 
 //change the stock status to not and over status
-let activateStock =(Id)=>{
-swal({
-   title : 'Are you sure',
-   text : 'Do you want to change the status',
-   icon : 'warning',
-   buttons : true,
-   dangerMode : true,
-  allowOutsideClick : false,
-  closeOnEsc : false,
-  closeOnClickOutside : false,
-}).then(willOUT=>{
-   if (willOUT) {
-       $.post('../controller/StockController.php?status=changeStockStatus',{
-          stockId : Id,
-          stockStatus : "1"
-       },(result)=>{
-           if (result[0]==1) {
-               toastr.success("Stock is out of stock");
-               viewStockData(result[1])
-           }else{
-               toastr.success(result[1]);
-           }
-       },'json')
-   }
-})
-}
+// let activateStock =(Id)=>{
+// swal({
+//    title : 'Are you sure',
+//    text : 'Do you want to change the status',
+//    icon : 'warning',
+//    buttons : true,
+//    dangerMode : true,
+//   allowOutsideClick : false,
+//   closeOnEsc : false,
+//   closeOnClickOutside : false,
+// }).then(willOUT=>{
+//    if (willOUT) {
+//        $.post('../controller/StockController.php?status=changeStockStatus',{
+//           stockId : Id,
+//           stockStatus : "1"
+//        },(result)=>{
+//            if (result[0]==1) {
+//                toastr.success("Stock is out of stock");
+//                viewStockData(result[1])
+//            }else{
+//                toastr.success(result[1]);
+//            }
+//        },'json')
+//    }
+// })
+// }
 
 //new order table
 let newOrderTableBody=()=>{
@@ -1555,7 +1629,7 @@ let newOrderTableBody=()=>{
             '<td>'+result[index].invoice_net_total+'</td>'+
             '<td>'+result[index].invoice_date+'</td><td>';
             if (result[index].ordertb_status==1) {
-                row += '<button class="btn btn-outline-danger rounded shadow" onclick="orderPreparing(\'' + result[index].invoice_id + '\')">New Order</button>'; 
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="orderPreparing(\'' + result[index].invoice_id + '\',\'' + result[index].ordertb_id + '\')">New Order</button>'; 
             }
             row+= '</td>'+
             '<td>'+
@@ -1594,11 +1668,7 @@ let invoiceTableBody=()=>{
           '<th>'+count+'</th>'+
          '<td>'+result[index].invoice_id+'</td>'+
          '<td>'+result[index].invoice_date+'</td>'+
-         '<td>'+result[index].invoice_sub_amount+'</td>'+
-         '<td>'+result[index].invoice_discount+'</td>'+
          '<td>'+result[index].invoice_net_total+'</td>'+
-         '<td>'+result[index].invoice_recieve_amount+'</td>'+
-         '<td>'+result[index].invoice_balance_amount+'</td>'+
          //'<td>'+result[index].invoice_type+'</td>'+
          '<td>'+
             '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewInvoice" onclick="viewInvoiceDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
@@ -1609,6 +1679,12 @@ let invoiceTableBody=()=>{
         $("#onlineInvoiceTable").html(row).show();
     },'json')
 }
+
+// let getInvoiceNumber =()=>{
+//     $.get("../controller/InvoiceController.php?status=getInvoiceNumber",(result)=>{
+//         return result;
+//     },'json')
+// }
 
 let viewInvoiceDetails = (Id)=>{
     $.post("../controller/InvoiceController.php?status=viewOnlineOrderDetails",{
@@ -1661,11 +1737,7 @@ let manualInvoiceTableBody =()=>{
            '<th>'+count+'</th>'+
          '<td>'+result[index].invoice_id+'</td>'+
          '<td>'+result[index].invoice_date+'</td>'+
-         '<td>'+result[index].invoice_sub_amount+'</td>'+
-         '<td>'+result[index].invoice_discount+'</td>'+
          '<td>'+result[index].invoice_net_total+'</td>'+
-         '<td>'+result[index].invoice_recieve_amount+'</td>'+
-         '<td>'+result[index].invoice_balance_amount+'</td>'+
          '<td>'+
             '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewManualInvoice" onclick="viewManualInvoiceDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>&nbsp;&nbsp;&nbsp;' +
         '</td>'+
@@ -1730,9 +1802,9 @@ let onlineOrderTableBody =()=>{
             '<td>'+result[index].invoice_net_total+'</td>'+
             '<td>'+result[index].invoice_date+'</td><td>';
             if (result[index].ordertb_status==1) {
-                row += '<button class="btn btn-outline-danger rounded shadow" onclick="orderPreparing(\'' + result[index].invoice_id + '\')">New Order</button>'; 
+                row += '<button class="btn btn-outline-danger rounded shadow" onclick="orderPreparing(\'' + result[index].invoice_id + '\',\'' + result[index].ordertb_id + '\')">New Order</button>'; 
             }else {
-                row += '<button class="btn btn-outline-info rounded shadow" onclick="orderReadyToDelivery(\'' + result[index].invoice_id + '\')"> Preparing</button>';
+                row += '<button class="btn btn-outline-info rounded shadow" onclick="orderReadyToDelivery(\'' + result[index].invoice_id + '\',\'' + result[index].ordertb_id + '\')"> Preparing</button>';
             }
             row+='<td>'+
             '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewOnlineOrder" onclick="viewOnlineOrderDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>' ;+
@@ -1782,7 +1854,60 @@ let viewOnlineOrderDetails = (Id)=>{
     },'json')
 }
 
-let orderPreparing=(Id)=>{
+//delivery management
+
+let readyToDeliveryTableBody = ()=>{
+    $.get('../controller/DeliveryController.php?status=getReadyToDeliveryData',(result)=>{
+        let row = '';
+        let count = 1;
+        for (let index = 0; index <result.length; index++) {
+            row += '<tr>'+
+            '<th>'+count+'</th>'+
+            '<td>'+result[index].invoice_id+'</td>'+
+            '<td>'+result[index].invoice_date+'</td><td>';
+            if (result[index].ordertb_status==3) {
+                row += '<button class="btn btn-outline-warning rounded shadow">Ready to Delivery</button>';
+            }
+            else{
+                row += '<button class="btn btn-outline-success rounded shadow" onclick="assignedDelivered(\'' + result[index].invoice_id + '\')">Assign Delivery</button>';
+            }
+            row+='</td>'+
+            '<td>'+
+            '<button class="btn  btn-dark" data-bs-toggle="modal" data-bs-target="#assignDeliveryPerson" onclick="assignDeliveryPerson(\'' + result[index].ordertb_id + '\')"><i class="fas fa-plus"></i></button>&nbsp;&nbsp;&nbsp;' +
+            //'<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDeliveryDetails" onclick="viewDeliveryDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>' ;+
+            '</td>'+
+            '</tr>';
+            count++;
+        }
+        $("#readyToDeliveryTable").html(row).show();
+    },'json')
+}
+
+let orderAssignPerson = ()=>{
+    $.get('../controller/DeliveryController.php?status=getAssignDeliveryData',(result)=>{
+        let row = '';
+        let count = 1;
+        for (let index = 0; index <result.length; index++) {
+            row += '<tr>'+
+            '<th>'+count+'</th>'+
+            '<td>'+result[index].invoice_id+'</td>'+
+            '<td>'+result[index].invoice_date+'</td>'+
+            '<td>'+result[index].user_fname+' '+result[index].user_lname+'</td><td>';
+            if (result[index].ordertb_status==4) {
+                row += '<button class="btn btn-outline-dark rounded shadow" onclick="orderDelivered(\'' + result[index].invoice_id + '\',\'' + result[index].ordertb_id + '\')">Delivery Assigned</button>';
+            }
+            row+='</td>'+
+            // '<td>'+
+            // '<button class="btn  btn-dark" data-bs-toggle="modal" data-bs-target="#assignDeliveryPerson" onclick="assignDeliveryPerson(\'' + result[index].ordertb_id + '\')"><i class="fas fa-plus"></i></button>&nbsp;&nbsp;&nbsp;' +
+            // //'<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDeliveryDetails" onclick="viewDeliveryDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>' ;+
+            // '</td>'+
+            '</tr>';
+            count++;
+        }
+        $("#orderAssignTable").html(row).show();
+    },'json')
+}
+let orderPreparing=(Id, ord_id)=>{
     swal({
         title: 'Are you sure',
         text: 'Do you want to change the status',
@@ -1796,6 +1921,7 @@ let orderPreparing=(Id)=>{
         if (willOUT) {
             $.post('../controller/OrderController.php?status=changeOnlineOrderStatus',{
                 invoiceId: Id,
+                orderId: ord_id,
                 onlineOrderStatus:"2"
             },(result)=>{
                 if (result[0]==1) {
@@ -1808,7 +1934,7 @@ let orderPreparing=(Id)=>{
         }
     })
 }
-let orderReadyToDelivery=(Id)=>{
+let orderReadyToDelivery=(Id, ord_id)=>{
     swal({
         title: 'Are you sure',
         text: 'Do you want to change the status',
@@ -1822,6 +1948,7 @@ let orderReadyToDelivery=(Id)=>{
         if (willOUT) {
             $.post('../controller/OrderController.php?status=changeOnlineOrderStatus',{
                 invoiceId: Id,
+                orderId: ord_id,
                 onlineOrderStatus:"3"
             },(result)=>{
                 if (result[0]==1) {
@@ -1835,57 +1962,7 @@ let orderReadyToDelivery=(Id)=>{
     })
 }
 
-let readyToDeliveryTableBody = ()=>{
-    $.get('../controller/DeliveryController.php?status=getReadyToDeliveryData',(result)=>{
-        let row = '';
-        let count = 1;
-        for (let index = 0; index <result.length; index++) {
-            row += '<tr>'+
-            '<th>'+count+'</th>'+
-            '<td>'+result[index].invoice_id+'</td>'+
-            '<td>'+result[index].invoice_date+'</td><td>';
-            if (result[index].ordertb_status==3) {
-                row += '<button class="btn btn-outline-warning rounded shadow" onclick="orderDelivered(\'' + result[index].invoice_id + '\')">Ready to Delivery</button>';
-            }
-            else{
-                row += '<button class="btn btn-outline-success rounded shadow" onclick="orderDelivered(\'' + result[index].invoice_id + '\')">Order Delivered</button>';
-            }
-            row+='</td>'+
-            '<td>'+
-            '<button class="btn  btn-dark" data-bs-toggle="modal" data-bs-target="#assignDeliveryPerson" onclick="assignDeliveryPerson(\'' + result[index].ordertb_id + '\')"><i class="fas fa-plus"></i></button>&nbsp;&nbsp;&nbsp;' +
-            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDeliveryDetails" onclick="viewDeliveryDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>' ;+
-            '</td>'+
-            '</tr>';
-            count++;
-        }
-        $("#readyToDeliveryTable").html(row).show();
-    },'json')
-}
-
-let deliveryCompletedTableBody=()=>{
-    $.get('../controller/DeliveryController.php?status=getOrderCompletedData',(result)=>{
-        let row = '';
-        let count = 1;
-        for (let index = 0; index <result.length; index++) {
-            row += '<tr>'+
-            '<th>'+count+'</th>'+
-            '<td>'+result[index].invoice_id+'</td>'+
-            '<td>'+result[index].invoice_date+'</td><td>';
-            if (result[index].ordertb_status==4) {
-                row += '<button class="btn btn-outline-success rounded shadow" onclick="orderDelivered(\'' + result[index].invoice_id + '\')">Order Delivered</button>';
-            }
-            row+='</td>'+
-            '<td>'+
-            '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDeliveryDetails" onclick="viewDeliveryDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>' ;+
-            '</td>'+
-            '</tr>';
-            count++;
-        }
-        $("#orderCompletedTable").html(row).show();
-    },'json')
-}
-
-let orderDelivered=(Id)=>{
+let orderAssign=(Id, ord_id)=>{
     swal({
         title: 'Are you sure',
         text: 'Do you want to change the status',
@@ -1899,11 +1976,66 @@ let orderDelivered=(Id)=>{
         if (willOUT) {
             $.post('../controller/OrderController.php?status=changeOnlineOrderStatus',{
                 invoiceId: Id,
+                orderId: ord_id,
                 onlineOrderStatus:"4"
             },(result)=>{
                 if (result[0]==1) {
-                    toastr.success("Order is delivered");
+                    toastr.success("Order is ready to delivery");
                     onlineOrderTableBody(result[1])
+                }else{
+                    toastr.success(result[1])
+                }
+            },'json')
+        }
+    })
+}
+
+
+let deliveryCompletedTableBody=()=>{
+    $.get('../controller/DeliveryController.php?status=getOrderCompletedData',(result)=>{
+        let row = '';
+        let count = 1;
+        for (let index = 0; index <result.length; index++) {
+            row += '<tr>'+
+            '<th>'+count+'</th>'+
+            '<td>'+result[index].invoice_id+'</td>'+
+            '<td>'+result[index].invoice_date+'</td><td>';
+            if (result[index].ordertb_status==5) {
+                row += '<button class="btn btn-outline-success rounded shadow">Order Delivered</button>';
+            }
+            row+='</td>'+
+            // '<td>'+
+            // '<button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#viewDeliveryDetails" onclick="viewDeliveryDetails(\'' + result[index].invoice_id + '\')"><i class="fal fa-eye"></i></button>' ;+
+            // '</td>'+
+            '</tr>';
+            count++;
+        }
+        $("#orderCompletedTable").html(row).show();
+    },'json')
+}
+
+let orderDelivered=(Id, ord_id)=>{
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to change the status',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    }).then(willOUT=>{
+        if (willOUT) {
+            $.post('../controller/OrderController.php?status=changeOnlineOrderStatus',{
+                invoiceId: Id,
+                orderId: ord_id,
+                onlineOrderStatus:"5"
+            },(result)=>{
+                if (result[0]==1) {
+                    toastr.success("Order is delivered");
+                    //onlineOrderTableBody(result[1])
+                    orderAssignPerson();
+                    deliveryCompletedTableBody()
                 }else{
                     toastr.success(result[1])
                 }
@@ -1995,55 +2127,121 @@ let assignDeliveryPerson=(Id)=>{
     $("#orderId").val(Id); //get the id from view modal nd assign it to hidden field order id
 }
 
-let getStockReleaseNumber = ()=>{
-    $.get("../controller/StockReleaseController.php?status=getStockReleaseNo",(result)=>{
-        $('#stockReleaseNo').val(result);
-    },'json')
-}
-
-let getRoleData = () => {
-    $.get("../controller/RoleController.php?status=getRole",(result)=>{
-        let row = '<option>--Select Person--</option>';
+let getBackupData = ()=>{
+    $.get('../controller/BackupController.php?status=getBackupData',(result)=>{
+        let row = '';
+        let count = 1;
         for (let index = 0; index < result.length; index++) {
-            row += '<option value="' + result[index].role_id + '">' + result[index].role_name + '</option>';
+           row += '<tr>'+
+           '<td>'+count+'</td>'+
+           '<td>'+result[index].backup_date+'</td>'+
+           '<td>'+result[index].backup_name+'</td>'+
+           '<td>'+
+           '<a href="'+result[index].backup_location+'" class="btn  btn-info text-light"><i class="fas fa-download"></i></a>&nbsp;&nbsp;&nbsp;'+
+           '<button class="btn  btn-danger" onclick="deleteBackup(\'' + result[index].backup_id + '\')"><i class="fad fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;' +
+           '</td>'+
+           '</tr>';
+            count++;
         }
-        $('#stockReleaseMadeBy').html(row).show()
+        $("#backupTable").html(row).show();
     },'json')
 }
-
-let viewStockReleaseData = ()=>{
-    $.get('../controller/StockReleaseController.php?status=getStockReleaseData',(result)=>{
-        let row ='';
-        let count =1 ;
-        for (let index = 0; index < result.length; index++) {
-            row += '<tr>'+
-            '<th>'+count+'</th>'+
-            '<td>'+result[index].item_release_date+'</td>'+
-            '<td>'+rowItemName(result[index].item_release_item_id).row_item_name+'</td>'+
-            '</tr>'
-            count++
-        }
-        $('#stockReleaseTable').html(row).show();
-    },'json')
-}
-let rowItemName = (Id) => {
-    var result = '';
-    $.ajax({
-        url: '../controller/RowItemController.php?status=getRowItemById',
-        type: 'GET',
-        dataType: 'JSON',
-        data: {
-            rowItemId: Id
-        },
-        async: false,
-        success: function (data) {
-            result = data
+let deleteBackup = (Id) =>{
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to delete this backup',
+        icon: 'warning',
+        buttons: true,
+        angerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+        }).then(willOUT => {
+            if (willOUT) {
+                $.post('../controller/BackupController.php?status=deleteBackup', {
+                    backupId: Id
+                }, (result) => {
+                    if ([result[0] == 1]) {
+                        toastr.success("Backup successfully deleted");
+                        getBackupData(result[1])
+                        } else {
+                            toastr.success(result[1]);
+                        }
+            }, 'json')
         }
     })
-    return result;
-    // console.log(result)
 }
 
+let viewLoggedUser = ()=>{
+    $.get('../controller/LoggedUserController.php?status=viewLoggedUserDetails',(result)=>{
+        //    $("#userFirstName").val(result.user_fname);
+        //    $("#userLastName").val(result.user_lname);
+        //    $("#userContact").val(result.user_contact);
+        //    $("#userBirthday").val(result.user_dob);
+        // //    $("#")
+        //    $("#userNic").val(result.user_nic);
+        //    $("#userEmail").val(result.user_email);
+        //    $("#userRole").val(result.role_role_id);   
+        //    $("#userAdd1").val(result.user_add1);
+        //    $("#userAdd2").val(result.user_add2);
+        //    $("#userAdd3").val(result.user_add3);
+
+        let row = '<div class="row">'+
+            '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-2">' +
+            '<img src="../../images/user-images/' + result.user_image + '" alt="" width="150px" height="150px" class="m-auto">' +
+            '</div>'+
+
+            '<div class="col-xs-8 col-sm-8 col-md-8 col-lg-6">' +
+            '<label for="name" class="col-sm-12 col-form-label"><h2>' + result.user_fname + ' ' + result.user_lname + '</h2></label>' +
+            '</div>'+
+            '<div class="col-xs-8 col-sm-8 col-md-8 col-lg-4">' +
+            '<button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#editMyProfile" style="background-color: #2f2e41;"><i class="fad fa-edit"></i> EDIT PROFILE</button>'+
+            '</div>'+
+
+
+            '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 fs-5" >' +
+            '<label for="address" class="col-sm-2 col-form-label">Contact </label>' +
+            '<label for="address" class="col-sm-10 col-form-label  mb-2"> :  ' + result.user_contact + '</label>' +
+            '</div>'+
+
+            '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 fs-5" >' +
+            '<label for="address" class="col-sm-2 col-form-label">Email </label>' +
+            '<label for="address" class="col-sm-10 col-form-label  mb-2"> :  ' + result.user_email + '</label>' +
+            '</div>'+ 
+
+            '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 fs-5" >' +
+            '<label for="address" class="col-sm-2 col-form-label">NIC </label>' +
+            '<label for="address" class="col-sm-10 col-form-label  mb-2"> :  ' + result.user_nic + '</label>' +
+            '</div>'+
+
+            '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 fs-5" >' +
+            '<label for="address" class="col-sm-2 col-form-label">Birthday </label>' +
+            '<label for="address" class="col-sm-10 col-form-label  mb-2"> :  ' + result.user_dob + '</label>' +
+            '</div>'+
+
+            '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 fs-5">' +
+            '<label for="address" class="col-sm-2 col-form-label"> Address </label>' +
+            '<label for="address" class="col-sm-10 col-form-label  mb-2"> :  ' + result.user_add1 + ' ' + result.user_add2 + ' ' + result.user_add3 + '</label>' +
+            '</div>'+
+            '</div>';
+           $("#viewLoggedUserContent").html(row).show()
+    },'json')
+}
+let editLoggedUserDetails = ()=>{
+    $.get('../controller/LoggedUserController.php?status=viewLoggedUserDetails',(result)=>{
+           $("#userFirstName").val(result.user_fname);
+           $("#userLastName").val(result.user_lname);
+           $("#userContact").val(result.user_contact);
+           $("#userBirthday").val(result.user_dob);
+           $("#userNic").val(result.user_nic);
+           $("#userEmail").val(result.user_email);
+           $("#userAdd1").val(result.user_add1);
+           $("#userAdd2").val(result.user_add2);
+           $("#userAdd3").val(result.user_add3);
+           let url = "../../images/user-images/" + result.user_image;
+        $('#user_pre_image').attr('src', url).height(200).width(200);
+},'json')
+}
 // let itemNotCollected=(Id)=>{
 
 //     swal({
@@ -2097,3 +2295,57 @@ let rowItemName = (Id) => {
 //         }
 //     })
 // }
+//let deactivateGrn =(Id)=>{
+    //          swal({
+    //              title : 'Are you sure',
+    //              text : 'Do you want to change the status',
+    //              icon : 'warning',
+    //              buttons : true,
+    //              dangerMode : true,
+    //             allowOutsideClick : false,
+    //             closeOnEsc : false,
+    //             closeOnClickOutside : false,
+    //          }).then(willOUT=>{
+    //              if (willOUT) {
+    //                  $.post('../controller/GrnController.php?status=changeGrnStatus',{
+    //                      grnId : Id,
+    //                      grnStatus : "0"
+    //                  },(result)=>{
+    //                      if (result[0]==1) {
+    //                          toastr.success("Grn is hand over");
+    //                          getGrnData(result[1])
+    //                      }else{
+    //                          toastr.success(result[1]);
+    //                      }
+    //                  },'json')
+    //              }
+    //          })
+    // }
+    
+    //  //change the grn status to not and over status
+    //  let activateGrn =(Id)=>{
+    //     swal({
+    //         title : 'Are you sure',
+    //         text : 'Do you want to change the status',
+    //         icon : 'warning',
+    //         buttons : true,
+    //         dangerMode : true,
+    //        allowOutsideClick : false,
+    //        closeOnEsc : false,
+    //        closeOnClickOutside : false,
+    //     }).then(willOUT=>{
+    //         if (willOUT) {
+    //             $.post('../controller/GrnController.php?status=changeGrnStatus',{
+    //                 grnId : Id,
+    //                 grnStatus : "1"
+    //             },(result)=>{
+    //                 if (result[0]==1) {
+    //                     toastr.success("Grn is not hand over");
+    //                     getGrnData(result[1])
+    //                 }else{
+    //                     toastr.success(result[1]);
+    //                 }
+    //             },'json')
+    //         }
+    //     })
+    // }

@@ -28,26 +28,28 @@ require_once "sidebar.php";
             </ol>
         </nav>
     </div>
-    <div class="card shadow-lg mx-auto mt-3" style="width: 30rem;">
-        <div class="card-header" style="background-color: #2f2e41;">
-            <h3 class="text-light"><i class="fas fa-lock-alt"></i> Password Reset</h3>
-        </div>
-        <div class="card-body">
-        <form action="" method="post" role="form" id="adminPasswordResetForm">
-            <div class="mb-3">
-                <label for="userName" class="form-label">User Name</label>
-                <input type="hidden" class="form-control" id="userResetId" name="userResetId">
-                <!-- <input type="hidden" class="form-control" id="userResetNic" name="userResetNic"> -->
-                <input type="text" class="form-control" id="userResetName" name="userResetName">
+    <div class="card shadow-lg mt-3 mb-3" style="border-radius: 20px;">
+        <div class="card shadow-lg mx-auto mt-3 mb-3" style="width: 30rem;">
+            <div class="card-header" style="background-color: #2f2e41;">
+                <h3 class="text-light"><i class="fas fa-lock-alt"></i> Password Reset</h3>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="float-end d-inline-flex">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Reset</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <button type="button" id="adminResetPassword" class="btn btn-primary">Submit</button>
-                </div>
+            <div class="card-body">
+                <form action="" method="post" role="form" id="adminPasswordResetForm">
+                    <div class="mb-3">
+                        <label for="userName" class="form-label">User Name</label>
+                        <input type="hidden" class="form-control" id="userResetId" name="userResetId">
+                        <!-- <input type="hidden" class="form-control" id="userResetNic" name="userResetNic"> -->
+                        <input type="text" class="form-control" id="userResetName" name="userResetName">
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="float-end d-inline-flex">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Reset</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="button" id="adminResetPassword" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
         </div>
     </div>
 </div>

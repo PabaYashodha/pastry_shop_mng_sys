@@ -48,11 +48,7 @@ require_once "sidebar.php";
                                                     <th scope="col">#</th>
                                                     <th scope="col">Invoice Id</th>
                                                     <th scope="col">Date</th>
-                                                    <th scope="col">Sub Amount<br>(Rs)</th>
-                                                    <th scope="col">Discount<br>(%)</th>
                                                     <th scope="col">Net Total<br>(Rs)</th>
-                                                    <th scope="col">Received Amount<br>(Rs)</th>
-                                                    <th scope="col">Balance Amount<br>(Rs)</th>
                                                     <th scope="col">Option</th>
                                                 </tr>
                                             </thead>
@@ -73,11 +69,7 @@ require_once "sidebar.php";
                                                     <th scope="col">#</th>
                                                     <th scope="col">Invoice Id</th>
                                                     <th scope="col">Date</th>
-                                                    <th scope="col">Sub Amount<br>(Rs)</th>
-                                                    <th scope="col">Discount<br>(%)</th>
                                                     <th scope="col">Net Total<br>(Rs)</th>
-                                                    <th scope="col">Received Amount<br>(Rs)</th>
-                                                    <th scope="col">Balance Amount<br>(Rs)</th>
                                                     <th scope="col">Option</th>
                                                 </tr>
                                             </thead>

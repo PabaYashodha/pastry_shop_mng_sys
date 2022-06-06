@@ -29,7 +29,9 @@
         -moz-appearance: textfield;
     }
 </style>
-
+<div class="row mt-3 ms-5" style="width: fit-content;">
+<a href="../view/dashboard.php" class="btn btn-dark float-start" role="button" style="background-color: #2f2e41;">DASHBOARD</a>
+</div>
 <div class="card mx-auto mt-5" style="width: 30rem;">
     <div class="card-header" style="background-color: #2f2e41;">
         <h3 class="text-light"><i class="fas fa-lock-alt"></i> Password Reset</h3>
@@ -44,7 +46,7 @@
                 <label for="newPassword" class="form-label">New Password</label>
                 <div class="input-group mb-3">
                     <input type="password" class="form-control" id="newPassword" name="newPassword">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fas fa-eye"></i></button>
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword"><i class="fas fa-eye"></i></button>
                 </div>
             </div>
             <div class="mb-3">

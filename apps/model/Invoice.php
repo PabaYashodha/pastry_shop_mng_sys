@@ -12,14 +12,14 @@ class Invoice
     public function getOnlineInvoiceData()
     {
         $conn = $this->db->connection();
-        $sql =  "SELECT * FROM `invoice` WHERE `invoice_type`= 'online'";
+        $sql =  "SELECT * FROM `invoice` WHERE `invoice_type`= 'online' ORDER BY `invoice_id` DESC";
         $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
     public function getManualInvoiceData()
     {
         $conn = $this->db->connection();
-        $sql =  "SELECT * FROM `invoice` WHERE `invoice_type`= 'manual'";
+        $sql =  "SELECT * FROM `invoice` WHERE `invoice_type`= 'manual' ORDER BY `invoice_id` DESC";
         $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
@@ -44,7 +44,7 @@ class Invoice
     public function viewManualOrderDetails($invoiceId)
     {
         $conn = $this->db->connection();
-        $sql = "SELECT `i`.*, `s`.`invoice_invoice_id` FROM `invoice` `i` , `sales` `s` WHERE `i`.`invoice_id` = `s`.`invoice_invoice_id` AND `i`.`invoice_id`='$invoiceId' AND `i`.`invoice_type`='manual'";
+        $sql = "SELECT `i`.*, `s`.`invoice_invoice_id` FROM `invoice` `i` , `sales` `s` WHERE `i`.`invoice_id` = `s`.`invoice_invoice_id` AND `i`.`invoice_id`='$invoiceId' AND `i`.`invoice_type`='manual' ORDER BY `invoice_id` DESC";
         $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
@@ -55,5 +55,12 @@ class Invoice
         $sql ="SELECT `sales_quantity`, `sales_food_item_unit_price`, `food_item_food_item_id` FROM `sales` WHERE `invoice_invoice_id`='$invoiceId'";
         $result = $conn->query($sql) or die($conn->error);
         return $result;
+    }
+    public function getInvoiceNumber()
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT COUNT(`grn_id`) as `count` FROM `invoice`";
+        $getInvoiceCount = $conn->query($sql);
+        return $getInvoiceCount;
     }
 }

@@ -2,81 +2,103 @@
 include_once '../../config/dbConnection.php';
 $dbConnObj= new dbConnection();
 
-class backUp{
-    function insertBackup($fileName,$name){
-        $con = $GLOBALS['con'];
-        $sql = "INSERT INTO backup(	backup_name,backup_location) VALUES ('$name','$fileName')";
-        $result = $con->query($sql) or die($con->error);
+class BackUp{
+
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = new dbConnection();
+    }
+
+    public function insertBackup($fileName,$name){
+        $conn = $this->db->connection();
+        $sql = "INSERT INTO backup(backup_name,backup_location) VALUES ('$name','$fileName')";
+        $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
 
-    function getBackup(){
-        $con = $GLOBALS['con'];
+    public function getBackup(){
+        $conn = $this->db->connection();
         $sql = "SELECT * FROM backup ORDER BY backup_id DESC";
-        $result = $con->query($sql) or die($con->error);
+        $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
 
-    function setName(){
-        $con = $GLOBALS['con'];
+    public function setName(){
+        $conn = $this->db->connection();
         $sql = "SET NAMES 'utf8'";
-        $result = $con->query($sql) or die($con->error);
+        $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
 
-    function showTables(){
-        $con = $GLOBALS['con'];
+    public function showTables(){
+        $conn = $this->db->connection();
         $sql = "SHOW TABLES";
-        $result = $con->query($sql) or die($con->error);
+        $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
 
-    function selectTables($table){
-        $con = $GLOBALS['con'];
+    public function selectTables($table){
+        $conn = $this->db->connection();
         $sql = "SELECT * FROM $table";
-        $result = $con->query($sql) or die($con->error);
+        $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
 
-    function showCreatTable($table){
-        $con = $GLOBALS['con'];
+    public function showCreatTable($table){
+        $conn = $this->db->connection();
         $sql = "SHOW CREATE TABLE $table";
-        $result = $con->query($sql) or die($con->error);
+        $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
 
-    function removeBackup($backup_id){
-        $con = $GLOBALS['con'];
+    public function removeBackup($backup_id){
+        $conn = $this->db->connection();
         $sql = "DELETE FROM backup WHERE backup_name ='$backup_id'";
-        $result = $con->query($sql) or die($con->error);
+        $result = $conn->query($sql) or die($conn->error);
         return $result;
     } 
     
-    function foreignKeyCheckOff(){
-        $con = $GLOBALS['con'];
+    public function foreignKeyCheckOff(){
+        $conn = $this->db->connection();
         $sql = "SET foreign_key_checks = 0";
-        $result = $con->query($sql) or die($con->error);
+        $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
 
-    function dropTables($table){
-        $con = $GLOBALS['con'];
+    public function dropTables($table){
+        $conn = $this->db->connection();
         $sql = "DROP TABLE IF EXISTS ".$table;
-        $result = $con->query($sql) or die($con->error);
+        $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
 
-//    function foreignKeyCheckOn(){
-//        $con = $GLOBALS['con'];
+//    public function foreignKeyCheckOn(){
+//        $conn = $this->db->connection();
 //        $sql = "SET foreign_key_checks = 1";
-//        $result = $con->query($sql) or die($con->error);
+//        $result = $conn->query($sql) or die($conn->error);
 //        return $result;
 //    }
 
-    function restoreSql($sql){
-        $con = $GLOBALS['con'];
-        $result = $con->query($sql) or die($con->error);
+    public function restoreSql($sql){
+        $conn = $this->db->connection();
+        $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
 
+    public function getBackupData()
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT * FROM `backup` ORDER BY `backup_id` DESC";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
+    public function deleteBackup($backupId)
+    {
+        $conn = $this->db->connection();
+        $sql = "DELETE FROM `backup` WHERE `backup_id` = '$backupId'";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
 }

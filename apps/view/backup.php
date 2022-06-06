@@ -25,6 +25,14 @@ require_once "sidebar.php";
         </nav>
     </div>
     <div class="card shadow-lg mt-3" style="border-radius: 20px;">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-top: 20px; padding-right: 20px;">
+            <div class="float-end d-inline-flex">
+                <button type="button" id="make_backup" class="btn text-light" style="background-color: #2f2e41;">Make BackUp</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <!-- <button type="button" id="uploadBackup" class="btn text-light" style="background-color: #2f2e41;">Upload Backup</button> -->
+                <a href="../view/uploadBackup.php" class="btn btn-dark float-end" role="button" style="background-color: #2f2e41;">Upload Backup</a>
+            </div>
+        </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -32,12 +40,12 @@ require_once "sidebar.php";
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Backup Name</th>
                                 <th scope="col">Backup Date</th>
+                                <th scope="col">Backup Name</th>
                                 <th scope="col">Options</th>
                             </tr>
                         </thead>
-                        <tbody id="diningTable"></tbody>
+                        <tbody id="backupTable"></tbody>
                     </table>
                 </div>
             </div>
@@ -46,4 +54,7 @@ require_once "sidebar.php";
 </div>
 </div>
 <?php require_once "scriptInclude.php" ?>
+<script>
+    window.load(getBackupData());
+</script>
 <?php require_once "footer.php" ?>

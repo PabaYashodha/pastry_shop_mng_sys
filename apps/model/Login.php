@@ -18,9 +18,12 @@ class Login{
         return $result;
     }
 
-    public function ifTheCurrentPasswordIsCorrect($currentPassword)
+    public function getRoleName($userRoleId)
     {
-        # code...
+        $conn= $this->db->connection();
+        $sql = "SELECT `role_name` FROM `role` WHERE `role_id`= $userRoleId";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
     }
 }
 ?>

@@ -8,10 +8,21 @@ switch ($status) {
        $getReadyToDeliveryData = $deliveryObj->getReadyToDeliveryData();
        $deliveryArray = array();
        while ($row= $getReadyToDeliveryData->fetch_assoc()) {
+        $row['invoice_id'] = "INV".str_pad($row['invoice_id'], 6, "0", STR_PAD_LEFT);
            array_push($deliveryArray,$row);
        }
        echo json_encode($deliveryArray);
         break;
+
+    case 'getAssignDeliveryData':
+        $getAssignDeliveryData = $deliveryObj->getAssignDeliveryData();
+        $deliveryArray = array();
+        while ($row= $getAssignDeliveryData->fetch_assoc()) {
+            $row['invoice_id'] = "INV".str_pad($row['invoice_id'], 6, "0", STR_PAD_LEFT);
+            array_push($deliveryArray,$row);
+        }
+        echo json_encode($deliveryArray);
+        break;    
     
     case 'getDeliveryPersonData':
         $deliverPersonData = $deliveryObj->getDeliveryPersonData();
@@ -26,6 +37,7 @@ switch ($status) {
         $getOrderCompletedData = $deliveryObj->getOrderCompletedData();
         $deliveryArray=array();
         while ($row = $getOrderCompletedData->fetch_assoc()) {
+            $row['invoice_id'] = "INV".str_pad($row['invoice_id'], 6, "0", STR_PAD_LEFT);
             array_push($deliveryArray,$row);
         }
         echo json_encode($deliveryArray);
@@ -52,6 +64,7 @@ switch ($status) {
             }
             $addDelivery = $deliveryObj->addDelivery($deliveryPerson,$orderId);
             if ($addDelivery==1) {
+                $updateOrderStatus = $deliveryObj->updateOrderStatus($orderId);
                 $res=1;
                 $result=$deliveryObj->getDeliveryData();
                 $deliveryArray=array();

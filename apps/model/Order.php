@@ -9,6 +9,23 @@ class Order
         $this->db = new dbConnection();
     }
 
+    // public function newInv()
+    // {
+    //     $conn = $this->db->connection();
+    //     $sql = "SELECT count(`invoice_id`) FROM `invoice`";
+    //     $result = $conn->query($sql);
+    //     $row = $result->num_rows;
+    //     if ($row == 0) {
+    //         $newId = "INV0001";
+    //         return $newId;
+    //     } else {
+    //         $row = $result->fetch_array();
+    //         $count = $row[0];
+    //         $count++;
+    //         $newId = "INV" . str_pad($count, 5, "0", STR_PAD_LEFT);
+    //         return $newId;
+    //     }
+    // }
     //add manual orders
     public function addInvoice($invoiceSubAmount,$invoiceTotalDiscount,$invoiceNetTotal,$invoiceReceivedAmount,$invoiceBalanceAmount)
     {
@@ -41,7 +58,7 @@ class Order
     public function getNewOnlineOrderData()
     {
         $conn= $this->db->connection();
-        $sql = "SELECT `i`.`invoice_id`, `i`.`invoice_net_total`, `i`.`invoice_date`, `o`.`ordertb_status` FROM `invoice` `i`, `ordertb` `o`
+        $sql = "SELECT `i`.`invoice_id`, `i`.`invoice_net_total`, `i`.`invoice_date`, `o`.`ordertb_status`, `o`.`ordertb_id` FROM `invoice` `i`, `ordertb` `o`
          WHERE `i`.`invoice_id`= `o`.`invoice_invoice_id` AND `o`.`ordertb_status`='1'";
         $getNewOnlineOrderData = $conn->query($sql) or die($conn->error);
         return $getNewOnlineOrderData;
@@ -64,17 +81,19 @@ class Order
     public function getOnlineOrderData()
     {
         $conn = $this->db->connection();
-        $sql = "SELECT `i`.`invoice_id`, `i`.`invoice_net_total`, `i`.`invoice_date`, `o`.`ordertb_status` FROM `invoice` `i`, `ordertb` `o` 
+        $sql = "SELECT `i`.`invoice_id`, `i`.`invoice_net_total`, `i`.`invoice_date`, `o`.`ordertb_status`, `o`.`ordertb_id` FROM `invoice` `i`, `ordertb` `o` 
             WHERE `i`.`invoice_id` = `o`.`invoice_invoice_id` AND `i`.`invoice_type`='online' AND `ordertb_status`!='3' AND `ordertb_status`!='4'";
         $getOnlineOrderData = $conn->query($sql) or die($conn->error);
         return $getOnlineOrderData;
     }
 
-    public function changeOnlineOrderStatus($invoiceId,$onlineOrderStatus)
+    public function changeOnlineOrderStatus($invoiceId,$onlineOrderStatus, $ord_id)
     {
         $conn = $this->db->connection();
         $sql = "UPDATE `ordertb` SET `ordertb_status`='$onlineOrderStatus' WHERE `invoice_invoice_id`='$invoiceId'";
+        $sql2 = "UPDATE `delivery` SET `delivery_status`='$onlineOrderStatus' WHERE `ordertb_ordertb_id`='$ord_id'";
         $result = $conn->query($sql) or die($conn->error);
+        $conn->query($sql2) or die($conn->error);
         return $result;
     }
     

@@ -55,14 +55,13 @@ require_once '../view/sidebar.php';
                                             <thead>
                                                 <tr>
                                                     <th scope="col">#</th>
+                                                    <th scope="col">Row Item Name</th>
                                                     <th scope="col">Count<br>(kg,l)</th>
                                                     <th scope="col">Current Count<br>(kg,l)</th>
                                                     <th scope="col">Cost per unit<br>(Rs)</th>
-                                                    <th scope="col">Discount</th>
-                                                    <th scope="col">MNF Date</th>
-                                                    <th scope="col">EXP Date</th>
+                                                    <th scope="col"> Date</th>
                                                     <th scope="col">Net cost<br>(Rs)</th>
-                                                    <th scope="col">Status</th>
+                                                    
                                                 </tr>
                                             </thead>
                                             <tbody id="stockTable"></tbody>
@@ -84,6 +83,8 @@ require_once '../view/sidebar.php';
                                             <tr>
                                                 <th scope="col">#</th>
                                                 <th scope="col">Row Item Name</th>
+                                                <th scope="col">Reorder Level</th>
+                                                <th scope="col">Stock Sum</th>
                                                 <th scope="col">Status</th>
                                                 <th scope="col">Options</th>
                                             </tr>
@@ -96,9 +97,9 @@ require_once '../view/sidebar.php';
                     <!-- grn -->
                         <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
+                                <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
                                     <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addGrn"><i class="far fa-plus"></i> ADD GRN</button>
-                                </div>
+                                </div> -->
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <table class="table tablePills table-hover table-responsive-*" id="dataTable">
                                         <thead>
@@ -108,8 +109,6 @@ require_once '../view/sidebar.php';
                                                 <th scope="col">Grn Date</th>
                                                 <th scope="col">Grn Price</th>
                                                 <th scope="col">Supplier Contact Name</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Options</th>
                                             </tr>
                                         </thead>
                                         <tbody id="grnTable"></tbody>
@@ -130,7 +129,7 @@ require_once '../view/sidebar.php';
                                                 <th scope="col">#</th>
                                                 <th scope="col">Date</th>
                                                 <th scope="col">Item Name</th>
-                                                <th scope="col">Options</th>
+                                                <th scope="col">Release To</th>
                                             </tr>
                                         </thead>
                                         <tbody id="stockReleaseTable"></tbody>
@@ -162,6 +161,13 @@ require_once '../view/sidebar.php';
                                 <label for="rowItemName" class="col-sm-3 col-form-label">Item Name</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="rowItemName" name="rowItemName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                                <label for="rowItemReorderLevel" class="col-sm-3 col-form-label">Reorder Level</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" id="rowItemReorderLevel" name="rowItemReorderLevel">
                                 </div>
                             </div>
                         </div>
@@ -197,6 +203,14 @@ require_once '../view/sidebar.php';
                                 <label for="editRowItemName" class="col-sm-3 col-form-label">Item Name</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="editRowItemName" name="editRowItemName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="row mb-3">
+                                <label for="editRowItemReorderLevel" class="col-sm-3 col-form-label">Reorder Level</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="editRowItemReorderLevel" name="editRowItemReorderLevel">
                                 </div>
                             </div>
                         </div>

@@ -236,12 +236,8 @@ switch ($status) {
         $result = $userObj->changeUserStatus($userId, $userStatus);
         if ($result == 1) {
             $res = 1;
-            $getUserTbl = $userObj->getUserData();
-            $userArray = array();
-            while ($row = $getUserTbl->fetch_assoc()) {
-                array_push($userArray, $row);
-            }
-            $msg = $userArray;
+            $getUserTbl = $userObj->getUserData();           
+            $msg = '';
         } else {
             $res = 2;
             $msg = "Oops! user can't deactivate";

@@ -148,7 +148,7 @@ switch ($status) {
             $msg = $categoryArray;
         } else {
             $res = 2;
-            $ms = "Oops category can't delete";
+            $msg = "Oops category can't delete";
         }
         $data[0] = $res;
         $data[1] = $msg;

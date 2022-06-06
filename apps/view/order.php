@@ -38,9 +38,9 @@ require_once "sidebar.php";
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active nav-link2" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Online Orders</button>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <!-- <li class="nav-item" role="presentation">
                             <button class="nav-link nav-link2" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">New Orders</button>
-                        </li>
+                        </li> -->
                     </ul>
 
                     <!-- online orders -->
@@ -67,7 +67,7 @@ require_once "sidebar.php";
                             </div>
                         </div>
                         <!-- new orders -->
-                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        <!-- <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                             <div class="row">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -87,7 +87,7 @@ require_once "sidebar.php";
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

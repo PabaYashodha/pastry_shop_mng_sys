@@ -87,7 +87,7 @@ require_once "sidebar.php";
                                                     <th scope="col">#</th>
                                                     <th scope="col">Image</th>
                                                     <th scope="col">Category Name</th>
-                                                    <th scope="col">Status</th>
+                                                
                                                     <th scope="col">Option</th>
                                                 </tr>
                                             </thead>
@@ -111,7 +111,7 @@ require_once "sidebar.php";
                                                 <th scope="col">Image</th>
                                                 <th scope="col">Sub Category Name</th>
                                                 <th scope="col">Category Name</th>
-                                                <th scope="col">Status</th>
+                                                
                                                 <th scope="col">Option</th>
                                             </tr>
                                         </thead>
@@ -229,7 +229,7 @@ require_once "sidebar.php";
 <div class="modal fade" tabindex="-1" aria-labelledby="editFoodItem" id="editFoodItem" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header text-light" style="background-color:#2f2e41;">
                 <h5 class="modal-title">Edit Food Item</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>

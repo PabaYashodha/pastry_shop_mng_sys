@@ -9,7 +9,7 @@ switch ($status) {
         $result = $getGrnNumber->fetch_assoc();
         $count = $result['count'];
         $count += 1;
-        $newCount = "GRN".str_pad($count, 6, "0", STR_PAD_LEFT);
+        $newCount = "GRN" . str_pad($count, 6, "0", STR_PAD_LEFT);
         echo json_encode($newCount);
         break;
 
@@ -19,22 +19,22 @@ switch ($status) {
             $stockCreateDate = $_POST['stockCreteDate'];
             $stockReferenceNumber = $_POST['stockReferenceNumber'];
             $stockGrnNumber = $_POST['stockGrnNumber'];
-            $stockRowItemId=$_POST['stockTableRowItemId'];
-            $stockMnfData=$_POST['stockTableMnfDate'];
-            $stockExpDate=$_POST['stockTableExpDate'];
-            $stockReceivedQuantity=$_POST['stockTableReceivedQuantity'];
-            $stockCostPerUnit=$_POST['stockTableCostPerUnit'];
-            $stockDiscount= $_POST['stockTableDiscount'];
-            $stockNetCost =$_POST['stockTableNetCost'];
+            $stockRowItemId = $_POST['stockTableRowItemId'];
+            $stockMnfData = $_POST['stockTableMnfDate'];
+            $stockExpDate = $_POST['stockTableExpDate'];
+            $stockReceivedQuantity = $_POST['stockTableReceivedQuantity'];
+            $stockCostPerUnit = $_POST['stockTableCostPerUnit'];
+            $stockDiscount = $_POST['stockTableDiscount'];
+            $stockNetCost = $_POST['stockTableNetCost'];
             $stockTotalCost = $_POST['stockTotalCost'];
             $stockTotalDiscount = $_POST['stockTotalDiscount'];
             $stockNetTotal = $_POST['stockNetTotal'];
-           
-            
-            if ($stockSupplierId== "") {
+
+
+            if ($stockSupplierId == "") {
                 throw new Exception("Supplier name is required");
             }
-            if ($stockReferenceNumber=="") {
+            if ($stockReferenceNumber == "") {
                 throw new Exception("Stock reference id is required");
             }
             if ($stockCreateDate == "") {
@@ -67,38 +67,42 @@ switch ($status) {
             if ($stockTotalDiscount == "") {
                 throw new Exception("Total discount is required");
             }
-            if ($stockNetTotal== "") {
+            if ($stockNetTotal == "") {
                 throw new Exception("Net total is required");
             }
-            $addGrn = $stockObj->addGrn($stockSupplierId, $stockCreateDate, $stockReferenceNumber,$stockTotalDiscount, $stockNetTotal);//return insert id ro stock model
-            if ($addGrn>0) {
+            $addGrn = $stockObj->addGrn($stockSupplierId, $stockCreateDate, $stockReferenceNumber, $stockTotalDiscount, $stockNetTotal); //return insert id ro stock model
+            if ($addGrn > 0) {
                 foreach ($stockRowItemId as $key => $value) {
-                   $addStock = $stockObj->addStock($stockReceivedQuantity[$key],$stockCostPerUnit[$key], $stockDiscount[$key], $stockMnfData[$key], $stockExpDate[$key], $stockNetCost[$key],$value,$addGrn);
-                   if ($addStock == 1) {
-                       $res = 1;
-                       $getStockData = $stockObj->getStockData();
-                       $stockArray = array();
-                         while ($row = $getStockData->fetch_assoc()) {
-                         array_push($stockArray, $row);
-                        }
-                   $msg = $stockArray;
+                    $addStock = $stockObj->addStock($stockReceivedQuantity[$key], $stockCostPerUnit[$key], $stockDiscount[$key], $stockMnfData[$key], $stockExpDate[$key], $stockNetCost[$key], $value, $addGrn);
+                    $getRowItemStockSum = $stockObj->getRowItemStockSum($stockReceivedQuantity[$key],$value);
+                    if ($addStock != 1) {
+                        throw new Exception("Stock insertion failed");
+                    }
                 }
+                $res = 1;
+                $getStockData = $stockObj->getStockData();
+                $stockArray = array();
+                while ($row = $getStockData->fetch_assoc()) {
+                    array_push($stockArray, $row);
+                }
+                $msg = $stockArray;
+            } else {
+                throw new Exception("Grn insertion failed");
             }
-        }
         } catch (Throwable $th) {
             $res = 2;
             $msg = $th->getMessage();
         }
-        $data[0]=$res;
-        $data[1]=$msg;
+        $data[0] = $res;
+        $data[1] = $msg;
         echo json_encode($data);
         break;
-        
+
     case 'getStockData':
         $getStockData = $stockObj->getStockData();
-        $stockArray= array();
+        $stockArray = array();
         while ($row = $getStockData->fetch_assoc()) {
-            array_push($stockArray,$row);
+            array_push($stockArray, $row);
         }
         echo json_encode($stockArray);
         break;
@@ -107,22 +111,20 @@ switch ($status) {
         $stockId = base64_decode(($_POST['stockId']));
         $stockStatus = $_POST['stockStatus'];
         $result = $stockObj->changeStockStatus($stockId, $stockStatus);
-        if ($result==1) {
-            $res  =1;
-            $getStockTbl=$stockObj->getStockData();
-            $stockArray= array();
-            while ($row= $getStockTbl->fetch_assoc()) {
+        if ($result == 1) {
+            $res  = 1;
+            $getStockTbl = $stockObj->getStockData();
+            $stockArray = array();
+            while ($row = $getStockTbl->fetch_assoc()) {
                 array_push($stockArray, $row);
             }
-            $msg= $stockArray;
-        }else{
+            $msg = $stockArray;
+        } else {
             $res = 2;
             $msg = "Oops stock can't deactivate";
         }
-        $data[0] =$res;
-        $data[1] =$msg;
+        $data[0] = $res;
+        $data[1] = $msg;
         echo json_encode($data);
-        break;    
-    
-  
+        break;
 }

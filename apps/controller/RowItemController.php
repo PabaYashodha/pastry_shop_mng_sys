@@ -7,23 +7,30 @@ switch ($status) {
     case 'addRowItem':
         try {
             $rowItemName = $_POST['rowItemName'];
+            $rowItemReorderLevel = $_POST['rowItemReorderLevel'];
+
             if ($rowItemName == "") {
                 throw new Exception("Row Item Name is required");
+            }
+            if ($rowItemReorderLevel=="") {
+                throw new Exception("Row Item reorder level is required");
             }
             $existRowItemName = $rowItemObj->existRowItemName($rowItemName);
             if ($existRowItemName->num_rows != 0) {
                 throw new Exception("Row item name is already exist");
             }
-            $addRowItem = $rowItemObj->addRowItem($rowItemName);
-            if ($addRowItem == 1) {
-                $res = 1;
-                $getRowItemData = $rowItemObj->getRowItemData();
-                $rowItemArray = array();
-                while ($row = $getRowItemData->fetch_assoc()) {
-                    array_push($rowItemArray, $row);
+            
+                $addRowItem = $rowItemObj->addRowItem($rowItemName,$rowItemReorderLevel);
+                if ($addRowItem == 1) {
+                    $res = 1;
+                    $getRowItemData = $rowItemObj->getRowItemData();
+                    $rowItemArray = array();
+                    while ($row = $getRowItemData->fetch_assoc()) {
+                        array_push($rowItemArray, $row);
+                    }
+                    $msg = $rowItemArray;
                 }
-                $msg = $rowItemArray;
-            }
+            
         } catch (Throwable $th) {
             $res = 2;
             $msg = $th->getMessage();
@@ -74,15 +81,19 @@ switch ($status) {
         try {
             $rowItemId = base64_decode($_POST['editRowItemId']);
             $rowItemName = $_POST['editRowItemName'];
+            $rowItemReorderLevel = $_POST['editRowItemReorderLevel'];
 
             if ($rowItemName == "") {
                 throw new Exception("Row item name is required");
             }
-            $existRowItemName = $rowItemObj->existRowItemName($rowItemName);
-            if ($existRowItemName->num_rows != 0) {
-                throw new Exception("Row item name is already exist");
+            if ($rowItemReorderLevel=="") {
+                throw new Exception("reorder level is required");
             }
-            $editRowItem = $rowItemObj->editRowItem($rowItemId, $rowItemName);
+            //$existRowItemName = $rowItemObj->existRowItemName($rowItemName);
+            // if ($existRowItemName->num_rows != 0) {
+            //     throw new Exception("Row item name is already exist");
+            // }
+            $editRowItem = $rowItemObj->editRowItem($rowItemId, $rowItemName,$rowItemReorderLevel);
             if ($editRowItem == 1) {
                 $res = 1;
                 $getRowItemData = $rowItemObj->getRowItemData();
@@ -107,17 +118,19 @@ switch ($status) {
         $searchResult[] = "";
         while ($row = $getRowItemByRowItemName->fetch_assoc()) {
             $searchResult[] = array(
-                "id"=>$row['row_item_id'],
-                "value"=>$row['row_item_name']
+                "id" => $row['row_item_id'],
+                "value" => $row['row_item_name']
             );
         }
         echo json_encode($searchResult);
         break;
-    
+
     case 'getRowItemById':
         $rowItemId = $_GET['rowItemId'];
         $getRowItemName = $rowItemObj->getRowItemById($rowItemId);
         $row = $getRowItemName->fetch_assoc();
         echo json_encode($row);
-        break;    
+        break;
+
+ 
 }

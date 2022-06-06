@@ -57,4 +57,12 @@ class Stock
         $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
+
+    public function getRowItemStockSum($quantity, $rowItemId)
+    {
+        $conn= $this->db->connection();
+        $sql = "UPDATE `row_item` SET `row_item_stock_sum`=`row_item_stock_sum`+'$quantity' WHERE `row_item_id`='$rowItemId'";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
  }

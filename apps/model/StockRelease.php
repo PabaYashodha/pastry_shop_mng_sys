@@ -44,4 +44,45 @@ class stockRelease
          $getStockReleaseData = $conn->query($sql) or die($conn->error);
         return  $getStockReleaseData;
     }
+
+    public function getAvailableStockById($value)
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT `stock_current_count` , `stock_id` FROM `stock` WHERE `row_item_row_item_id` ='$value' AND `stock_status`=1";
+        $result = $conn->query($sql);
+        return $result;
+    }
+
+    public function currentCountGraterThanReleaseCount($stock_id, $qty)
+    {
+        $conn = $this->db->connection();
+        $sql = "UPDATE `stock` SET `stock_current_count`=`stock_current_count`-'$qty' WHERE `stock_id`= '$stock_id'";
+        $result = $conn->query($sql);
+        return $result;
+    }
+
+    public function currentCountEqualTOReleaseCount($stock_id)
+    {
+        $conn = $this->db->connection();
+        $sql = "UPDATE `stock` SET `stock_current_count`=0, `stock_status`=0  WHERE `stock_id`= '$stock_id'";
+        $result = $conn->query($sql);
+        return $result;
+    }
+
+    public function availableStock()
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT `r`.`row_item_name` , `r`.`row_item_id`  FROM `stock` `s`, `row_item` `r` WHERE `s`.`stock_status`=1 AND `s`.`row_item_row_item_id` = `r`.`row_item_id` GROUP BY `r`.`row_item_id`";
+        $result = $conn->query($sql);
+        return $result;
+    }
+    public function updateRowItemQtyById($qty, $item_id)
+    {
+        $conn = $this->db->connection();
+        $sql = "UPDATE `row_item` SET `row_item_stock_sum` = `row_item_stock_sum` - '$qty' WHERE `row_item_id` = '$item_id'";
+        $result = $conn->query($sql);
+        return $result;
+    }
+
+    
 }

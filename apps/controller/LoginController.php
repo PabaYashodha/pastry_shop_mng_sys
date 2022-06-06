@@ -37,9 +37,17 @@ switch($status){
         }
      break;
 
-    // case "logout":
-    //     session_destroy();
-    //     header("location:../view/login.php");
-    //break;
+     case 'getRoleName':
+         $userRoleId= $_SESSION['user']['role_role_id'];
+         $result = $loginObj->getRoleName($userRoleId);
+         //print_r($result);
+          $row = $result->fetch_assoc();
+          echo json_encode($row);
+         break;
+         
+    case "logout":
+        session_destroy();
+        header("location:../view/login.php");
+    break;
 
 }
