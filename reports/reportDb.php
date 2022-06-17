@@ -56,6 +56,14 @@ class reportDb
         return $result;
     }
 
+    public function getSupplierDetails()
+    {
+        $conn= $this->db->connection();
+        $sql = "SELECT * FROM `supplier`";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
+
     public function invoiceDailyReport()
     {
         date_default_timezone_set('Asia/Colombo');
@@ -86,9 +94,12 @@ class reportDb
         return $result;
     }
 
-    public function invoiceCustomReport()
+    public function invoiceCustomDateReport($salesFromDate, $salesToDate)
     {
-        
+        $conn= $this->db->connection();
+        $sql = "SELECT * FROM `invoice` WHERE DATE(`invoice_date`) BETWEEN $salesFromDate AND $salesToDate ORDER BY `invoice_id` DESC";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
     }
 
     public function invoiceManualOrderReport()
@@ -111,8 +122,43 @@ class reportDb
         return $result;
     }
 
+    public function availableStock()
+    {
+        $conn= $this->db->connection();
+        $sql = "SELECT `row_item_name` FROM `row_item` WHERE `row_item_stock_sum`> 0";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
+    public function outOfStockStock()
+    {
+        $conn= $this->db->connection();
+        $sql = "SELECT `row_item_name` FROM `row_item` WHERE `row_item_stock_sum`= 0";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
+    public function readToDelivery()
+    {
+        $conn= $this->db->connection();
+        $sql = "SELECT * FROM `ordertb` WHERE `ordertb_status`=3";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
+    public function delivered()
+    {
+        $conn= $this->db->connection();
+        $sql = "SELECT * FROM `ordertb` WHERE `ordertb_status`=5";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
     public function deliveryDailyReport()
     {
-       
+        date_default_timezone_set('Asia/Colombo');
+        $today = date("Y-m-d");
+        $conn= $this->db->connection();
+        $sql = "SELECT * FROM `delivery` WHERE DATE(`delivery_date`)='$today' AND `delivery_status`=5 ORDER BY `delivery_id` DESC";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
     }
+
+    
 }

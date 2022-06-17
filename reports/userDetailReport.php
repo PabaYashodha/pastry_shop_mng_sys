@@ -15,7 +15,7 @@ class PDF extends FPDF
         // Title
         $this->Cell(30, 10, 'User Detail Report', 0, 1, 'C');
         $this->SetFont('Arial','', 10);
-        $this->Cell(193, 10, '(2022-03-05)', 0, 0, 'C');
+        //$this->Cell(193, 10, '(2022-03-05)', 0, 0, 'C');
         // Line break
         $this->Ln(20);
     }
@@ -61,7 +61,7 @@ class PDF extends FPDF
             $this->Cell(20, 10, $row['user_id'], 1, 0, 'C');
             $this->Cell(30, 10, $row['user_fname'].$row['user_lname'], 1, 0, 'C');
             $this->Cell(20, 10, $row['user_dob'], 1, 0, 'C');
-            $this->MultiCell(50, 10, $row['user_add1']. $row['user_add2']. $row['user_add3'], 1, 'C');
+            $this->Cell(50, 10, $row['user_add1']. $row['user_add2']. $row['user_add3'], 1, 'C');
             $this->Cell(20, 10, $row['user_contact'], 1, 0, 'C');
             $this->Cell(30, 10, $row['user_email'], 1, 0, 'C');
             $this->Cell(20, 10, $row['user_nic'], 1, 1, 'C');

@@ -13,6 +13,18 @@ switch ($status) {
         echo json_encode($newCount);
         break;
 
+    case 'checkStockReleaseRowItemNamesIsAvailable':
+        $stockReleaseRowItemId = $_POST['stockReleaseRowItemId'];
+        $result = $stockReleaseObj->checkStockReleaseRowItemNamesIsAvailable($stockReleaseRowItemId);
+        echo ($result == false) ? 1 : '';
+        break;
+
+    case 'checkIfTheQuantityMatch':
+        $stockReleaseQuantity = $_POST['stockReleaseQuantity'];
+        $result = $stockReleaseObj->checkIfTheQuantityMatch($stockReleaseQuantity);
+        echo ($result == false) ? 1 : '';
+        break;   
+
     case 'addStockRelease':
         try {
             $stockReleaseDate = $_POST['stockReleaseDate'];

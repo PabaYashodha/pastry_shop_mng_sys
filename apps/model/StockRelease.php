@@ -40,7 +40,7 @@ class stockRelease
     {
         $conn = $this->db->connection();
         //$sql =  "SELECT `i`.`item_release_date`, `li`.item_release_item_id`, `li`.`item_release_quantity` FROM `item_release` `i`, `item_release_list` `li`";
-        $sql = "SELECT  * FROM `item_release` `i`, `item_release_list` `li`";
+        $sql = "SELECT  * FROM `item_release` `i`, `item_release_list` `li` ORDER BY `item_release_id` DESC";
          $getStockReleaseData = $conn->query($sql) or die($conn->error);
         return  $getStockReleaseData;
     }
@@ -84,5 +84,20 @@ class stockRelease
         return $result;
     }
 
+    public function checkStockReleaseRowItemNamesIsAvailable($stockReleaseRowItemId)
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT `row_item_stock_sum`, `row_item_id` FROM `row_item` WHERE `row_item_id`='$stockReleaseRowItemId' AND `row_item_stock_sum`= 0 ";
+        $result = $conn->query($sql) or die($conn->error);
+        return ($result->num_rows>0) ? false : true;  
+    }
+
+    public function checkIfTheQuantityMatch($stockReleaseQuantity)
+    {
+        $conn = $this->db->connection();
+        $sql = "SELECT `row_item_stock_sum` FROM `row_item` WHERE `row_item_stock_sum` < '$stockReleaseQuantity'";
+        $result = $conn->query($sql) or die($conn->error);
+        return ($result->num_rows>0) ? false : true;  
+    }
     
 }

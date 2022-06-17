@@ -1,8 +1,7 @@
 <?php
 include_once '../resources/FPDF/fpdf.php';
 include_once 'reportDb.php';
-$from = $_REQUEST['from'];
-$to = $_REQUEST['to'];
+
 class PDF extends FPDF
 {
     function Header()
@@ -14,14 +13,14 @@ class PDF extends FPDF
         // Move to the right
         $this->Cell(80);
         // Title
-        $this->Cell(30, 10, 'Invoice Custom Report', 0, 1, 'C');
-        $this->SetFont('Arial', '', 10);
+        $this->Cell(30, 10, 'Supplier Detail Report', 0, 1, 'C');
+        $this->SetFont('Arial','', 10);
         //$this->Cell(193, 10, '(2022-03-05)', 0, 0, 'C');
-        //
         // Line break
         $this->Ln(20);
     }
-    // Cell(float w [, float h [, string txt [, mixed border [, int ln [, string align [, boolean fill [, mixed link]]]]]]])
+// Cell(float w [, float h [, string txt [, mixed border [, int ln [, string align [, boolean fill [, mixed link]]]]]]])
+//MultiCell(float w, float h, string txt [, mixed border [, string align [, boolean fill]]])
     // Page footer
     function Footer()
     {
@@ -41,35 +40,28 @@ class PDF extends FPDF
     {
         $this->SetFont('Arial', 'B', 10);
         $this->Cell(6, 10, '#', 1, 0, 'C');
-        $this->Cell(23, 10, 'INVOICE NO', 1, 0, 'C');
-        $this->Cell(30, 10, 'DATE ', 1, 0, 'C');
-        $this->Cell(25, 10, 'SUB AMT.(RS)', 1, 0, 'C');
-        $this->Cell(15, 10, 'DIS.', 1, 0, 'C');
-        $this->Cell(23, 10, 'NET.(RS)', 1, 0, 'C');
-        $this->Cell(25, 10, 'RECIEVE.(RS)', 1, 0, 'C');
-        $this->Cell(25, 10, 'BALN.(RS) ', 1, 0, 'C');
-        $this->Cell(20, 10, 'TYPE ', 1, 1, 'C');
+        $this->Cell(30, 10, 'NAME ', 1, 0, 'C');
+        $this->Cell(70, 10, 'ADDRESS ', 1,0, 'C');
+        $this->Cell(40, 10, 'CONTACT ', 1, 0, 'C');
+        $this->Cell(40, 10, 'Email ', 1, 1, 'C');
     }
 
-    function TableBody($from, $to)
+    function TableBody()
     {
-        $reportDb = new reportDb();
-        $result = $reportDb->invoiceCustomDateReport($from, $to);
+        $reportDb = new reportDb(); 
+        $result = $reportDb->getSupplierDetails();
         //var_dump( $result);
         $this->SetFont('Arial', '', 8);
         $count = 1;
         while ($row = $result->fetch_assoc()) {
             $this->Cell(6, 10, $count++, 1, 0, 'C');
-            $this->Cell(23, 10, $row['invoice_id'], 1, 0, 'C');
-            $this->Cell(30, 10, $row['invoice_date'], 1, 0, 'C');
-            $this->Cell(25, 10, $row['invoice_sub_amount'], 1, 0, 'C');
-            $this->Cell(15, 10, $row['invoice_discount'], 1, 0, 'C');
-            $this->Cell(23, 10, $row['invoice_net_total'], 1, 0, 'C');
-            $this->Cell(25, 10, $row['invoice_recieve_amount'], 1, 0, 'C');
-            $this->Cell(25, 10, $row['invoice_balance_amount'], 1, 0, 'C');
-            $this->Cell(20, 10, $row['invoice_type'], 1, 1, 'C');
-        }
-    }
+            $this->Cell(30, 10, $row['supplier_name'], 1, 0, 'C');
+            $this->Cell(70, 10, $row['supplier_add1'].','. $row['supplier_add2'].','. $row['supplier_add3'], 1, 'C');
+            $this->Cell(40, 10, $row['supplier_contact'], 1, 0, 'C');
+            $this->Cell(40, 10, $row['supplier_email'], 1, 1, 'C');
+            
+        }  
+   }
 }
 
 //Instanciation of inherited class
@@ -77,6 +69,6 @@ $pdf = new PDF();
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->TableHeader();
-$pdf->TableBody($from, $to);
+$pdf->TableBody();
 $pdf->SetFont('Times', '', 12);
 $pdf->Output();

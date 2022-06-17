@@ -15,7 +15,8 @@ class PDF extends FPDF
         // Title
         $this->Cell(30, 10, 'Invoice Daily Report', 0, 1, 'C');
         $this->SetFont('Arial','', 10);
-        $this->Cell(193, 10, '(2022-03-05)', 0, 0, 'C');
+        //$this->Cell(193, 10, '(2022-03-05)', 0, 0, 'C');
+        //
         // Line break
         $this->Ln(20);
     }

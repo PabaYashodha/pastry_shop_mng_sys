@@ -13,7 +13,7 @@ class PDF extends FPDF
         // Move to the right
         $this->Cell(80);
         // Title
-        $this->Cell(30, 10, 'Invoice Online Order Report', 0, 1, 'C');
+        $this->Cell(30, 10, 'Out of Stock Report', 0, 1, 'C');
         $this->SetFont('Arial','', 10);
         //$this->Cell(193, 10, '(2022-03-05)', 0, 0, 'C');
         // Line break
@@ -39,33 +39,20 @@ class PDF extends FPDF
     {
         $this->SetFont('Arial', 'B', 10);
         $this->Cell(10, 10, '#', 1, 0, 'C');
-        $this->Cell(25, 10, 'INVOICE NO', 1, 0, 'C');
-        $this->Cell(35, 10, 'DATE ', 1, 0, 'C');
-        $this->Cell(30, 10, 'SUB AMT.(RS)', 1, 0, 'C');
-        //$this->Cell(20, 10, 'DIS.', 1, 0, 'C');
-        $this->Cell(25, 10, 'NET.(RS)', 1, 0, 'C');
-        $this->Cell(35, 10, 'RECIEVE.(RS)', 1, 0, 'C');
-        //$this->Cell(25, 10, 'BALN.(RS) ', 1, 0, 'C');
-        $this->Cell(25, 10, 'TYPE ', 1, 1, 'C');
+        $this->Cell(35, 10, 'Row Item Name', 1, 1, 'C');
+       
     }
 
     function TableBody()
     {
         $reportDb = new reportDb(); 
-        $result = $reportDb->invoiceOnlineOrderReport();
+        $result = $reportDb->outOfStockStock();
         //var_dump( $result);
         $this->SetFont('Arial', '', 8);
         $count = 1;
         while ($row = $result->fetch_assoc()) {
             $this->Cell(10, 10, $count++, 1, 0, 'C');
-            $this->Cell(25, 10, $row['invoice_id'], 1, 0, 'C');
-            $this->Cell(35, 10, $row['invoice_date'], 1, 0, 'C');
-            $this->Cell(30, 10, $row['invoice_sub_amount'], 1, 0, 'C');
-            //$this->Cell(20, 10, $row['invoice_discount'], 1, 0, 'C');
-            $this->Cell(25, 10, $row['invoice_net_total'], 1, 0, 'C');
-            $this->Cell(35, 10, $row['invoice_recieve_amount'], 1, 0, 'C');
-            //$this->Cell(25, 10, $row['invoice_balance_amount'], 1, 0, 'C');
-            $this->Cell(25, 10, $row['invoice_type'], 1, 1, 'C');
+            $this->Cell(35, 10, $row['row_item_name'], 1, 1, 'C');
         }  
    }
 }

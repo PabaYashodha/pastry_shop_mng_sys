@@ -97,7 +97,7 @@ require_once "sidebar.php";
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
                                 <label for="customerGender" class="col-sm-3 col-form-label"> Gender </label>
                                 <div class="col-sm-9">
@@ -108,15 +108,15 @@ require_once "sidebar.php";
                                     <input type="radio" class="form-check-input" name="customerGender" id="Female" value="0">
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        </div> -->
+                        <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
                                 <label for="customerBirthday" class="col-sm-3 col-form-label"> Birthday </label>
                                 <div class="col-sm-9">
                                     <input type="date" class="form-control" id="customerBirthday" name="customerBirthday">
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="row mb-3">
@@ -145,14 +145,14 @@ require_once "sidebar.php";
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
                                 <label for="customerNic" class="col-sm-3 col-form-label"> NIC </label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="customerNic" name="customerNic">
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row mb-3">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="float-end d-inline-flex">
@@ -233,7 +233,7 @@ require_once "sidebar.php";
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
                                 <label for="editCustomerGender" class="col-sm-3 col-form-label"> Gender </label>
                                 <div class="col-sm-9">
@@ -244,15 +244,15 @@ require_once "sidebar.php";
                                     <input type="radio" class="form-check-input" name="editCustomerGender" id="Female" value="0">
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        </div> -->
+                        <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
                                 <label for="editCustomerBirthday" class="col-sm-3 col-form-label"> Birthday </label>
                                 <div class="col-sm-9">
                                     <input type="date" class="form-control" id="editCustomerBirthday" name="editCustomerBirthday">
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="row mb-3">
@@ -281,14 +281,14 @@ require_once "sidebar.php";
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
                                 <label for="editCustomerNic" class="col-sm-3 col-form-label"> NIC </label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="editCustomerNic" name="editCustomerNic">
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row mb-3">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="float-end d-inline-flex">

@@ -38,11 +38,11 @@ class PDF extends FPDF
     function TableHeader()
     {
         $this->SetFont('Arial', 'B', 10);
-        $this->Cell(6, 10, '#', 1, 0, 'C');
-        $this->Cell(50, 10, 'Deliver', 1, 0, 'C');
-        $this->Cell(40, 10, 'DATE ', 1, 0, 'C');
-        $this->Cell(40, 10, 'ADDRESS', 1, 0, 'C');
-        //$this->Cell(53, 10, 'SUPPLIER ', 1, 1, 'C');
+        $this->Cell(10, 10, '#', 1, 0, 'C');
+        $this->Cell(30, 10, 'Name', 1, 0, 'C');
+        $this->Cell(40, 10, 'Contact', 1, 0, 'C');
+        $this->Cell(40, 10, 'Email', 1, 0, 'C');
+        $this->Cell(55, 10, 'Address', 1, 1, 'C');
     }
 
     function TableBody()
@@ -52,11 +52,11 @@ class PDF extends FPDF
         $this->SetFont('Arial', '', 8);
         $count = 1;
         while ($row = $result->fetch_assoc()) {
-            $this->Cell(6, 10, $count++, 1, 0, 'C');
-            $this->Cell(50, 10, $row['grn_ref_id'], 1, 0, 'C');
-            $this->Cell(40, 10, $row['grn_date'], 1, 0, 'C');
-            $this->Cell(40, 10, $row['grn_price'], 1, 0, 'C');
-            $this->Cell(53, 10, $row['supplier_name'], 1, 1, 'C');
+            $this->Cell(10, 10, $count++, 1, 0, 'C');
+            $this->Cell(30, 10, $row['ordertb_cus_fname'].' '.$row['ordertb_cus_lname'], 1, 0, 'C');
+            $this->Cell(40, 10, $row['ordertb_cus_contact'], 1, 0, 'C');
+            $this->Cell(40, 10, $row['ordertb_cus_email'], 1, 0, 'C');
+            $this->Cell(55, 10, $row['ordertb_cus_add1'].', '.$row['ordertb_cus_add2'].', '.$row['ordertb_cus_add3'], 1, 1, 'C');
         }  
    }
 }

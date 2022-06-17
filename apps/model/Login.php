@@ -25,5 +25,13 @@ class Login{
         $result = $conn->query($sql) or die($conn->error);
         return $result;
     }
+
+    public function getUserImage($userId)
+    {
+        $conn= $this->db->connection();
+        $sql = "SELECT `user_image` FROM `user` WHERE `user_id`= '$userId'";
+        $result = $conn->query($sql) or die($conn->error);
+        return $result;
+    }
 }
 ?>

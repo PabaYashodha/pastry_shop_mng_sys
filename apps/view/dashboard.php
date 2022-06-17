@@ -79,9 +79,10 @@ require_once "sidebar.php";
 <?php
 require_once "scriptInclude.php";
 ?>
-<!-- <script>
-    $(window).load(lowStockCount());
-</script> -->
+<script>
+    // $(window).load(lowStockCount());
+    $( ".nav-link" ).addClass( "active" );
+</script>
 <?php
 require_once "footer.php";
 ?>

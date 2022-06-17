@@ -189,7 +189,8 @@ require_once "sidebar.php";
 </div>
 <?php require_once "scriptInclude.php" ?>
 <script>
-    $(window).load(getRowItemData(), getGrnNumber(), );
-    window.lo
+    // $( "a[href*='stock.php']" ).addClass( "active" );
+    $( ".nav-link" ).addClass( "active" );
+    $(window).load(getRowItemData(), getGrnNumber());
 </script>
 <?php require_once "footer.php" ?>

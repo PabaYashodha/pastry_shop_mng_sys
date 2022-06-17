@@ -96,7 +96,7 @@ $(document).ready(function () {
   })
 
   //auto complete the ro item name in add stock page
-  $("#stockRowItemName, #stockReleaseRowItemNames").autocomplete({
+  $("#stockRowItemName,#stockReleaseRowItemNames").autocomplete({
     source: function(request, response) {
         $.ajax({
             url: "../controller/RowItemController.php?status=getRowItemByRowItemName",
@@ -117,37 +117,37 @@ $(document).ready(function () {
     },
     select: function (event, ui) {
         //console.log(ui)
-      $("#stockRowItemId ,#stockReleaseRowItemId").val(ui.item.id)
-       $("#stockRowItemName, #stockReleaseRowItemNames").val(ui.item.value)
+      $("#stockRowItemId,#stockReleaseRowItemId ").val(ui.item.id)
+     $("#stockRowItemName,#stockReleaseRowItemNames").val(ui.item.value)
   },
 })
 
-$("#stockReleaseRowItemNames").autocomplete({
-    source: function(request, response) {
-        $.ajax({
-            url: "../controller/StockReleaseController.php?status=getAvailableRowItemName",
-            dataType: "json",
-            data:{
-              rowItem : request.term
-            },
-            success: function(data) {
-              //  console.log(data)
-                response($.map(data, function(rowItem){
-                    return{
-                        id: rowItem.id,
-                        value: rowItem.value,
-                    }
-                }))
-            }
-        });
-    },
-    //minLength:2,
-    select: function (event, ui) {
-        //console.log(ui)
-      $("#stockReleaseRowItemId").val(ui.item.id)
-       $("#stockReleaseRowItemNames").val(ui.item.value)
-  },
-})
+//stock release ro item names
+// $("#stockReleaseRowItemNames").autocomplete({
+//     source: function(request, response) {
+//         $.ajax({
+//             url: "../controller/StockReleaseController.php?status=getAvailableRowItemName",
+//             dataType: "json",
+//             data:{
+//               rowItem : request.term
+//             },
+//             success: function(data) {
+//                 //console.log(data)
+//                 response($.map(data, function(rowItem){
+//                     return{
+//                         id: rowItem.id,
+//                         value: rowItem.value,
+//                     }
+//                 }))
+//             }
+//         });
+//     },
+//     select: function (event, ui) {
+//         //console.log(ui)
+//       $("#stockReleaseRowItemId").val(ui.item.id)
+//        $("#stockReleaseRowItemNames").val(ui.item.value)
+//   },
+// })
 
 //auto complete the category or add ood item modal
 $("#foodItemCategoryName").autocomplete({
@@ -268,7 +268,7 @@ $.get("../controller/DashboardController.php?status=getModule", (result) => {
         if (result[index].module_url == page) {
             li += ' active';
         }
-        li += '" style="padding:0.73rem; padding-left:1.7rem;" ><i class="'+result[index].module_logo+'"></i><span class="moduleName"> &nbsp;'+ result[index].module_name +'</span></a></li>';  
+        li += '" style="padding:0.73rem; padding-left:1.2rem;" ><i class="'+result[index].module_logo+'"></i><span class="moduleName"> &nbsp;'+ result[index].module_name +'</span></a></li>';  
     }
     $('#getModule').html(li).show();
 }, 'json')
@@ -299,6 +299,14 @@ $.get("../controller/LoginController.php?status=getRoleName",(result)=>{
     //console.log(result)
     $("#logRoleName").html(result).show();
 },'json')
+
+$.get("../controller/LoginController.php?status=getUserImage",(result)=>{
+    console.log(result)
+    //$("#userProfileImage").html(result).show();
+   // $("#userProfileImage").attr('src',result);
+    $('#userProfileImage').html('<img src="data:image/png;base64,' + result  + '" />');
+
+})
 
 $('#make_backup').click(() => {
         swal({
@@ -567,6 +575,11 @@ let editUserDetails = (Id) => {
         $('#editLastName').val(result.user_lname);
         $('#editContact').val(result.user_contact);
         $('#editBirthday').val(result.user_dob);
+        if (result.user_gender==1) {
+            $('#editMale').prop("checked", true);
+        }else{
+            $('#editFemale').prop("checked", true)
+        }
        // $('#editMale, #editFemale').val(result.user_gender);
         $('#editNic').val(result.user_nic);
         $('#editEmail').val(result.user_email);
@@ -752,25 +765,25 @@ let viewCustomerDetails = (Id) => {
             '<label for="address" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_add1 + ' ' + result.customer_add2 + ' ' + result.customer_add3 + '</label>' +
             '<label for="postalCode" class="col-sm-4 col-form-label text-end">Postal Code</label>' +
             '<label for="postalCode" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_postal_code + '</label>' +
-            '<label for="nic" class="col-sm-4 col-form-label text-end">NIC</label>' +
-            '<label for="nic" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_nic + '</label>' +
-            '<label for="gender" class="col-sm-4 col-form-label text-end">Gender</label>';
-        if ((result.customer_gender) == 1) {
-            row += '<label for="gender" class="col-sm-8 col-form-label text-start mb-2"> : male</label>';
-        } else {
-            row += '<label for="gender" class="col-sm-8 col-form-label text-start mb-2"> : female</label>';
-        }
+            //'<label for="nic" class="col-sm-4 col-form-label text-end">NIC</label>' +
+            //'<label for="nic" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_nic + '</label>' +
+        //     '<label for="gender" class="col-sm-4 col-form-label text-end">Gender</label>';
+        // if ((result.customer_gender) == 1) {
+        //     row += '<label for="gender" class="col-sm-8 col-form-label text-start mb-2"> : male</label>';
+        // } else {
+        //     row += '<label for="gender" class="col-sm-8 col-form-label text-start mb-2"> : female</label>';
+        // }
 
-        row += '<label for="birthday" class="col-sm-4 col-form-label text-end">Birthday</label>' +
-            '<label for="birthday" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_dob + '</label>' +
-            '<label for="status" class="col-sm-4 col-form-label text-end"> Status </label>';
-        if ((result.customer_status) == 1) {
-            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:green">Active</span></label>';
-        } else {
-            row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:red">Deactivate</span></label>';
-        }
-        row += '<label for="createDate" class="col-sm-4 col-form-label text-end">Create Date  </label>' +
-            '<label for="createDate" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_create_date + '</label>' +
+        // '<label for="birthday" class="col-sm-4 col-form-label text-end">Birthday</label>' +
+            //'<label for="birthday" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_dob + '</label>' +
+            //'<label for="status" class="col-sm-4 col-form-label text-end"> Status </label>';
+        // if ((result.customer_status) == 1) {
+        //     row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:green">Active</span></label>';
+        // } else {
+        //     row += '<label for="status" class="col-sm-8 col-form-label text-start mb-2"> : <span style="color:red">Deactivate</span></label>';
+        // }
+        // '<label for="createDate" class="col-sm-4 col-form-label text-end">Create Date  </label>' +
+        //     '<label for="createDate" class="col-sm-8 col-form-label text-start mb-2"> : ' + result.customer_create_date + '</label>' +
 
             '</div>'
         $('#viewCustomerContent').html(row).show()
@@ -1318,84 +1331,7 @@ let editSubCategoryDetails = (Id) => {
     }, 'json')
 }
 
-// let deactivateSubCategory = (Id) => {
-//     swal({
-//         title: 'Are you sure',
-//         text: 'Do you want to change the status',
-//         icon: 'warning',
-//         buttons: true,
-//         dangerMode: true,
-//         allowOutsideClick: false,
-//         closeOnClickOutside: false,
-//         closeOnEsc: false,
-//     }).then(willOUT => {
-//         if (willOUT) {
-//             $.post('../controller/SubCategoryController.php?status=changeSubCategoryStatus', {
-//                 subCategoryId: Id,
-//                 subCategoryStatus: "0"
-//             }, (result) => {
-//                 if ([result[0] == 1]) {
-//                     toastr.success("Sub Category is out of stock");
-//                     subCategoryTableBody(result[1])
-//                 } else {
-//                     toastr.success(result[1]);
-//                 }
-//             }, 'json')
-//         }
-//     })
-// }
 
-// let activateSubCategory = (Id) => {
-//     swal({
-//         title: 'Are you sure',
-//         text: 'Do you want to change the status',
-//         icon: 'warning',
-//         buttons: true,
-//         dangerMode: true,
-//         allowOutsideClick: false,
-//         closeOnClickOutside: false,
-//         closeOnEsc: false,
-//     }).then(willOUT => {
-//         if (willOUT) {
-//             $.post("../controller/SubCategoryController.php?status=changeSubCategoryStatus", {
-//                 subCategoryId: Id,
-//                 subCategoryStatus: "1"
-//             }, (result) => {
-//                 if ([result[0] == 1]) {
-//                     toastr.success("Sub Category is now available");
-//                 } else {
-//                     toastr.success(result[1]);
-//                 }
-//             }, 'json')
-//         }
-//     })
-// }
-
-// let deleteSubCategoryDetails = (Id) => {
-//     swal({
-//         title: 'Are you sure',
-//         text: 'Do you want to delete this category',
-//         icon: 'warning',
-//         buttons: true,
-//         dangerMode: true,
-//         allowOutsideClick: false,
-//         closeOnClickOutside: false,
-//         closeOnEsc: false,
-//     }).then(willOUT => {
-//         if (willOUT) {
-//             $.post("../controller/SubCategoryController.php?status=deleteSubCategory", {
-//                 subCategoryId: Id
-//             }, (result) => {
-//                 if ([result[0] == 1]) {
-//                     toastr.success("Sub Category successfully deleted");
-//                     subCategoryTableBody(result[1])
-//                 } else {
-//                     toastr.success(result[1]);
-//                 }
-//             }, 'json')
-//         }
-//     })
-// }
 
 
 //row item manage
@@ -2174,18 +2110,7 @@ let deleteBackup = (Id) =>{
 
 let viewLoggedUser = ()=>{
     $.get('../controller/LoggedUserController.php?status=viewLoggedUserDetails',(result)=>{
-        //    $("#userFirstName").val(result.user_fname);
-        //    $("#userLastName").val(result.user_lname);
-        //    $("#userContact").val(result.user_contact);
-        //    $("#userBirthday").val(result.user_dob);
-        // //    $("#")
-        //    $("#userNic").val(result.user_nic);
-        //    $("#userEmail").val(result.user_email);
-        //    $("#userRole").val(result.role_role_id);   
-        //    $("#userAdd1").val(result.user_add1);
-        //    $("#userAdd2").val(result.user_add2);
-        //    $("#userAdd3").val(result.user_add3);
-
+    
         let row = '<div class="row">'+
             '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-2">' +
             '<img src="../../images/user-images/' + result.user_image + '" alt="" width="150px" height="150px" class="m-auto">' +
@@ -2241,6 +2166,27 @@ let editLoggedUserDetails = ()=>{
            let url = "../../images/user-images/" + result.user_image;
         $('#user_pre_image').attr('src', url).height(200).width(200);
 },'json')
+}
+
+
+let logout = ()=>{
+    swal({
+        title: 'Are you sure',
+        text: 'Do you want to logout',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        allowOutsideClick: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    }).then((willOUT) => {
+        if (willOUT) {
+            $.post('../controller/LoginController.php?status=logout',function() {
+                location.reload();
+            });
+            
+        } 
+    })
 }
 // let itemNotCollected=(Id)=>{
 
@@ -2349,3 +2295,81 @@ let editLoggedUserDetails = ()=>{
     //         }
     //     })
     // }
+// let deactivateSubCategory = (Id) => {
+//     swal({
+//         title: 'Are you sure',
+//         text: 'Do you want to change the status',
+//         icon: 'warning',
+//         buttons: true,
+//         dangerMode: true,
+//         allowOutsideClick: false,
+//         closeOnClickOutside: false,
+//         closeOnEsc: false,
+//     }).then(willOUT => {
+//         if (willOUT) {
+//             $.post('../controller/SubCategoryController.php?status=changeSubCategoryStatus', {
+//                 subCategoryId: Id,
+//                 subCategoryStatus: "0"
+//             }, (result) => {
+//                 if ([result[0] == 1]) {
+//                     toastr.success("Sub Category is out of stock");
+//                     subCategoryTableBody(result[1])
+//                 } else {
+//                     toastr.success(result[1]);
+//                 }
+//             }, 'json')
+//         }
+//     })
+// }
+
+// let activateSubCategory = (Id) => {
+//     swal({
+//         title: 'Are you sure',
+//         text: 'Do you want to change the status',
+//         icon: 'warning',
+//         buttons: true,
+//         dangerMode: true,
+//         allowOutsideClick: false,
+//         closeOnClickOutside: false,
+//         closeOnEsc: false,
+//     }).then(willOUT => {
+//         if (willOUT) {
+//             $.post("../controller/SubCategoryController.php?status=changeSubCategoryStatus", {
+//                 subCategoryId: Id,
+//                 subCategoryStatus: "1"
+//             }, (result) => {
+//                 if ([result[0] == 1]) {
+//                     toastr.success("Sub Category is now available");
+//                 } else {
+//                     toastr.success(result[1]);
+//                 }
+//             }, 'json')
+//         }
+//     })
+// }
+
+// let deleteSubCategoryDetails = (Id) => {
+//     swal({
+//         title: 'Are you sure',
+//         text: 'Do you want to delete this category',
+//         icon: 'warning',
+//         buttons: true,
+//         dangerMode: true,
+//         allowOutsideClick: false,
+//         closeOnClickOutside: false,
+//         closeOnEsc: false,
+//     }).then(willOUT => {
+//         if (willOUT) {
+//             $.post("../controller/SubCategoryController.php?status=deleteSubCategory", {
+//                 subCategoryId: Id
+//             }, (result) => {
+//                 if ([result[0] == 1]) {
+//                     toastr.success("Sub Category successfully deleted");
+//                     subCategoryTableBody(result[1])
+//                 } else {
+//                     toastr.success(result[1]);
+//                 }
+//             }, 'json')
+//         }
+//     })
+// }

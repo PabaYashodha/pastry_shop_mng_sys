@@ -42,8 +42,15 @@ switch($status){
          $result = $loginObj->getRoleName($userRoleId);
          //print_r($result);
           $row = $result->fetch_assoc();
-          echo json_encode($row);
+          echo json_encode($row['role_name']);
          break;
+
+    case 'getUserImage':
+        $userId = $_SESSION['user']['user_id'];
+        $result = $loginObj->getUserImage($userId);
+        $row = $result->fetch_assoc();
+        echo json_encode($row['user_image']); 
+        break;     
          
     case "logout":
         session_destroy();

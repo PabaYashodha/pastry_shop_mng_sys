@@ -2179,7 +2179,8 @@ $(document).ready(()=>{
                             });
                             viewStockData(result[1]);
                             $("#addStockForm").trigger('reset');
-                            
+                            $(".is-valid").removeClass('is-valid');
+                           // $("#stockTbody").remove();
                         }
                         if (result[0]==2) {
                             swal({
@@ -2394,8 +2395,10 @@ $(document).ready(()=>{
                                 buttons: false,
                                 timer: 1000,
                             })
-                            $("#makeOrderForm").trigger('reset')
-                            $("#manualOrderTbody").trigger('reset');
+                            $("#makeOrderForm").trigger('reset');
+                            $(".is-valid").removeClass('is-valid');
+                            //$("#manualOrderTbody").remove();
+                            
                         }
                         if (result[0]==2) {
                             swal({
@@ -2472,6 +2475,7 @@ $(document).ready(()=>{
                             readyToDeliveryTableBody()
                             orderAssignPerson()
                             $('#assignDeliveryPerson').modal('hide');
+                            $(".is-valid").removeClass('is-valid');
                             $("#assignDeliveryForm").trigger('reset');
                             
                         }
@@ -2588,14 +2592,14 @@ $(document).ready(()=>{
 
         if (usernameVal == "" && passwordVal=="") {
             toastr.error("Please fill username and password")
-            $([username, password]).each(function() {
-                $(this).removeInvalidClass("is-valid").addClass("is-invalid");
-            })
+            // $([username, password]).each(function() {
+            //     $(this).removeInvalidClass("is-valid").addClass("is-invalid");
+            // })
             username.focus();
             return false;
         }
         if(usernameVal=="" || !usernameVal.match(patEmail) ){
-            addInvalidClass(username, "Please enter username");
+            addInvalidClass(username, "Please enter correct username");
             return false;
         }
         if (passwordVal=="") {
@@ -2619,11 +2623,11 @@ $(document).ready(()=>{
                 }else if(result==2){
                     toastr.success("User successfully login");
                     window.location.href="../view/dashboard.php";
-                }else{
-                    toastr.error(result);
                 }
-            },error:function(error) {
-                console.log(error);
+            },error:function($msg) {
+                //console.log(error);
+                $msg = "The Credentials: username and the password does not match!";  
+                toastr.error($msg);
             }
         })
 
@@ -2729,6 +2733,31 @@ $(document).ready(()=>{
     const stockReleaseRowItemId = $('#stockReleaseRowItemId');
     const stockReleaseQuantity = $('#stockReleaseQuantity');
 
+     stockReleaseRowItemNames.blur(() => {
+        const url = "../controller/StockReleaseController.php?status=checkStockReleaseRowItemNamesIsAvailable";
+        let stockReleaseRowItemIdVal = stockReleaseRowItemId.val();
+        $.post(url, {
+            stockReleaseRowItemId: stockReleaseRowItemIdVal
+        }, (result) => {
+            if (result == 1) {
+                addInvalidClass(stockReleaseRowItemNames, "Row item is out of stock");
+                return false;
+            }
+        })
+    })
+
+    stockReleaseQuantity.blur(() => {
+        const url = "../controller/StockReleaseController.php?status=checkIfTheQuantityMatch";
+        let stockReleaseQuantityVal = stockReleaseQuantity.val();
+        $.post(url, {
+            stockReleaseQuantity: stockReleaseQuantityVal
+        }, (result) => {
+            if (result == 1) {
+                addInvalidClass(stockReleaseQuantity, "Row item is reach the quantity");
+                return false;
+            }
+        })
+    })
     $("#addReleaseStockRow").click(()=>{
         let stockReleaseRowItemNamesVal = stockReleaseRowItemNames.val();
         let stockReleaseRowItemIdVal = stockReleaseRowItemId.val();
@@ -2846,6 +2875,10 @@ $(document).ready(()=>{
                                 buttons: false,
                                 timer: 1000,
                             });
+                            viewStockReleaseData(result[1]);
+                            $("#addStockReleaseForm").trigger('reset');
+                            $(".is-valid").removeClass('is-valid');
+                            //$("#stockReleaseTbody").remove();
                             
                         }
                         if (result[0] == 2) {
@@ -3016,7 +3049,47 @@ $(document).ready(()=>{
         $(this).parent().siblings('ul').children('a').find("i.icon").addClass("fad fa-folder");
     })
     
-    
+    const salesFromDate = $('#salesFromDate');
+    const salesToDate = $('#salesToDate');
+    $('#generateCustomDateRange').click(()=>{
+        let salesFromDateVal = salesFromDate.val();
+        let salesToDateVal = salesToDate.val();
+
+        if (salesFromDateVal == "" && salesToDateVal=="" ) {
+            toastr.error("Please fill the form");
+            $([salesFromDate,salesToDate]).each(function() {
+                $(this).removeClass("is-valid").addClass("is-invalid");
+            });
+            salesFromDate.focus();
+            return false;
+        }
+        if (salesFromDateVal == "") {
+            addInvalidClass(salesFromDate, "Please enter starting date");
+            return false;
+        }
+        if (salesToDateVal == "") {
+            addInvalidClass(salesToDate, "Please enter ending date");
+            return false;
+        }
+        swal({
+            title: 'Generate Report',
+            //text: 'Do you want to logout',
+            icon: 'warning', 
+            buttons: true,
+            dangerMode: true,
+            allowOutsideClick: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+        }).then((willOUT) => {
+            if (willOUT) {
+                    window.open("../../reports/invoiceCustomDateReport.php?from="+salesFromDateVal+"&to="+salesToDateVal,"_blank"); 
+            } 
+            $("#CustomizedSalesModal").modal('hide');
+            $(".is-valid").removeClass('is-valid');
+            $("#invoiceCustomDateReportForm").trigger('reset');
+
+        })
+    })
 
     let addInvalidClass = (Id, message) => {
         let id = Id
@@ -3158,6 +3231,8 @@ $(document).ready(()=>{
     stockReleaseTo.change(()=>{removeInvalidClass(stockReleaseTo)});
     stockReleaseMadeBy.change(()=>{removeInvalidClass(stockReleaseMadeBy)});
 
+    salesFromDate.change(()=>{removeInvalidClass(salesFromDate)});
+    salesToDate.change(()=>{removeInvalidClass(salesToDate)});
 
 
 

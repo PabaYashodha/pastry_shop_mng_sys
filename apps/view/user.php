@@ -242,10 +242,10 @@ require_once "sidebar.php";
                                 <label for="editGender" class="col-sm-3 col-form-label"> Gender </label>
                                 <div class="col-sm-9">
                                     <label class="form-check-label" for="Male"> Male </label>
-                                    <input type="radio" class="form-check-input" name="editGender" id="editMale" value="1">
+                                    <input type="radio" class="form-check-input" name="editGender" id="editMale">
                                     &nbsp; &nbsp;
                                     <label class="form-check-label" for="Female"> Female </label>
-                                    <input type="radio" class="form-check-input" name="editGender" id="editFemale" value="0">
+                                    <input type="radio" class="form-check-input" name="editGender" id="editFemale" >
                                 </div>
                             </div>
                         </div>
@@ -302,7 +302,7 @@ require_once "sidebar.php";
                             <div class="row mb-3">
                                 <label for="editImage" class="col-sm-3 col-form-label">Image</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="file" id="editImage" name="editImage" accept="image/png, image/jpg, image/jpeg  onchange="preview(this)">
+                                    <input class="form-control" type="file" id="editImage" name="editImage" accept="image/png, image/jpg, image/jpeg"  onchange="preview(this)">
                                 </div>
                             </div>
                         </div>

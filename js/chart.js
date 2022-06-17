@@ -1,18 +1,17 @@
 $(document).ready(function () {
-
+    let columChartUrl = "../controller/ChartController.php?status=getColumChartValue"
+    $.getJSON(columChartUrl, function (response) {
+       chart.updateSeries([{
+           data: response[1]
+         }])
+        chart.updateOptions({
+        xaxis: {
+            categories: response[0]
+        }
+        })
+    });
 var options = { //bar chart
-    series: [{
-    name: 'Monthly Profit',
-    data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-  }
-//   , {
-//     name: 'Revenue',
-//     data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-//   }, {
-//     name: 'Free Cash Flow',
-//     data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-//   }
-],
+    series: [],
     chart: {
     type: 'bar',
     height: 350
@@ -33,11 +32,11 @@ var options = { //bar chart
     colors: ['transparent']
   },
   xaxis: {
-    categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+    categories: [],
   },
   yaxis: {
     title: {
-      text: 'Rs (thousands)'
+      text: 'Rs'
     }
   },
   fill: {
@@ -54,14 +53,21 @@ var options = { //bar chart
 
   var chart = new ApexCharts(document.querySelector("#barChart"), options);
   chart.render();
-
+ //pie chart
+ let pieChartUrl = "../controller/ChartController.php?status=getPieChartValue"
+ $.getJSON(pieChartUrl, function (response) {
+    chart1.updateOptions({
+        series: response[1],
+        labels: response[0]
+    })
+ })
 var options = { //pie chart
-    series: [44, 55, 41, 17, 15,50,65],
+    series: [],
     chart: {
     width: 380,
     type: 'pie',
   },
-  labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday','Saturday','Sunday'],
+  labels: [],
   plotOptions: {
     pie: {
       startAngle: -90,
@@ -95,6 +101,7 @@ var options = { //pie chart
   }]
   };
 
-  var chart = new ApexCharts(document.querySelector("#pieChart"), options);
-  chart.render();
+  var chart1 = new ApexCharts(document.querySelector("#pieChart"), options);
+  chart1.render();
+
 });

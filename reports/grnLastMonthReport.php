@@ -13,7 +13,7 @@ class PDF extends FPDF
         // Move to the right
         $this->Cell(80);
         // Title
-        $this->Cell(30, 10, 'GRN Last Week Report', 0, 1, 'C');
+        $this->Cell(30, 10, 'GRN Last Month Report', 0, 1, 'C');
         $this->SetFont('Arial','', 10);
         //$this->Cell(193, 10, '(2022-03-05)', 0, 0, 'C');
         // Line break
